@@ -7,10 +7,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from 'native-base';
+
 import Onboarding from './Authentication/Onboarding';
+import ImportMnemonic from './Authentication/ImportMnemonic'
 
 type AppStackParamsList = {
   Onboarding: undefined;
+  ImportMnemonic: undefined;
 }
 
 const AppStack = createNativeStackNavigator<AppStackParamsList>();
@@ -27,6 +30,7 @@ function App(): JSX.Element {
               animation: 'slide_from_right',
             }}>
             <AppStack.Screen name="Onboarding" component={Onboarding} />
+            <AppStack.Screen name="ImportMnemonic" component={ImportMnemonic} />
           </AppStack.Navigator>
           </NavigationContainer>
         </SafeAreaView>

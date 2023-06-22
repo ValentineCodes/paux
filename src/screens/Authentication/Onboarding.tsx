@@ -1,12 +1,14 @@
 import React from 'react'
 import { View, Text, VStack, Button, Center } from 'native-base'
 
-import globalStyles from "../../styles/global"
 import styles from "../../styles/onboarding"
+import { useNavigation } from '@react-navigation/native'
 
 type Props = {}
 
 const Onboarding = (props: Props) => {
+    const navigation = useNavigation()
+    
   return (
     <View style={styles.container}>
         <View style={styles.logo}>
@@ -25,7 +27,7 @@ const Onboarding = (props: Props) => {
             <Center style={styles.contentCard}>
                 <Text fontSize="md" bold>Nope, I've got a secret recovery phrase</Text>
                 <Text style={styles.contentCaption}>Import your wallet and create a new password for your pocket</Text>
-                <Button variant="outline">Import it!</Button>
+                <Button variant="outline" onPress={() => navigation.navigate("ImportMnemonic")}>Import it!</Button>
             </Center>
         </VStack>
     </View>
