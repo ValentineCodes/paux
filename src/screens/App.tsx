@@ -6,6 +6,8 @@ import {
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { ToastProvider } from 'native-base';
+import Onboarding from './Authentication/Onboarding';
 
 type AppStackParamsList = {
   Onboarding: undefined;
@@ -15,8 +17,21 @@ const AppStack = createNativeStackNavigator<AppStackParamsList>();
 
 function App(): JSX.Element {
   return (
-    <SafeAreaView style={styles.container}>
-    </SafeAreaView>
+    <ToastProvider>
+      <SafeAreaProvider>
+        <SafeAreaView style={styles.container}>
+          <NavigationContainer>
+          <AppStack.Navigator
+            screenOptions={{
+              headerShown: false,
+              animation: 'slide_from_right',
+            }}>
+            <AppStack.Screen name="Onboarding" component={Onboarding} />
+          </AppStack.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    </ToastProvider>
   );
 }
 
