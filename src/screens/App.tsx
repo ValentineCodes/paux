@@ -9,11 +9,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from 'native-base';
 
 import Onboarding from './Authentication/Onboarding';
+import GenerateMnemonic from './Authentication/GenerateMnemonic';
 import ImportMnemonic from './Authentication/ImportMnemonic'
 import CreatePassword from './Authentication/CreatePassword';
 
 type AppStackParamsList = {
   Onboarding: undefined;
+  GenerateMnemonic: undefined;
   ImportMnemonic: undefined;
   CreatePassword: undefined;
 }
@@ -32,6 +34,7 @@ function App(): JSX.Element {
               animation: 'slide_from_right',
             }}>
             <AppStack.Screen name="Onboarding" component={Onboarding} />
+            <AppStack.Screen name="GenerateMnemonic" component={GenerateMnemonic} />
             <AppStack.Screen name="ImportMnemonic" component={ImportMnemonic} />
             <AppStack.Screen name="CreatePassword" component={CreatePassword} />
           </AppStack.Navigator>

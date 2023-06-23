@@ -21,7 +21,7 @@ const Onboarding = (props: Props) => {
             <Center style={styles.contentCard}>
                 <Text fontSize="md" bold>Yeah, get me started!</Text>
                 <Text style={styles.contentCaption}>This will create a new wallet, secret recovery phrase and a new password for your pocket</Text>
-                <Button>Get started!</Button>
+                <Button onPress={() => navigation.navigate("GenerateMnemonic")}>Get started!</Button>
             </Center>
 
             <Center style={styles.contentCard}>
