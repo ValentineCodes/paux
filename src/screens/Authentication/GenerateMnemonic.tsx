@@ -37,7 +37,7 @@ function GenerateMnemonic({}: Props) {
                 )}
             </Center>
 
-            <Button>Continue</Button>
+            <Button onPress={() => navigation.navigate("ConfirmMnemonic")}>Continue</Button>
         </VStack>
 
     </View>

@@ -10,12 +10,14 @@ import { ToastProvider } from 'native-base';
 
 import Onboarding from './Authentication/Onboarding';
 import GenerateMnemonic from './Authentication/GenerateMnemonic';
+import ConfirmMnemonic from './Authentication/ConfirmMnemonic';
 import ImportMnemonic from './Authentication/ImportMnemonic'
 import CreatePassword from './Authentication/CreatePassword';
 
 type AppStackParamsList = {
   Onboarding: undefined;
   GenerateMnemonic: undefined;
+  ConfirmMnemonic: undefined;
   ImportMnemonic: undefined;
   CreatePassword: undefined;
 }
@@ -35,6 +37,7 @@ function App(): JSX.Element {
             }}>
             <AppStack.Screen name="Onboarding" component={Onboarding} />
             <AppStack.Screen name="GenerateMnemonic" component={GenerateMnemonic} />
+            <AppStack.Screen name="ConfirmMnemonic" component={ConfirmMnemonic} />
             <AppStack.Screen name="ImportMnemonic" component={ImportMnemonic} />
             <AppStack.Screen name="CreatePassword" component={CreatePassword} />
           </AppStack.Navigator>
