@@ -3,12 +3,14 @@ import React, { useState } from 'react'
 import {View, Pressable} from "react-native"
 
 import styles from "../../styles/authentication/confirmMnemonic"
+import { useNavigation } from '@react-navigation/native'
 
 type Props = {}
 
 const sampleMnemonic = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 
 function ConfirmMnemonic({}: Props) {
+  const navigation = useNavigation()
   const [mnemonic, setMnemonic] = useState<string[]>([])
   
   const handleWordSelection = (word: string) => {
@@ -44,7 +46,7 @@ function ConfirmMnemonic({}: Props) {
                 ))}
             </View>
 
-            <Button>Confirm</Button>
+            <Button onPress={() => navigation.navigate("CreatePassword")}>Confirm</Button>
         </VStack>
     </View>
   )
