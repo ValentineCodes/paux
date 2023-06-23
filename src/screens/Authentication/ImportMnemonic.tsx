@@ -2,7 +2,7 @@ import { VStack, Text, Button } from 'native-base'
 import React from 'react'
 import { View } from 'react-native'
 
-import styles from "../../styles/importMnemonic"
+import styles from "../../styles/authentication/importMnemonic"
 import MnemonicInput from '../../components/forms/MnemonicInput'
 
 type Props = {}

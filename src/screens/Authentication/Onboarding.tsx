@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, VStack, Button, Center } from 'native-base'
 
-import styles from "../../styles/onboarding"
+import styles from "../../styles/authentication/onboarding"
 import { useNavigation } from '@react-navigation/native'
 
 type Props = {}

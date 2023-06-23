@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native'
 import { Input, Icon, Button, HStack, Text } from 'native-base'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Pressable, View, StyleSheet, TextInput } from 'react-native'
@@ -25,6 +26,8 @@ const InputField = ({onChange}: InputFieldProps) => {
 }
 
 function MnemonicInput({}: MnemonicInputProps) {
+  const navigation = useNavigation()
+
   const [mnemonic, setMnemonic] = useState(Array(12).fill(""))
 
   const renderMnemonicInput = useMemo(() => {
@@ -48,7 +51,7 @@ function MnemonicInput({}: MnemonicInputProps) {
       <View style={styles.mnemonicInputContainer}>
         {renderMnemonicInput}
       </View>
-      <Button onPress={() => console.log(mnemonic)}>Confirm</Button>
+      <Button onPress={() => navigation.navigate("CreatePassword")}>Confirm</Button>
     </View>
   )
 }
