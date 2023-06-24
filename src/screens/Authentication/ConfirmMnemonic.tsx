@@ -1,17 +1,18 @@
 import { HStack, Text, VStack, Button } from 'native-base'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {View, Pressable} from "react-native"
 
 import styles from "../../styles/authentication/confirmMnemonic"
 import { useNavigation } from '@react-navigation/native'
+import { shuffleArray } from '../../utils/helperFunctions'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type Props = {}
-
-const sampleMnemonic = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 
 function ConfirmMnemonic({}: Props) {
   const navigation = useNavigation()
   const [mnemonic, setMnemonic] = useState<string[]>([])
+  const [shuffledMnemonic, setShuffledMnemonic] = useState<string[]>([])
   
   const handleWordSelection = (word: string) => {
     let _mnemonic = mnemonic.slice()
@@ -24,6 +25,18 @@ function ConfirmMnemonic({}: Props) {
 
     setMnemonic(_mnemonic)
   }
+
+  useEffect(() => {
+    (async () => {
+        const mnemonic = await AsyncStorage.getItem("mnemonic")
+        if(mnemonic) {
+            const _mnemonic: string[] = mnemonic.split(" ")
+            const shuffledMnemonic = shuffleArray(_mnemonic)
+            setShuffledMnemonic(shuffledMnemonic)
+        }
+    })()
+  }, [])
+  
   return (
     <View style={styles.container}>
         <View>
@@ -39,7 +52,7 @@ function ConfirmMnemonic({}: Props) {
             </View>
 
             <View  style={styles.mnemonicWrapper}>
-                {sampleMnemonic.map(word => (
+                {shuffledMnemonic.map(word => (
                     <Pressable onPress={() => handleWordSelection(word)}>
                         <Text style={mnemonic.includes(word)? styles.selectedWord : styles.word}>{word}</Text>
                     </Pressable>
