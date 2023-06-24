@@ -1,16 +1,18 @@
 import { HStack, Text, VStack, Button } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import {View, Pressable} from "react-native"
+import {View, Pressable, ScrollView} from "react-native"
 
 import styles from "../../styles/authentication/confirmMnemonic"
 import { useNavigation } from '@react-navigation/native'
 import { shuffleArray } from '../../utils/helperFunctions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useToast } from 'react-native-toast-notifications'
 
 type Props = {}
 
 function ConfirmMnemonic({}: Props) {
   const navigation = useNavigation()
+  const toast = useToast();
   const [mnemonic, setMnemonic] = useState<string[]>([])
   const [shuffledMnemonic, setShuffledMnemonic] = useState<string[]>([])
   
@@ -26,6 +28,30 @@ function ConfirmMnemonic({}: Props) {
     setMnemonic(_mnemonic)
   }
 
+  const confirm = async () => {
+    if(mnemonic.length !== 12) {
+        toast.show("Incomplete mnemonic", {
+            type: "warning"
+        })
+        return
+    }
+
+    try {
+        const _mnemonic = await AsyncStorage.getItem("mnemonic")
+        const selectedMnemonic = mnemonic.join(" ")
+        if(_mnemonic === selectedMnemonic) {
+            navigation.navigate("CreatePassword")
+        } else {
+            toast.show("Incorrect mnemonic order", {
+                type: "danger"
+            })
+        }
+    } catch(error) {
+        console.log("Failed to get mnemonic")
+        console.error(error)
+    }
+  }
+
   useEffect(() => {
     (async () => {
         const mnemonic = await AsyncStorage.getItem("mnemonic")
@@ -38,7 +64,7 @@ function ConfirmMnemonic({}: Props) {
   }, [])
   
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
         <View>
             <Text fontSize="2xl" bold>Pocket</Text>
         </View>
@@ -47,21 +73,24 @@ function ConfirmMnemonic({}: Props) {
             <Text fontSize="xl">Confirm Secret Recovery Phrase</Text>
             <Text>Select each phrase in order</Text>
 
-            <View style={styles.mnemonicWrapper}>
-                {mnemonic.map(word => <Text>{word}</Text>)}
+            <View style={styles.selectedMnemonic}>
+                {mnemonic.map(word => <Text key={word} textAlign="center" style={[styles.word, {margin: 10, borderWidth: 0}]}>{word}</Text>)}
             </View>
 
-            <View  style={styles.mnemonicWrapper}>
+            <View  style={[styles.mnemonicWrapper, {borderWidth: 0}]}>
                 {shuffledMnemonic.map(word => (
-                    <Pressable onPress={() => handleWordSelection(word)}>
-                        <Text style={mnemonic.includes(word)? styles.selectedWord : styles.word}>{word}</Text>
+                    <Pressable key={word} onPress={() => handleWordSelection(word)} style={{margin: 10, width: "33%"}}>
+                        <Text textAlign="center" style={mnemonic.includes(word)? styles.selectedWord : styles.word}>{word}</Text>
                     </Pressable>
                 ))}
             </View>
 
-            <Button onPress={() => navigation.navigate("CreatePassword")}>Confirm</Button>
+            <HStack space={2}>
+                <Button variant="outline" borderColor="red.300" onPress={() => setMnemonic([])}>Clear</Button>
+                <Button onPress={confirm}>Confirm</Button>
+            </HStack>
         </VStack>
-    </View>
+    </ScrollView>
   )
 }
 

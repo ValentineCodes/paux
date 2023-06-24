@@ -7,14 +7,17 @@ import App from './src/screens/App';
 import {name as appName} from './app.json';
 import { NativeBaseProvider } from 'native-base';
 import { Provider } from 'react-redux';
+import { ToastProvider } from 'react-native-toast-notifications'
 import { store } from './src/store';
 
 function Application() {
     return (
         <Provider store={store}>
-            <NativeBaseProvider>
-                <App />
-            </NativeBaseProvider>
+            <ToastProvider>
+                <NativeBaseProvider>
+                    <App />
+                </NativeBaseProvider>
+            </ToastProvider>
         </Provider>
     );
 }

@@ -6,6 +6,16 @@ export default StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
   },
+  selectedMnemonic: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    marginVertical: 20,
+    width: '100%',
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+  },
   mnemonicWrapper: {
     flexDirection: 'row',
     flexWrap: 'wrap',
