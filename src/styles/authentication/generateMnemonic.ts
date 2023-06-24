@@ -22,5 +22,6 @@ export default StyleSheet.create({
     backgroundColor: '#313234',
     alignItems: 'center',
     padding: 10,
+    justifyContent: 'center',
   },
 });

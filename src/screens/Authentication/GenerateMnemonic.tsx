@@ -1,5 +1,5 @@
-import { Center, Text, VStack, Button } from 'native-base'
-import React, { useState, useCallback } from 'react'
+import { Center, Text, VStack, Button, HStack } from 'native-base'
+import React, { useState, useEffect } from 'react'
 import { View, ActivityIndicator } from 'react-native'
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 
@@ -10,7 +10,7 @@ import { ethers } from "ethers";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import  styles from "../../styles/authentication/generateMnemonic"
-import { useNavigation, useFocusEffect } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { addKeyPair } from '../../store/reducers/KeyPairs'
 
 type Props = {}
@@ -47,9 +47,9 @@ function GenerateMnemonic({}: Props) {
         }, 100)
     }
 
-    useFocusEffect(
-        useCallback(generateNewWallet, [])
-    )
+    useEffect(() => {
+        generateNewWallet()
+    }, [])
   return (
     <View style={styles.container}>
         <View>
@@ -63,13 +63,18 @@ function GenerateMnemonic({}: Props) {
             {isLoading? (
                 <ActivityIndicator />
             ) : (
-                <View style={{width: "100%", height: 200}}>
+                <View style={{width: "100%", height: 300}}>
                     <View style={styles.mnemonicWrapper}>
-                        {wallet && wallet.mnemonic.split(" ").map(word => <Text key={word} style={{borderWidth: 1, borderRadius: 50, paddingVertical: 15, paddingHorizontal: 10}}>{word}</Text>)}
+                        {wallet && wallet.mnemonic.split(" ").map((word, index) => (
+                             <HStack key={Math.random().toString()} alignItems="center" space={2} width="33%" marginTop={5}>
+                                <Text bold>{index + 1}</Text>
+                                <Text key={word} style={{borderWidth: 1, borderRadius: 10, paddingVertical: 10, paddingHorizontal: 5}}>{word}</Text>
+                             </HStack>
+                        ))}
                     </View>
 
                     {!showMnemonic && (
-                    <VStack space={4} style={styles.mnemonicMask}>
+                    <VStack space={4} style={styles.mnemonicMask} height={300}>
                         <MaterialIcons name="visibility-off" style={{color: "white", fontSize: 30}}/>
                         <Text bold color="white">Tap to reveal your Secret Recovery Phrase</Text>
                         <Text color="grey">Mask sure no one is watching your screen</Text>
