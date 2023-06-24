@@ -3,6 +3,13 @@ import { Input, Icon, Button, HStack, Text } from 'native-base'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Pressable, View, StyleSheet, TextInput } from 'react-native'
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
+import { useToast } from 'react-native-toast-notifications'
+
+import "react-native-get-random-values"
+import "@ethersproject/shims"
+import { ethers } from "ethers";
+
+import { addKeyPair } from '../../store/reducers/KeyPairs'
 
 type MnemonicInputProps = {}
 type InputFieldProps = {
@@ -27,6 +34,7 @@ const InputField = ({onChange}: InputFieldProps) => {
 
 function MnemonicInput({}: MnemonicInputProps) {
   const navigation = useNavigation()
+  const toast = useToast();
 
   const [mnemonic, setMnemonic] = useState(Array(12).fill(""))
 
@@ -46,12 +54,35 @@ function MnemonicInput({}: MnemonicInputProps) {
     })
   }, [])
 
+  const confirm = async () => {
+    if(mnemonic.length !== 12) {
+      toast.show("Incomplete mnemonic", {
+        type: "warning"
+      })
+      return
+    }
+
+    const _mnemonic = "prize waste party attract street satoshi lava help goose anchor appear horror"
+    if(ethers.utils.isValidMnemonic(_mnemonic)){
+      const wallet = ethers.Wallet.fromMnemonic(_mnemonic)
+      const _wallet = {
+        privateKey: wallet.privateKey,
+        publicKey: wallet.publicKey
+      }
+      console.log(_wallet)
+    } else {
+      toast.show("Invalid Mnemonic!", {
+        type: "danger"
+      })
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.mnemonicInputContainer}>
         {renderMnemonicInput}
       </View>
-      <Button onPress={() => navigation.navigate("CreatePassword")}>Confirm</Button>
+      <Button onPress={confirm}>Confirm</Button>
     </View>
   )
 }
