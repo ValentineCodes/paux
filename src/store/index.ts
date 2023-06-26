@@ -18,7 +18,7 @@ const persistConfig = {
   key: 'pocket.root.storage',
   version: 1,
   storage: AsyncStorage,
-  blacklist: ['keyPair'],
+  blacklist: ['keyPair', 'auth'],
 };
 
 const reducers = combineReducers({
