@@ -10,6 +10,7 @@ import "@ethersproject/shims"
 import { ethers } from "ethers";
 
 import { addKeyPair } from '../../store/reducers/KeyPairs'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type MnemonicInputProps = {}
 type InputFieldProps = {
@@ -62,14 +63,19 @@ function MnemonicInput({}: MnemonicInputProps) {
       return
     }
 
-    const _mnemonic = "prize waste party attract street satoshi lava help goose anchor appear horror"
+    const _mnemonic = mnemonic.join(" ")
     if(ethers.utils.isValidMnemonic(_mnemonic)){
       const wallet = ethers.Wallet.fromMnemonic(_mnemonic)
       const _wallet = {
         privateKey: wallet.privateKey,
-        publicKey: wallet.publicKey
+        address: wallet.address
       }
-      console.log(_wallet)
+
+      // Save wallet
+      AsyncStorage.setItem("mnemonic", _mnemonic)
+      addKeyPair(_wallet)
+
+      navigation.navigate("CreatePassword")
     } else {
       toast.show("Invalid Mnemonic!", {
         type: "danger"

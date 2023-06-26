@@ -18,7 +18,7 @@ type Props = {}
 interface Wallet {
     mnemonic: string;
     privateKey: string;
-    publicKey: string;
+    address: string;
 }
 function GenerateMnemonic({}: Props) {
     const navigation = useNavigation()
@@ -30,7 +30,7 @@ function GenerateMnemonic({}: Props) {
     const saveWallet = () => {
         if(!wallet) return
         AsyncStorage.setItem("mnemonic", wallet.mnemonic)
-        addKeyPair({ privateKey: wallet.privateKey, publicKey: wallet.publicKey })
+        addKeyPair({ privateKey: wallet.privateKey, address: wallet.address })
         navigation.navigate("ConfirmMnemonic")
     }
 
@@ -40,7 +40,7 @@ function GenerateMnemonic({}: Props) {
             const wallet = {
                 mnemonic: newWallet.mnemonic.phrase,
                 privateKey: newWallet.privateKey,
-                publicKey: newWallet.publicKey
+                address: newWallet.address
             }
             setWallet(wallet)
             setIsLoading(false)

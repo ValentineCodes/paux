@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 
 interface KeyPair {
   privateKey: string;
-  publicKey: string;
+  address: string;
 }
 
 const initialState: KeyPair[] = [];
@@ -15,7 +15,7 @@ export const slice = createSlice({
       return [...state, action.payload];
     },
     removeKeyPair: (state, action) => {
-      return state.filter(keyPair => keyPair.publicKey !== action.payload);
+      return state.filter(keyPair => keyPair.address !== action.payload);
     },
   },
 });
