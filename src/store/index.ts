@@ -21,14 +21,23 @@ const persistConfig = {
   blacklist: ['keyPair', 'auth'],
 };
 
+const authPersistConfig = {
+  key: 'auth',
+  storage: AsyncStorage,
+};
+const keyPairPersistConfig = {
+  key: 'auth',
+  storage: AsyncStorage,
+};
+
 const reducers = combineReducers({
-  auth: Auth,
-  keyPair: KeyPair,
+  auth: persistReducer(authPersistConfig, Auth),
+  keyPair: persistReducer(keyPairPersistConfig, KeyPair),
 });
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: reducers,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {

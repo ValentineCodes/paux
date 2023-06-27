@@ -53,7 +53,7 @@ function CreatePassword({}: Props) {
         AsyncStorage.setItem("security", JSON.stringify(security))
         dispatch(loginUser())
 
-        toast.show("User logged in!")
+        navigation.navigate("Home")
     }
   return (
     <View style={styles.container}>
