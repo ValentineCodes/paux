@@ -6,7 +6,8 @@ import { useNavigation } from '@react-navigation/native'
 import PasswordInput from '../../components/forms/PasswordInput'
 import { useDispatch } from 'react-redux'
 import { useToast } from 'react-native-toast-notifications'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import SInfo from "react-native-sensitive-info";
+
 import { loginUser } from '../../store/reducers/Auth'
 
 type Props = {}
@@ -21,14 +22,14 @@ function CreatePassword({}: Props) {
     const [isBiometricsEnabled, setIsBiometricsEnabled] = useState(false)
 
     const confirmationMessage = useCallback(() => {
-        if(confirmPassword) {
+        if(password && confirmPassword) {
             if(password === confirmPassword) {
                 return <Text color="green.500">Passwords match</Text>
             } else {
                 return <Text color="red.500">Passwords do not match</Text>
             }
         }
-    }, [confirmPassword])
+    }, [password, confirmPassword])
 
     const createPassword = async () => {
         if(!password) {
@@ -50,7 +51,10 @@ function CreatePassword({}: Props) {
             isBiometricsEnabled
         }
 
-        AsyncStorage.setItem("security", JSON.stringify(security))
+        await SInfo.setItem("security", JSON.stringify(security), {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        });
         dispatch(loginUser())
 
         navigation.navigate("Home")

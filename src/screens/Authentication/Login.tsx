@@ -1,11 +1,10 @@
 import { Button, Center, Text } from 'native-base'
 import React, { useState } from 'react'
-import { Platform } from 'react-native'
 import PasswordInput from '../../components/forms/PasswordInput'
 import { useToast } from 'react-native-toast-notifications'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
-import ReactNativeBiometrics, { BiometryTypes } from 'react-native-biometrics'
+import ReactNativeBiometrics from 'react-native-biometrics'
+import SInfo from "react-native-sensitive-info";
 
 type Props = {}
 
@@ -23,7 +22,10 @@ function Login({}: Props) {
             return
         }
 
-        const _security = await AsyncStorage.getItem("security")
+        const _security = await SInfo.getItem("security", {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        });
         const security = JSON.parse(_security!)
 
         if(password !== security.password) {

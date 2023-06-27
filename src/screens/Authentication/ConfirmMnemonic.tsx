@@ -5,8 +5,8 @@ import {View, Pressable, ScrollView} from "react-native"
 import styles from "../../styles/authentication/confirmMnemonic"
 import { useNavigation } from '@react-navigation/native'
 import { shuffleArray } from '../../utils/helperFunctions'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useToast } from 'react-native-toast-notifications'
+import SInfo from "react-native-sensitive-info";
 
 type Props = {}
 
@@ -37,7 +37,10 @@ function ConfirmMnemonic({}: Props) {
     }
 
     try {
-        const _mnemonic = await AsyncStorage.getItem("mnemonic")
+        const _mnemonic = await SInfo.getItem("mnemonic", {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        });
         const selectedMnemonic = mnemonic.join(" ")
         if(_mnemonic === selectedMnemonic) {
             navigation.navigate("CreatePassword")
@@ -54,7 +57,10 @@ function ConfirmMnemonic({}: Props) {
 
   useEffect(() => {
     (async () => {
-        const mnemonic = await AsyncStorage.getItem("mnemonic")
+        const mnemonic = await SInfo.getItem("mnemonic", {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        });
         if(mnemonic) {
             const _mnemonic: string[] = mnemonic.split(" ")
             const shuffledMnemonic = shuffleArray(_mnemonic)

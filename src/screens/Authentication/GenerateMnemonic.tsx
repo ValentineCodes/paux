@@ -7,11 +7,9 @@ import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { ethers } from "ethers";
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import  styles from "../../styles/authentication/generateMnemonic"
 import { useNavigation } from '@react-navigation/native'
-import { addAccount } from '../../store/reducers/Accounts'
+import SInfo from "react-native-sensitive-info";
 
 type Props = {}
 
@@ -27,11 +25,22 @@ function GenerateMnemonic({}: Props) {
     const [showMnemonic, setShowMnemonic] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
-    const saveWallet = () => {
+    const saveWallet = async () => {
         if(!wallet) return
-        AsyncStorage.setItem("mnemonic", wallet.mnemonic)
-        addAccount({ privateKey: wallet.privateKey, address: wallet.address })
-        navigation.navigate("ConfirmMnemonic")
+        try {
+            await SInfo.setItem("mnemonic", wallet.mnemonic, {
+                sharedPreferencesName: "pocket.android.storage",
+                keychainService: "pocket.ios.storage",
+            });
+            const _wallet = { privateKey: wallet.privateKey, address: wallet.address }
+            await SInfo.setItem("accounts", JSON.stringify([_wallet]), {
+                sharedPreferencesName: "pocket.android.storage",
+                keychainService: "pocket.ios.storage",
+            })
+            navigation.navigate("ConfirmMnemonic")
+        } catch(error) {
+
+        }
     }
 
     const generateNewWallet = () => {
