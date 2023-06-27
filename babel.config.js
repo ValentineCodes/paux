@@ -11,6 +11,7 @@ module.exports = {
           stream: 'stream-browserify',
           buffer: '@craftzdog/react-native-buffer',
           'bn.js': 'react-native-bignumber',
+          '@ethersproject/pbkdf2': './src/utils/ethers-patch.ts',
         },
       },
     ],

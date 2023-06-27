@@ -21,4 +21,5 @@ function Application() {
         </Provider>
     );
 }
+
 AppRegistry.registerComponent(appName, () => Application);
