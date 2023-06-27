@@ -11,7 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import  styles from "../../styles/authentication/generateMnemonic"
 import { useNavigation } from '@react-navigation/native'
-import { addKeyPair } from '../../store/reducers/KeyPairs'
+import { addAccount } from '../../store/reducers/Accounts'
 
 type Props = {}
 
@@ -30,7 +30,7 @@ function GenerateMnemonic({}: Props) {
     const saveWallet = () => {
         if(!wallet) return
         AsyncStorage.setItem("mnemonic", wallet.mnemonic)
-        addKeyPair({ privateKey: wallet.privateKey, address: wallet.address })
+        addAccount({ privateKey: wallet.privateKey, address: wallet.address })
         navigation.navigate("ConfirmMnemonic")
     }
 

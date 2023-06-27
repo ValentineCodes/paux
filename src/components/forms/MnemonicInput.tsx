@@ -9,7 +9,7 @@ import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { ethers } from "ethers";
 
-import { addKeyPair } from '../../store/reducers/KeyPairs'
+import { addAccount } from '../../store/reducers/Accounts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type MnemonicInputProps = {}
@@ -73,7 +73,7 @@ function MnemonicInput({}: MnemonicInputProps) {
 
       // Save wallet
       AsyncStorage.setItem("mnemonic", _mnemonic)
-      addKeyPair(_wallet)
+      addAccount(_wallet)
 
       navigation.navigate("CreatePassword")
     } else {

@@ -12,27 +12,27 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Auth from './reducers/Auth';
-import KeyPair from './reducers/KeyPairs';
+import Account from './reducers/Accounts';
 
 const persistConfig = {
   key: 'pocket.root.storage',
   version: 1,
   storage: AsyncStorage,
-  blacklist: ['keyPair', 'auth'],
+  blacklist: ['account', 'auth'],
 };
 
 const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
 };
-const keyPairPersistConfig = {
+const accountPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
 };
 
 const reducers = combineReducers({
   auth: persistReducer(authPersistConfig, Auth),
-  keyPair: persistReducer(keyPairPersistConfig, KeyPair),
+  account: persistReducer(accountPersistConfig, Account),
 });
 const persistedReducer = persistReducer(persistConfig, reducers);
 
