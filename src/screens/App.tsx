@@ -32,8 +32,6 @@ const AppStack = createNativeStackNavigator<AppStackParamsList>();
 function App(): JSX.Element {
   const auth = useSelector(state => state.auth)
 
-  console.log(auth)
-
   return (
     <ToastProvider>
       <SafeAreaProvider>
