@@ -1,36 +1,7 @@
 import { Text, Select, CheckIcon, Box, HStack, Modal, VStack, Button, ScrollView } from 'native-base'
 import React, { useState, useRef } from 'react'
-
-const NETWORKS = [
-    {
-        name: "Ethereum",
-        value: "mainnet"
-    }, {
-        name: "Sepolia",
-        value: "sepolia"
-    }, {
-        name: "Goerli",
-        value: "goerli"
-    }, {
-        name: "Arbitrum",
-        value: "arbitrum"
-    }, {
-        name: "ArbitrumGoerli",
-        value: "arbitrumGoerli"
-    }, {
-        name: "Optimism",
-        value: "optimism"
-    }, {
-        name: "OptimismGoerli",
-        value: "optimismGoerli"
-    }, {
-        name: "Polygon",
-        value: "polygon"
-    }, {
-        name: "Mumbai",
-        value: "mumbai"
-    }
-]
+import { useDispatch, useSelector } from 'react-redux'
+import { Network, switchNetwork } from '../../../store/reducers/Networks'
 
 const ACCOUNTS = [
     {
@@ -59,25 +30,35 @@ const ACCOUNTS = [
 type Props = {}
 
 function Header({}: Props) {
-    const [selectedNetwork, setSelectedNetwork] = useState("mainnet")
+    const dispatch = useDispatch()
     const [isAccountModalVisible, setIsAccountModalVisible] = useState(false)
 
     const accountInitialRef = useRef(null)
     const accountFinalRef = useRef(null)
+
+    const networks: Network[] = useSelector(state => state.networks)
+    // const connectedAccount: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
+
+    const handleNetworkSelecttion = (chainId: string) => {
+            dispatch(switchNetwork(chainId))
+    }
+
+    console.log("Networks: ", networks)
+    // console.log("Connected Network: ", connectedAccount)
 
   return (
     <HStack alignItems="center" justifyContent="space-between" borderBottomWidth={1} borderBottomColor="#ccc" padding={2}>
         <Text fontSize="2xl" bold>Pocket</Text>
 
         <HStack space={2}>
-            <Box maxW="200">
-                <Select selectedValue={selectedNetwork} minWidth="200" accessibilityLabel="Choose Network" placeholder="Choose Network" _selectedItem={{
+            {/* <Box maxW="200">
+                <Select selectedValue={connectedAccount.chainId.toString()} minWidth="200" accessibilityLabel="Choose Network" placeholder="Choose Network" _selectedItem={{
                 bg: "teal.600",
                 endIcon: <CheckIcon size="5" />
-            }} mt={1} onValueChange={network => setSelectedNetwork(network)}>
-                    {NETWORKS.map(network => <Select.Item key={network.value} label={network.name} value={network.value} />)}
+            }} mt={1} onValueChange={handleNetworkSelecttion}>
+                    {networks.map((network: Network) => <Select.Item key={network.chainId} label={network.name} value={network.chainId.toString()} />)}
                 </Select>
-            </Box>
+            </Box> */}
 
             <Button onPress={() => setIsAccountModalVisible(true)}>Accounts</Button>
         </HStack>
