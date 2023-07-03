@@ -14,22 +14,21 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Auth from './reducers/Auth';
 import Networks from './reducers/Networks';
 
-const authPersistConfig = {
-  key: 'auth',
-  storage: AsyncStorage,
-};
-const networksConfig = {
-  key: 'networks',
+const persistConfig = {
+  key: 'root',
+  version: 1,
   storage: AsyncStorage,
 };
 
 const reducers = combineReducers({
-  auth: persistReducer(authPersistConfig, Auth),
-  networks: persistReducer(networksConfig, Networks),
+  auth: Auth,
+  networks: Networks,
 });
 
+const persistedReducer = persistReducer(persistConfig, reducers);
+
 export const store = configureStore({
-  reducer: reducers,
+  reducer: persistedReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: {

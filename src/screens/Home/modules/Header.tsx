@@ -37,28 +37,25 @@ function Header({}: Props) {
     const accountFinalRef = useRef(null)
 
     const networks: Network[] = useSelector(state => state.networks)
-    // const connectedAccount: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
+    const connectedAccount: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
 
     const handleNetworkSelecttion = (chainId: string) => {
             dispatch(switchNetwork(chainId))
     }
-
-    console.log("Networks: ", networks)
-    // console.log("Connected Network: ", connectedAccount)
 
   return (
     <HStack alignItems="center" justifyContent="space-between" borderBottomWidth={1} borderBottomColor="#ccc" padding={2}>
         <Text fontSize="2xl" bold>Pocket</Text>
 
         <HStack space={2}>
-            {/* <Box maxW="200">
+            <Box maxW="200">
                 <Select selectedValue={connectedAccount.chainId.toString()} minWidth="200" accessibilityLabel="Choose Network" placeholder="Choose Network" _selectedItem={{
                 bg: "teal.600",
                 endIcon: <CheckIcon size="5" />
             }} mt={1} onValueChange={handleNetworkSelecttion}>
                     {networks.map((network: Network) => <Select.Item key={network.chainId} label={network.name} value={network.chainId.toString()} />)}
                 </Select>
-            </Box> */}
+            </Box>
 
             <Button onPress={() => setIsAccountModalVisible(true)}>Accounts</Button>
         </HStack>

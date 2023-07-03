@@ -8,16 +8,19 @@ import {name as appName} from './app.json';
 import { NativeBaseProvider } from 'native-base';
 import { Provider } from 'react-redux';
 import { ToastProvider } from 'react-native-toast-notifications'
-import { store } from './src/store';
+import { persistor, store } from './src/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function Application() {
     return (
         <Provider store={store}>
-            <ToastProvider>
-                <NativeBaseProvider>
-                    <App />
-                </NativeBaseProvider>
-            </ToastProvider>
+            <PersistGate loading={null} persistor={persistor}>
+                <ToastProvider>
+                    <NativeBaseProvider>
+                        <App />
+                    </NativeBaseProvider>
+                </ToastProvider>
+            </PersistGate>
         </Provider>
     );
 }
