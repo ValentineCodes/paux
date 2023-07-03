@@ -42,7 +42,7 @@ const initialState: Network[] = [
     name: 'Arbitrum',
     provider: `https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`,
     chainId: 42161,
-    currencySymbol: 'ETH',
+    currencySymbol: 'ARB',
     isConnected: false,
   },
   {
