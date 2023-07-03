@@ -23,7 +23,7 @@ function MainBalance({}: Props) {
     try {
       const provider = new ethers.providers.JsonRpcProvider(connectedNetwork.provider)
       const balance = await provider.getBalance(connectedAccount.address)
-      const _balance = ethers.utils.formatEther(balance)
+      const _balance = Number(ethers.utils.formatEther(balance)).toFixed(4)
 
       try {
         const price = await redstone.getPrice(connectedNetwork.currencySymbol);
@@ -32,7 +32,7 @@ function MainBalance({}: Props) {
       } catch(error) {
         return
       } finally {
-        setBalance(_balance)
+        setBalance(_balance.toString())
       }
 
     } catch(error) {
