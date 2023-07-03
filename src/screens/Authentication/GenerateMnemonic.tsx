@@ -10,6 +10,8 @@ import { ethers } from "ethers";
 import  styles from "../../styles/authentication/generateMnemonic"
 import { useNavigation } from '@react-navigation/native'
 import SInfo from "react-native-sensitive-info";
+import { useDispatch } from 'react-redux'
+import { addAccount } from '../../store/reducers/Accounts'
 
 type Props = {}
 
@@ -20,6 +22,8 @@ interface Wallet {
 }
 function GenerateMnemonic({}: Props) {
     const navigation = useNavigation()
+
+    const dispatch = useDispatch()
     
     const [wallet, setWallet] = useState<Wallet>()
     const [showMnemonic, setShowMnemonic] = useState(false)
@@ -37,6 +41,9 @@ function GenerateMnemonic({}: Props) {
                 sharedPreferencesName: "pocket.android.storage",
                 keychainService: "pocket.ios.storage",
             })
+
+            dispatch(addAccount(_wallet.address))
+
             navigation.navigate("ConfirmMnemonic")
         } catch(error) {
 

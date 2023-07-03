@@ -10,6 +10,8 @@ import "@ethersproject/shims"
 import { ethers } from "ethers";
 
 import SInfo from "react-native-sensitive-info";
+import { useDispatch } from 'react-redux'
+import { addAccount } from '../../store/reducers/Accounts'
 
 type MnemonicInputProps = {}
 type InputFieldProps = {
@@ -35,6 +37,8 @@ const InputField = ({onChange}: InputFieldProps) => {
 function MnemonicInput({}: MnemonicInputProps) {
   const navigation = useNavigation()
   const toast = useToast();
+
+  const dispatch = useDispatch()
 
   const [mnemonic, setMnemonic] = useState(Array(12).fill(""))
 
@@ -79,6 +83,8 @@ function MnemonicInput({}: MnemonicInputProps) {
         sharedPreferencesName: "pocket.android.storage",
         keychainService: "pocket.ios.storage",
       })
+
+      dispatch(addAccount(_wallet.address))
 
       navigation.navigate("CreatePassword")
     } else {
