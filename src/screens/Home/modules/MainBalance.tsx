@@ -1,21 +1,25 @@
 import { HStack, Image, Text, VStack, Button } from 'native-base'
-import React, {useState, useEffect} from 'react'
-import { StyleSheet } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ethers } from 'ethers'
 import redstone from 'redstone-api';
+import { useToast } from 'react-native-toast-notifications'
 
 import { Account } from '../../../store/reducers/Accounts'
 import { Network } from '../../../store/reducers/Networks'
 
 type Props = {}
 
-function MainBalance({}: Props) {
+function MainBalance({ }: Props) {
   const connectedNetwork: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
   const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
   const [balance, setBalance] = useState<string | null>(null)
   const [dollarValue, setDollarValue] = useState<string | null>(null)
+  const [refresh, setRefresh] = useState(false)
+
+  const toast = useToast()
 
   const getBalance = async () => {
     setBalance(null)
@@ -29,15 +33,25 @@ function MainBalance({}: Props) {
         const price = await redstone.getPrice(connectedNetwork.currencySymbol);
         const dollarValue = Number(_balance) * price.value
         setDollarValue(dollarValue.toFixed(2))
-      } catch(error) {
+      } catch (error) {
         return
       } finally {
         setBalance(_balance.toString())
       }
 
-    } catch(error) {
+    } catch (error) {
+      toast.show("Failed to load balance", {
+        type: "normal"
+      })
       return
     }
+
+  }
+
+  const refreshBalance = async () => {
+    setRefresh(true)
+    await getBalance()
+    setRefresh(false)
 
   }
 
@@ -45,7 +59,8 @@ function MainBalance({}: Props) {
     getBalance()
   }, [connectedAccount, connectedNetwork])
   return (
-    <VStack alignItems="center" space={2} paddingY={5}>
+    <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} />}>
+      <VStack alignItems="center" space={2} paddingY={5}>
         <Image source={require("../../../images/eth-icon.png")} alt="Ethereum" width={50} height={50} />
         <VStack alignItems="center">
           <Text fontSize="xl" bold>{balance !== null && `${balance} ${connectedNetwork.currencySymbol}`}</Text>
@@ -55,17 +70,18 @@ function MainBalance({}: Props) {
           <Button>Deposit</Button>
           <Button>Transfer</Button>
         </Button.Group>
-    </VStack>
+      </VStack>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-    percentDiff: {
-        borderWidth: 1,
-        borderRadius: 25,
-        paddingVertical: 5,
-        paddingHorizontal: 5
-    }
+  percentDiff: {
+    borderWidth: 1,
+    borderRadius: 25,
+    paddingVertical: 5,
+    paddingHorizontal: 5
+  }
 })
 
 export default MainBalance

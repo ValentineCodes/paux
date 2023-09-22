@@ -16,6 +16,7 @@ import CreatePassword from './Authentication/CreatePassword';
 import Login from './Authentication/Login'
 import Home from './Home'
 import { useSelector } from 'react-redux';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type AppStackParamsList = {
   Onboarding: undefined;
@@ -34,14 +35,15 @@ function App(): JSX.Element {
 
   return (
     <ToastProvider>
+      {/* <GestureHandlerRootView style={{ flex: 1 }}> */}
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <NavigationContainer>
-          <AppStack.Navigator
-            screenOptions={{
-              headerShown: false,
-              animation: 'slide_from_right',
-            }}>
+            <AppStack.Navigator
+              screenOptions={{
+                headerShown: false,
+                animation: 'slide_from_right',
+              }}>
               {
                 !auth.isLoggedIn && (
                   <>
@@ -53,12 +55,13 @@ function App(): JSX.Element {
                   </>
                 )
               }
-            <AppStack.Screen name="Login" component={Login} />
-            <AppStack.Screen name="Home" component={Home} />
-          </AppStack.Navigator>
+              <AppStack.Screen name="Login" component={Login} />
+              <AppStack.Screen name="Home" component={Home} />
+            </AppStack.Navigator>
           </NavigationContainer>
         </SafeAreaView>
       </SafeAreaProvider>
+      {/* </GestureHandlerRootView> */}
     </ToastProvider>
   );
 }
