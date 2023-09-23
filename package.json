@@ -17,6 +17,8 @@
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
     "@reduxjs/toolkit": "1.8.6",
+    "@rneui/base": "^4.0.0-rc.8",
+    "@rneui/themed": "^4.0.0-rc.8",
     "@walletconnect/react-native-compat": "^2.8.1",
     "@walletconnect/web3wallet": "^1.8.1",
     "ethers": "5.7",

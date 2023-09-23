@@ -8,6 +8,7 @@ import { useToast } from 'react-native-toast-notifications'
 
 import { Account } from '../../../store/reducers/Accounts'
 import { Network } from '../../../store/reducers/Networks'
+import TransferForm from '../../../components/forms/TransferForm'
 
 type Props = {}
 
@@ -18,6 +19,7 @@ function MainBalance({ }: Props) {
   const [balance, setBalance] = useState<string | null>(null)
   const [dollarValue, setDollarValue] = useState<string | null>(null)
   const [refresh, setRefresh] = useState(false)
+  const [showTransferForm, setShowTransferForm] = useState(false)
 
   const toast = useToast()
 
@@ -55,6 +57,10 @@ function MainBalance({ }: Props) {
 
   }
 
+  const toggleTransferForm = () => {
+    setShowTransferForm(!showTransferForm)
+  }
+
   useEffect(() => {
     getBalance()
   }, [connectedAccount, connectedNetwork])
@@ -68,8 +74,9 @@ function MainBalance({ }: Props) {
         </VStack>
         <Button.Group justifyContent="space-between">
           <Button>Deposit</Button>
-          <Button>Transfer</Button>
+          <Button onPress={() => setShowTransferForm(!showTransferForm)}>Transfer</Button>
         </Button.Group>
+        <TransferForm isVisible={showTransferForm} toggleVisibility={toggleTransferForm} />
       </VStack>
     </ScrollView>
   )
