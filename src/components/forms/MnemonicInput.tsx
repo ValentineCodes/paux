@@ -84,7 +84,7 @@ function MnemonicInput({ }: MnemonicInputProps) {
         keychainService: "pocket.ios.storage",
       })
 
-      dispatch(initAccount({ address: _wallet.address, fromMnemonic: true }))
+      dispatch(initAccount({ address: _wallet.address, isImported: false }))
 
       navigation.navigate("CreatePassword")
     } else {

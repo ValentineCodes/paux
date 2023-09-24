@@ -42,7 +42,7 @@ function GenerateMnemonic({ }: Props) {
                 keychainService: "pocket.ios.storage",
             })
 
-            dispatch(initAccount({ address: _wallet.address, fromMnemonic: true }))
+            dispatch(initAccount({ address: _wallet.address, isImported: false }))
 
             navigation.navigate("ConfirmMnemonic")
         } catch (error) {

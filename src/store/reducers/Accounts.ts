@@ -4,7 +4,7 @@ export interface Account {
   name: string;
   address: string;
   isConnected: boolean;
-  fromMnemonic: boolean;
+  isImported: boolean;
 }
 
 export const accountsSlice = createSlice({
@@ -16,17 +16,18 @@ export const accountsSlice = createSlice({
         name: "Account 1",
         address: action.payload.address,
         isConnected: true,
-        fromMnemonic: action.payload.fromMnemonic
+        isImported: action.payload.isImported
       }]
     },
     addAccount: (state, action) => {
+      const accounts = state.map(account => ({...account, isConnected: false}))
       return [
-        ...state,
+        ...accounts,
         {
           name: `Account ${state.length + 1}`,
           address: action.payload.address,
           isConnected: true,
-          fromMnemonic: action.payload.fromMnemonic
+          isImported: action.payload.isImported
         },
       ];
     },
