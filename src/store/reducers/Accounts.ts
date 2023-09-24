@@ -4,19 +4,29 @@ export interface Account {
   name: string;
   address: string;
   isConnected: boolean;
+  fromMnemonic: boolean;
 }
 
 export const accountsSlice = createSlice({
   name: 'ACCOUNTS',
   initialState: [] as Account[] | [],
   reducers: {
+    initAccount: (state, action) => {
+      return [{
+        name: "Account 1",
+        address: action.payload.address,
+        isConnected: true,
+        fromMnemonic: action.payload.fromMnemonic
+      }]
+    },
     addAccount: (state, action) => {
       return [
         ...state,
         {
           name: `Account ${state.length + 1}`,
-          address: action.payload,
+          address: action.payload.address,
           isConnected: true,
+          fromMnemonic: action.payload.fromMnemonic
         },
       ];
     },
@@ -48,7 +58,7 @@ export const accountsSlice = createSlice({
   },
 });
 
-export const {addAccount, switchAccount, removeAccount, changeName} =
+export const {initAccount, addAccount, switchAccount, removeAccount, changeName} =
   accountsSlice.actions;
 
 export default accountsSlice.reducer;

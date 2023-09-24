@@ -11,30 +11,30 @@ import { ethers } from "ethers";
 
 import SInfo from "react-native-sensitive-info";
 import { useDispatch } from 'react-redux'
-import { addAccount } from '../../store/reducers/Accounts'
+import { initAccount } from '../../store/reducers/Accounts'
 
 type MnemonicInputProps = {}
 type InputFieldProps = {
   onChange: (value: string) => void;
 }
-const InputField = ({onChange}: InputFieldProps) => {
+const InputField = ({ onChange }: InputFieldProps) => {
   const [show, setShow] = useState(false)
 
   const handleValueChange = (value: string) => {
     onChange(value)
   }
-  
-  return (  
+
+  return (
     <Input w={{
       base: "75%",
       md: "25%"
     }} type={show ? "text" : "password"} InputRightElement={<Pressable onPress={() => setShow(!show)}>
-        <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
-      </Pressable>} onChangeText={handleValueChange} />
+      <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
+    </Pressable>} onChangeText={handleValueChange} />
   )
 }
 
-function MnemonicInput({}: MnemonicInputProps) {
+function MnemonicInput({ }: MnemonicInputProps) {
   const navigation = useNavigation()
   const toast = useToast();
 
@@ -59,7 +59,7 @@ function MnemonicInput({}: MnemonicInputProps) {
   }, [])
 
   const confirm = async () => {
-    if(mnemonic.length !== 12) {
+    if (mnemonic.length !== 12) {
       toast.show("Incomplete mnemonic", {
         type: "warning"
       })
@@ -67,7 +67,7 @@ function MnemonicInput({}: MnemonicInputProps) {
     }
 
     const _mnemonic = mnemonic.join(" ")
-    if(ethers.utils.isValidMnemonic(_mnemonic)){
+    if (ethers.utils.isValidMnemonic(_mnemonic)) {
       const wallet = ethers.Wallet.fromMnemonic(_mnemonic)
       const _wallet = {
         privateKey: wallet.privateKey,
@@ -84,7 +84,7 @@ function MnemonicInput({}: MnemonicInputProps) {
         keychainService: "pocket.ios.storage",
       })
 
-      dispatch(addAccount(_wallet.address))
+      dispatch(initAccount({ address: _wallet.address, fromMnemonic: true }))
 
       navigation.navigate("CreatePassword")
     } else {
