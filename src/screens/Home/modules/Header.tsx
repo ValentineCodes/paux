@@ -10,12 +10,14 @@ import { useToast } from 'react-native-toast-notifications'
 import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { ethers } from "ethers";
+import PrivateKeyForm from '../../../components/forms/PrivateKeyForm'
 
 type Props = {}
 
 function Header({ }: Props) {
     const dispatch = useDispatch()
     const [isAccountModalVisible, setIsAccountModalVisible] = useState(false)
+    const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
 
     const accountInitialRef = useRef(null)
     const accountFinalRef = useRef(null)
@@ -55,6 +57,13 @@ function Header({ }: Props) {
         const path = "m/44'/60'/0'/0/" + numOfAccountsFromMnemonic
         const wallet = node.derivePath(path)
 
+        if (accounts.find(account => account.address == wallet.address) != undefined) {
+            toast.show("Account already exists", {
+                type: "normal"
+            })
+            return
+        }
+
         const createdAccounts = await SInfo.getItem("accounts", {
             sharedPreferencesName: "pocket.android.storage",
             keychainService: "pocket.ios.storage",
@@ -72,6 +81,10 @@ function Header({ }: Props) {
         })
 
         setIsAccountModalVisible(false)
+    }
+
+    const togglePrivateKeyForm = () => {
+        setShowPrivateKeyForm(!showPrivateKeyForm)
     }
 
     return (
@@ -114,13 +127,15 @@ function Header({ }: Props) {
                             <Button onPress={createAccount}>
                                 Create
                             </Button>
-                            <Button variant="outline">
+                            <Button variant="outline" onPress={togglePrivateKeyForm}>
                                 Import
                             </Button>
                         </Button.Group>
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
+
+            <PrivateKeyForm isVisible={showPrivateKeyForm} toggleVisibility={togglePrivateKeyForm} />
         </HStack>
     )
 }
