@@ -8,6 +8,7 @@ import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from 'react-native-toast-notifications'
 
 import { Account } from '../store/reducers/Accounts';
+import EditAccountNameForm from './forms/EditAccountNameForm';
 
 
 type Props = {
@@ -15,12 +16,13 @@ type Props = {
     toggleVisibility: () => void;
 }
 
-export default function Deposit({ isVisible, toggleVisibility }: Props) {
+export default function AccountDetails({ isVisible, toggleVisibility }: Props) {
     const toast = useToast()
 
     const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
     const [isAddressCopied, setIsAddressCopied] = useState(false)
+    const [isEditingAccountName, setIsEditingAccountName] = useState(false)
 
     const copyAddress = () => {
         Clipboard.setString(connectedAccount.address)
@@ -32,6 +34,14 @@ export default function Deposit({ isVisible, toggleVisibility }: Props) {
     return (
         <Overlay isVisible={isVisible} onBackdropPress={toggleVisibility}>
             <VStack alignItems="center">
+                {
+                    isEditingAccountName ? <EditAccountNameForm close={() => setIsEditingAccountName(false)} /> : (
+                        <HStack alignItems="center" space={2}>
+                            <Text>{connectedAccount.name}</Text>
+                            <Icon as={<Ionicons name="create-outline" />} size={5} color="muted.400" ml={3} onPress={() => setIsEditingAccountName(true)} />
+                        </HStack>
+                    )
+                }
                 <QRCode value={connectedAccount.address} />
                 <HStack mt={3}>
                     <Text>{connectedAccount.address}</Text>
@@ -43,6 +53,7 @@ export default function Deposit({ isVisible, toggleVisibility }: Props) {
                         </Pressable>
                     )}
                 </HStack>
+                <Button>Show private key</Button>
             </VStack>
         </Overlay>
     )

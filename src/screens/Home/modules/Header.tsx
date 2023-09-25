@@ -1,4 +1,4 @@
-import { Text, Select, CheckIcon, Box, HStack, Modal, VStack, Button, ScrollView } from 'native-base'
+import { Text, Select, CheckIcon, Box, HStack, Modal, VStack, Button, ScrollView, Icon } from 'native-base'
 import React, { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Network, switchNetwork } from '../../../store/reducers/Networks'
@@ -6,11 +6,20 @@ import { Account, addAccount, switchAccount } from '../../../store/reducers/Acco
 import { Pressable } from 'react-native'
 import SInfo from "react-native-sensitive-info";
 import { useToast } from 'react-native-toast-notifications'
+import Ionicons from "react-native-vector-icons/dist/Ionicons"
 
 import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { ethers } from "ethers";
 import PrivateKeyForm from '../../../components/forms/PrivateKeyForm'
+
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+} from 'react-native-popup-menu';
+import AccountDetails from '../../../components/AccountDetails'
 
 type Props = {}
 
@@ -18,6 +27,7 @@ function Header({ }: Props) {
     const dispatch = useDispatch()
     const [isAccountModalVisible, setIsAccountModalVisible] = useState(false)
     const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
+    const [showAccountDetails, setShowAccountDetails] = useState(false)
 
     const accountInitialRef = useRef(null)
     const accountFinalRef = useRef(null)
@@ -87,22 +97,35 @@ function Header({ }: Props) {
         setShowPrivateKeyForm(!showPrivateKeyForm)
     }
 
+    const toggleAccountDetails = () => {
+        setShowAccountDetails(!showAccountDetails)
+    }
+
     return (
         <HStack alignItems="center" justifyContent="space-between" borderBottomWidth={1} borderBottomColor="#ccc" padding={2}>
             <Text fontSize="2xl" bold>Pocket</Text>
 
-            <HStack space={2}>
-                <Box maxW="200">
-                    <Select selectedValue={connectedNetwork.chainId.toString()} minWidth="200" accessibilityLabel="Choose Network" placeholder="Choose Network" _selectedItem={{
-                        bg: "teal.600",
-                        endIcon: <CheckIcon size="5" />
-                    }} mt={1} onValueChange={handleNetworkSelecttion}>
-                        {networks.map((network: Network) => <Select.Item key={network.chainId} label={network.name} value={network.chainId.toString()} />)}
-                    </Select>
-                </Box>
+            <Box maxW="200">
+                <Select selectedValue={connectedNetwork.chainId.toString()} minWidth="200" accessibilityLabel="Choose Network" placeholder="Choose Network" _selectedItem={{
+                    bg: "teal.600",
+                    endIcon: <CheckIcon size="5" />
+                }} mt={1} onValueChange={handleNetworkSelecttion}>
+                    {networks.map((network: Network) => <Select.Item key={network.chainId} label={network.name} value={network.chainId.toString()} />)}
+                </Select>
+            </Box>
 
-                <Button onPress={() => setIsAccountModalVisible(true)}>Accounts</Button>
-            </HStack>
+            <Menu >
+                <MenuTrigger><Icon as={<Ionicons name="ellipsis-vertical-outline" />} size={5} color="black" /></MenuTrigger>
+                <MenuOptions>
+                    <MenuOption onSelect={() => setIsAccountModalVisible(true)}>
+                        <Text>Accounts</Text>
+                    </MenuOption>
+                    <MenuOption onSelect={() => setShowAccountDetails(true)}>
+                        <Text>Account details</Text>
+                    </MenuOption>
+                </MenuOptions>
+            </Menu>
+
             {/* Accounts */}
             <Modal isOpen={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} initialFocusRef={accountInitialRef} finalFocusRef={accountFinalRef}>
                 <Modal.Content>
@@ -135,6 +158,7 @@ function Header({ }: Props) {
                 </Modal.Content>
             </Modal>
 
+            <AccountDetails isVisible={showAccountDetails} toggleVisibility={toggleAccountDetails} />
             <PrivateKeyForm isVisible={showPrivateKeyForm} toggleVisibility={togglePrivateKeyForm} />
         </HStack>
     )

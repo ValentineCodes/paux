@@ -16,7 +16,7 @@ import CreatePassword from './Authentication/CreatePassword';
 import Login from './Authentication/Login'
 import Home from './Home'
 import { useSelector } from 'react-redux';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { MenuProvider } from 'react-native-popup-menu';
 
 type AppStackParamsList = {
   Onboarding: undefined;
@@ -35,33 +35,33 @@ function App(): JSX.Element {
 
   return (
     <ToastProvider>
-      {/* <GestureHandlerRootView style={{ flex: 1 }}> */}
-      <SafeAreaProvider>
-        <SafeAreaView style={styles.container}>
-          <NavigationContainer>
-            <AppStack.Navigator
-              screenOptions={{
-                headerShown: false,
-                animation: 'slide_from_right',
-              }}>
-              {
-                !auth.isLoggedIn && (
-                  <>
-                    <AppStack.Screen name="Onboarding" component={Onboarding} />
-                    <AppStack.Screen name="GenerateMnemonic" component={GenerateMnemonic} />
-                    <AppStack.Screen name="ConfirmMnemonic" component={ConfirmMnemonic} />
-                    <AppStack.Screen name="ImportMnemonic" component={ImportMnemonic} />
-                    <AppStack.Screen name="CreatePassword" component={CreatePassword} />
-                  </>
-                )
-              }
-              <AppStack.Screen name="Login" component={Login} />
-              <AppStack.Screen name="Home" component={Home} />
-            </AppStack.Navigator>
-          </NavigationContainer>
-        </SafeAreaView>
-      </SafeAreaProvider>
-      {/* </GestureHandlerRootView> */}
+      <MenuProvider>
+        <SafeAreaProvider>
+          <SafeAreaView style={styles.container}>
+            <NavigationContainer>
+              <AppStack.Navigator
+                screenOptions={{
+                  headerShown: false,
+                  animation: 'slide_from_right',
+                }}>
+                {
+                  !auth.isLoggedIn && (
+                    <>
+                      <AppStack.Screen name="Onboarding" component={Onboarding} />
+                      <AppStack.Screen name="GenerateMnemonic" component={GenerateMnemonic} />
+                      <AppStack.Screen name="ConfirmMnemonic" component={ConfirmMnemonic} />
+                      <AppStack.Screen name="ImportMnemonic" component={ImportMnemonic} />
+                      <AppStack.Screen name="CreatePassword" component={CreatePassword} />
+                    </>
+                  )
+                }
+                <AppStack.Screen name="Login" component={Login} />
+                <AppStack.Screen name="Home" component={Home} />
+              </AppStack.Navigator>
+            </NavigationContainer>
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </MenuProvider>
     </ToastProvider>
   );
 }

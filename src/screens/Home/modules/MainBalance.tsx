@@ -9,7 +9,6 @@ import { useToast } from 'react-native-toast-notifications'
 import { Account } from '../../../store/reducers/Accounts'
 import { Network } from '../../../store/reducers/Networks'
 import TransferForm from '../../../components/forms/TransferForm'
-import Deposit from '../../../components/Deposit'
 
 type Props = {}
 
@@ -21,7 +20,6 @@ function MainBalance({ }: Props) {
   const [dollarValue, setDollarValue] = useState<string | null>(null)
   const [refresh, setRefresh] = useState(false)
   const [showTransferForm, setShowTransferForm] = useState(false)
-  const [showDeposit, setShowDeposit] = useState(false)
 
   const toast = useToast()
 
@@ -63,10 +61,6 @@ function MainBalance({ }: Props) {
     setShowTransferForm(!showTransferForm)
   }
 
-  const toggleDeposit = () => {
-    setShowDeposit(!showDeposit)
-  }
-
   useEffect(() => {
     getBalance()
   }, [connectedAccount, connectedNetwork])
@@ -79,10 +73,8 @@ function MainBalance({ }: Props) {
           {dollarValue !== null && <Text>${dollarValue}</Text>}
         </VStack>
         <Button.Group justifyContent="space-between">
-          <Button onPress={() => setShowDeposit(!showDeposit)}>Deposit</Button>
           <Button onPress={() => setShowTransferForm(!showTransferForm)}>Transfer</Button>
         </Button.Group>
-        <Deposit isVisible={showDeposit} toggleVisibility={toggleDeposit} />
         <TransferForm isVisible={showTransferForm} toggleVisibility={toggleTransferForm} />
       </VStack>
     </ScrollView>
