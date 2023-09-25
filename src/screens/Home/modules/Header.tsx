@@ -7,6 +7,7 @@ import { Pressable } from 'react-native'
 import SInfo from "react-native-sensitive-info";
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
+import Share from 'react-native-share';
 
 import "react-native-get-random-values"
 import "@ethersproject/shims"
@@ -101,6 +102,16 @@ function Header({ }: Props) {
         setShowAccountDetails(!showAccountDetails)
     }
 
+    const shareAddress = async () => {
+        try {
+            await Share.open({ message: connectedAccount.address })
+        } catch (error) {
+            toast.show("Failed to share address", {
+                type: "danger"
+            })
+        }
+    }
+
     return (
         <HStack alignItems="center" justifyContent="space-between" borderBottomWidth={1} borderBottomColor="#ccc" padding={2}>
             <Text fontSize="2xl" bold>Pocket</Text>
@@ -122,6 +133,9 @@ function Header({ }: Props) {
                     </MenuOption>
                     <MenuOption onSelect={() => setShowAccountDetails(true)}>
                         <Text>Account details</Text>
+                    </MenuOption>
+                    <MenuOption onSelect={shareAddress}>
+                        <Text>Share address</Text>
                     </MenuOption>
                 </MenuOptions>
             </Menu>
