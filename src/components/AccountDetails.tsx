@@ -9,6 +9,7 @@ import { useToast } from 'react-native-toast-notifications'
 
 import { Account } from '../store/reducers/Accounts';
 import EditAccountNameForm from './forms/EditAccountNameForm';
+import { useNavigation } from '@react-navigation/native';
 
 
 type Props = {
@@ -18,6 +19,8 @@ type Props = {
 
 export default function AccountDetails({ isVisible, toggleVisibility }: Props) {
     const toast = useToast()
+
+    const navigation = useNavigation()
 
     const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
@@ -30,6 +33,11 @@ export default function AccountDetails({ isVisible, toggleVisibility }: Props) {
             type: "normal"
         })
         setIsAddressCopied(true)
+    }
+
+    const showPrivateKey = () => {
+        navigation.navigate("PrivateKey")
+        toggleVisibility()
     }
     return (
         <Overlay isVisible={isVisible} onBackdropPress={toggleVisibility}>
@@ -53,7 +61,7 @@ export default function AccountDetails({ isVisible, toggleVisibility }: Props) {
                         </Pressable>
                     )}
                 </HStack>
-                <Button>Show private key</Button>
+                <Button onPress={showPrivateKey}>Show private key</Button>
             </VStack>
         </Overlay>
     )
