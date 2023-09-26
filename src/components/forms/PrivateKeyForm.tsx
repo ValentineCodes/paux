@@ -52,7 +52,7 @@ export default function PrivateKeyForm({ isVisible, toggleVisibility }: Props) {
             toggleVisibility()
         } catch (error) {
             toast.show("Invalid private key", {
-                type: "error"
+                type: "danger"
             })
         }
 

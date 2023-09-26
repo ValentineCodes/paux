@@ -21,13 +21,13 @@ export default function EditAccountNameForm({ close }: Props) {
     const editName = () => {
         if (name.trim().length === 0) {
             toast.show("Account name cannot be empty", {
-                type: "error"
+                type: "danger"
             })
             return
         }
         if (accounts.find(account => account.name == name) !== undefined) {
             toast.show("Account name already exists", {
-                type: "error"
+                type: "danger"
             })
             return
         }

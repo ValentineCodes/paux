@@ -33,13 +33,13 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
     const transfer = async () => {
         if (!ethers.utils.isAddress(address)) {
             toast.show("Invalid address", {
-                type: "error"
+                type: "danger"
             })
             return
         }
         if (isNaN(Number(amount)) || Number(amount) <= 0) {
             toast.show("Invalid amount", {
-                type: "error"
+                type: "danger"
             })
             return
         }
@@ -68,7 +68,7 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
             toggleVisibility()
         } catch (error) {
             toast.show("Transfer failed!", {
-                type: "error"
+                type: "danger"
             })
         } finally {
             setIsTransferring(false)
