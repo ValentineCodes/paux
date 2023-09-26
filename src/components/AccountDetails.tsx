@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
+import { Alert } from "react-native"
 import { Overlay } from '@rneui/themed';
 import { Icon, Pressable, Button, Text, VStack, HStack } from 'native-base';
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import QRCode from 'react-native-qrcode-svg';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from 'react-native-toast-notifications'
 
-import { Account } from '../store/reducers/Accounts';
+import { Account, removeAccount } from '../store/reducers/Accounts';
 import EditAccountNameForm from './forms/EditAccountNameForm';
 import { useNavigation } from '@react-navigation/native';
 
@@ -22,6 +23,9 @@ export default function AccountDetails({ isVisible, toggleVisibility }: Props) {
 
     const navigation = useNavigation()
 
+    const dispatch = useDispatch()
+
+    const accounts: Account[] = useSelector(state => state.accounts)
     const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
     const [isAddressCopied, setIsAddressCopied] = useState(false)
@@ -38,6 +42,29 @@ export default function AccountDetails({ isVisible, toggleVisibility }: Props) {
     const showPrivateKey = () => {
         navigation.navigate("PrivateKey")
         toggleVisibility()
+    }
+
+    const remove = () => {
+        Alert.alert(
+            'Alert Title',
+            'This action cannot be reversed. Are you sure you want to go through with this?',
+            [
+                {
+                    text: "Yes, I'm sure",
+                    onPress: () => {
+                        dispatch(removeAccount(connectedAccount.address))
+                        toggleVisibility()
+                    }
+                },
+                {
+                    text: 'Not sure',
+                    style: 'cancel',
+                }
+            ],
+            {
+                cancelable: true,
+            },
+        );
     }
     return (
         <Overlay isVisible={isVisible} onBackdropPress={toggleVisibility}>
@@ -62,6 +89,7 @@ export default function AccountDetails({ isVisible, toggleVisibility }: Props) {
                     )}
                 </HStack>
                 <Button onPress={showPrivateKey}>Show private key</Button>
+                {accounts.length > 1 && <Button onPress={remove}>Remove account</Button>}
             </VStack>
         </Overlay>
     )

@@ -58,21 +58,17 @@ function Header({ }: Props) {
             keychainService: "pocket.ios.storage",
         })
         const node = ethers.utils.HDNode.fromMnemonic(mnemonic)
-        let numOfAccountsFromMnemonic = 0
-        accounts.forEach(account => {
-            if (!account.isImported) {
-                numOfAccountsFromMnemonic++
+
+        let wallet
+
+        for (let i = 0; i < Infinity; i++) {
+            const path = "m/44'/60'/0'/0/" + i
+            const _wallet = node.derivePath(path)
+
+            if (accounts.find(account => account.address == _wallet.address) == undefined) {
+                wallet = _wallet
+                break
             }
-        })
-
-        const path = "m/44'/60'/0'/0/" + numOfAccountsFromMnemonic
-        const wallet = node.derivePath(path)
-
-        if (accounts.find(account => account.address == wallet.address) != undefined) {
-            toast.show("Account already exists", {
-                type: "normal"
-            })
-            return
         }
 
         const createdAccounts = await SInfo.getItem("accounts", {
