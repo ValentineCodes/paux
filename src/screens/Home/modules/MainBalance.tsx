@@ -67,6 +67,7 @@ function MainBalance({ }: Props) {
   return (
     <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} />}>
       <VStack alignItems="center" space={2} paddingY={5}>
+        <Text style={{ fontSize: 20, fontWeight: "bold" }}>{connectedAccount.name}</Text>
         <Image source={require("../../../images/eth-icon.png")} alt="Ethereum" width={50} height={50} />
         <VStack alignItems="center">
           <Text fontSize="xl" bold>{balance !== null && `${balance} ${connectedNetwork.currencySymbol}`}</Text>
