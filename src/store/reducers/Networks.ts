@@ -7,6 +7,7 @@ export interface Network {
   chainId: number;
   currencySymbol: string;
   isConnected: boolean;
+  blockExplorer: string | null
 }
 
 const initialState: Network[] = [
@@ -16,6 +17,7 @@ const initialState: Network[] = [
     chainId: 31337,
     currencySymbol: 'ETH',
     isConnected: false,
+    blockExplorer: null
   },
   {
     name: 'Ethereum',
@@ -23,6 +25,7 @@ const initialState: Network[] = [
     chainId: 1,
     currencySymbol: 'ETH',
     isConnected: true,
+    blockExplorer: "https://etherscan.io/address/"
   },
   {
     name: 'Sepolia',
@@ -30,6 +33,7 @@ const initialState: Network[] = [
     chainId: 11155111,
     currencySymbol: 'SepoliaETH',
     isConnected: false,
+    blockExplorer: "https://sepolia.etherscan.io/address/"
   },
   {
     name: 'Goerli',
@@ -37,6 +41,7 @@ const initialState: Network[] = [
     chainId: 5,
     currencySymbol: 'GoerliETH',
     isConnected: false,
+    blockExplorer: "https://goerli.etherscan.io/address/"
   },
   {
     name: 'Arbitrum',
@@ -44,6 +49,7 @@ const initialState: Network[] = [
     chainId: 42161,
     currencySymbol: 'ARB',
     isConnected: false,
+    blockExplorer: "https://arbiscan.io/address/"
   },
   {
     name: 'Arbitrum Goerli',
@@ -51,6 +57,7 @@ const initialState: Network[] = [
     chainId: 421613,
     currencySymbol: 'AGOR',
     isConnected: false,
+    blockExplorer: "https://goerli.arbiscan.io/address/"
   },
   {
     name: 'Optimism',
@@ -58,6 +65,7 @@ const initialState: Network[] = [
     chainId: 10,
     currencySymbol: 'OP',
     isConnected: false,
+    blockExplorer: "https://optimistic.etherscan.io/address/"
   },
   {
     name: 'Optimism Goerli',
@@ -65,6 +73,7 @@ const initialState: Network[] = [
     chainId: 420,
     currencySymbol: 'ETH',
     isConnected: false,
+    blockExplorer: "https://goerli-optimism.etherscan.io/address/"
   },
   {
     name: 'Polygon',
@@ -72,6 +81,7 @@ const initialState: Network[] = [
     chainId: 137,
     currencySymbol: 'MATIC',
     isConnected: false,
+    blockExplorer: "https://polygonscan.com/address/"
   },
   {
     name: 'Mumbai',
@@ -79,6 +89,7 @@ const initialState: Network[] = [
     chainId: 80001,
     currencySymbol: 'MATIC',
     isConnected: false,
+    blockExplorer: "https://mumbai.polygonscan.com/address/"
   },
 ];
 

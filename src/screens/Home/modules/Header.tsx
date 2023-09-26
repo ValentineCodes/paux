@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Network, switchNetwork } from '../../../store/reducers/Networks'
 import { Account, addAccount, switchAccount } from '../../../store/reducers/Accounts'
-import { Pressable } from 'react-native'
+import { Pressable, Linking } from 'react-native'
 import SInfo from "react-native-sensitive-info";
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
@@ -106,7 +106,17 @@ function Header({ }: Props) {
         try {
             await Share.open({ message: connectedAccount.address })
         } catch (error) {
-            toast.show("Failed to share address", {
+            return
+        }
+    }
+
+    const viewOnBlockExplorer = async () => {
+        if (!connectedNetwork.blockExplorer) return
+
+        try {
+            await Linking.openURL(connectedNetwork.blockExplorer + connectedAccount.address)
+        } catch (error) {
+            toast.show("Cannot open url", {
                 type: "danger"
             })
         }
@@ -137,6 +147,9 @@ function Header({ }: Props) {
                     <MenuOption onSelect={shareAddress}>
                         <Text>Share address</Text>
                     </MenuOption>
+                    {connectedNetwork.blockExplorer && <MenuOption onSelect={viewOnBlockExplorer}>
+                        <Text>View on block explorer</Text>
+                    </MenuOption>}
                 </MenuOptions>
             </Menu>
 
