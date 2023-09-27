@@ -76,7 +76,7 @@ function MainBalance({ }: Props) {
         <Button.Group justifyContent="space-between">
           <Button onPress={() => setShowTransferForm(!showTransferForm)}>Transfer</Button>
         </Button.Group>
-        <TransferForm isVisible={showTransferForm} toggleVisibility={toggleTransferForm} />
+        {showTransferForm && <TransferForm isVisible={showTransferForm} toggleVisibility={toggleTransferForm} />}
       </VStack>
     </ScrollView>
   )
