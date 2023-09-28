@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Overlay, Button } from '@rneui/themed';
+import { Button } from '@rneui/themed';
 import { Icon, Input, Pressable, Text, Modal } from 'native-base';
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import FontAwesome5 from "react-native-vector-icons/dist/FontAwesome5"
@@ -8,13 +8,14 @@ import SInfo from "react-native-sensitive-info";
 
 import "react-native-get-random-values"
 import "@ethersproject/shims"
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 
 import { getProviderWithName, Providers } from '../../utils/providers';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Network } from '../../store/reducers/Networks';
 import { Wallet } from '../../types/wallet';
 import redstone from 'redstone-api';
+import { addTransaction } from '../../store/reducers/Transactions';
 
 type Props = {
     isVisible: boolean;
@@ -36,6 +37,8 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
     const transferFormFinalRef = useRef(null)
 
     const toast = useToast()
+
+    const dispatch = useDispatch()
 
     const transfer = async () => {
         if (!ethers.utils.isAddress(address)) {
@@ -64,10 +67,25 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
         try {
             setIsTransferring(true)
 
-            await wallet.sendTransaction({
+            const tx = await wallet.sendTransaction({
                 to: address,
                 value: ethers.utils.parseEther(amount)
             })
+
+            const txReceipt = await tx.wait(1)
+
+            const d = new Date()
+            const transaction = {
+                action: `Sent ${connectedNetwork.currencySymbol}`,
+                amount: amount,
+                gasCost: ethers.utils.formatEther(txReceipt.gasUsed.mul(txReceipt.effectiveGasPrice)),
+                timeStamp: `${d.toLocaleDateString()}, ${d.toLocaleTimeString()}`,
+                from: txReceipt.from,
+                to: txReceipt.to,
+                nonce: tx.nonce
+            }
+
+            dispatch(addTransaction(transaction))
 
             toast.show(`Successfully transferred ${amount} ${connectedNetwork.currencySymbol}`, {
                 type: "success"

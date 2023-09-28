@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Auth from './reducers/Auth';
 import Networks from './reducers/Networks';
 import Accounts from './reducers/Accounts';
+import Transactions from './reducers/Transactions';
 
 const persistConfig = {
   key: 'root',
@@ -25,6 +26,7 @@ const reducers = combineReducers({
   auth: Auth,
   networks: Networks,
   accounts: Accounts,
+  transactions: Transactions
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

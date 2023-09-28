@@ -1,15 +1,15 @@
-import { HStack, Text, View } from 'native-base'
 import React from 'react'
+import { View, Text, FlatList } from 'native-base'
+import { useSelector } from 'react-redux'
 
 type Props = {}
 
-function Transactions({}: Props) {
+export default function Transactions({ }: Props) {
+  const transactions = useSelector(state => state.transactions)
+
   return (
     <View>
-        <Text>Tx 1</Text>
-        <Text>Tx 2</Text>
+      <Text>Transaction:</Text>
     </View>
   )
 }
-
-export default Transactions
