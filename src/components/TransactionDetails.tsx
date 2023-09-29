@@ -73,7 +73,7 @@ export default function TransactionDetails({ isVisible, toggleVisibility, tx }: 
                     <Text>Nonce: {tx.nonce}</Text>
                     <Text>Date: {renderTimestamp()}</Text>
                     <Text>From: {tx.from}</Text>
-                    <Text>To: {tx.to}</Text>
+                    <Text>To: {tx.to || tx.contractAddress}</Text>
                     <Text>Amount: {ethers.utils.formatEther(BigNumber.from(tx.value))}</Text>
                     {tx.from.toLowerCase() === connectedAccount.address.toLowerCase() && (
                         <>
