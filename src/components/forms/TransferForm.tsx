@@ -74,19 +74,6 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
 
             const txReceipt = await tx.wait(1)
 
-            const d = new Date()
-            const transaction = {
-                action: `Sent ${connectedNetwork.currencySymbol}`,
-                amount: amount,
-                gasCost: ethers.utils.formatEther(txReceipt.gasUsed.mul(txReceipt.effectiveGasPrice)),
-                timeStamp: `${d.toLocaleDateString()}, ${d.toLocaleTimeString()}`,
-                from: txReceipt.from,
-                to: txReceipt.to,
-                nonce: tx.nonce
-            }
-
-            dispatch(addTransaction(transaction))
-
             toast.show(`Successfully transferred ${amount} ${connectedNetwork.currencySymbol}`, {
                 type: "success"
             })

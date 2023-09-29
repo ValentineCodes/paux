@@ -110,7 +110,7 @@ function Header({ }: Props) {
         if (!connectedNetwork.blockExplorer) return
 
         try {
-            await Linking.openURL(connectedNetwork.blockExplorer + connectedAccount.address)
+            await Linking.openURL(`${connectedNetwork.blockExplorer}/address/${connectedAccount.address}`)
         } catch (error) {
             toast.show("Cannot open url", {
                 type: "danger"
