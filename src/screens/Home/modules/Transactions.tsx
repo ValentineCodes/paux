@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, FlatList } from 'native-base'
 import { useSelector } from 'react-redux'
 import Transaction from '../../../components/Transaction'
-import { Transaction as TransactionType } from '../../../store/reducers/Transactions'
 import { Account } from '../../../store/reducers/Accounts'
 import TransactionsAPI from "../../../apis/transactions"
 import { Network } from '../../../store/reducers/Networks'
