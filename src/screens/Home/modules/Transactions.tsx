@@ -23,12 +23,14 @@ export default function Transactions({ }: Props) {
   const [loadingStatus, setLoadingStatus] =
     useState<LoadingStatusProps>('loading');
   const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const [currentPage, setCurrentPage] = useState(1)
 
   const toast = useToast()
 
   const getTransactions = async () => {
+    if (!connectedNetwork.txApiDomain) return
     if (loadingStatus !== 'loading') {
       setLoadingStatus('loading');
     }
@@ -36,7 +38,6 @@ export default function Transactions({ }: Props) {
     try {
       const transactions = await TransactionsAPI.getTransactions(connectedNetwork.txApiDomain, connectedNetwork.txApiKey, connectedAccount.address, currentPage)
 
-      console.log(transactions.result)
       setTransactions(transactions.result)
 
       setLoadingStatus('success')
@@ -44,7 +45,6 @@ export default function Transactions({ }: Props) {
       setCurrentPage(currentPage => currentPage + 1)
 
     } catch (error) {
-      console.log(error)
       setLoadingStatus('error')
     }
   }
@@ -73,10 +73,30 @@ export default function Transactions({ }: Props) {
     }
   }
 
-  useEffect(() => {
-    if (connectedNetwork.txApiDomain) {
-      getTransactions()
+  const handleRefresh = async () => {
+    if (!connectedNetwork.txApiDomain) return
+    if (isRefreshing) return
+
+    setIsRefreshing(true)
+
+    try {
+      const transactions = await TransactionsAPI.getTransactions(connectedNetwork.txApiDomain, connectedNetwork.txApiKey, connectedAccount.address, 1)
+      setTransactions(transactions.result)
+      setCurrentPage(2)
+    } catch (error) {
+      toast.show("Failed to get transactions", {
+        type: "danger"
+      })
+    } finally {
+      setIsRefreshing(false)
     }
+
+
+    setIsRefreshing(false)
+  }
+
+  useEffect(() => {
+    getTransactions()
   }, [connectedNetwork, connectedAccount])
 
   return (
@@ -88,9 +108,11 @@ export default function Transactions({ }: Props) {
         <Text>Failed to load transactions</Text>
         <Pressable onPress={getTransactions}><Text>Retry</Text></Pressable>
       </View> : transactions.length > 0 ? <FlatList
-        keyExtractor={(item: TransactionType) => item.nonce.toString()}
+        keyExtractor={(item) => item.hash}
         data={transactions}
         renderItem={({ item }) => <Transaction tx={item} />}
+        onRefresh={handleRefresh}
+        refreshing={isRefreshing}
         onEndReached={loadMoreTransactions}
         onEndReachedThreshold={0.2}
       /> : <Text>No transactions</Text>}

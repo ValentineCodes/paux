@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { VStack, Text } from 'native-base';
+import { Text } from 'native-base';
 import { useSelector } from 'react-redux';
 import { Account } from '../store/reducers/Accounts';
 import { Network } from '../store/reducers/Networks';
@@ -7,10 +7,9 @@ import { Network } from '../store/reducers/Networks';
 import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { BigNumber, ethers } from "ethers";
-import { Linking, Pressable } from 'react-native';
+import { Pressable } from 'react-native';
 import TransactionDetails from './TransactionDetails';
 import { View } from 'react-native';
-import { useToast } from 'react-native-toast-notifications';
 
 type Props = {
     tx: any;
@@ -22,19 +21,17 @@ export default function Transaction({ tx }: Props) {
 
     const [showTxDetails, setShowTxDetails] = useState(false)
 
-    const toast = useToast()
-
     const toggleTxDetails = () => {
         setShowTxDetails(!showTxDetails)
     }
 
     const renderAction = () => {
-        if (tx.contractAddress === '') {
+        if (tx.functionName === '') {
             if (tx.from.toLowerCase() == connectedAccount.address.toLowerCase()) {
                 return `Sent ${connectedNetwork.currencySymbol}`
             }
             if (tx.to.toLowerCase() == connectedAccount.address.toLowerCase()) {
-                return `Reveived ${connectedNetwork.currencySymbol}`
+                return `Received ${connectedNetwork.currencySymbol}`
             }
         }
 

@@ -26,12 +26,12 @@ export default function TransactionDetails({ isVisible, toggleVisibility, tx }: 
     const toast = useToast()
 
     const renderAction = () => {
-        if (tx.contractAddress === '') {
+        if (tx.functionName === '') {
             if (tx.from.toLowerCase() == connectedAccount.address.toLowerCase()) {
                 return `Sent ${connectedNetwork.currencySymbol}`
             }
             if (tx.to.toLowerCase() == connectedAccount.address.toLowerCase()) {
-                return `Reveived ${connectedNetwork.currencySymbol}`
+                return `Received ${connectedNetwork.currencySymbol}`
             }
         }
 
