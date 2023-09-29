@@ -1,5 +1,5 @@
 import { Button, Center, Text } from 'native-base'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PasswordInput from '../../components/forms/PasswordInput'
 import { useToast } from 'react-native-toast-notifications'
 import { useNavigation } from '@react-navigation/native'
@@ -8,14 +8,14 @@ import SInfo from "react-native-sensitive-info";
 
 type Props = {}
 
-function Login({}: Props) {
+function Login({ }: Props) {
     const toast = useToast()
     const navigation = useNavigation()
 
     const [password, setPassword] = useState("")
 
     const unlockWithPassword = async () => {
-        if(!password) {
+        if (!password) {
             toast.show("Password cannot be empty!", {
                 type: "danger"
             })
@@ -28,7 +28,7 @@ function Login({}: Props) {
         });
         const security = JSON.parse(_security!)
 
-        if(password !== security.password) {
+        if (password !== security.password) {
             toast.show("Incorrect password!", {
                 type: "danger"
             })
@@ -39,54 +39,57 @@ function Login({}: Props) {
     }
 
     const unlockWithBiometrics = async () => {
-        const rnBiometrics = new ReactNativeBiometrics({allowDeviceCredentials: true})
+        const rnBiometrics = new ReactNativeBiometrics({ allowDeviceCredentials: true })
 
         try {
             const signInWithBio = async () => {
                 let epochTimeSeconds = Math.round((new Date()).getTime() / 1000).toString()
                 let payload = epochTimeSeconds + 'some message'
-    
+
                 try {
                     const response = await rnBiometrics.createSignature({
                         promptMessage: 'Sign in',
                         payload: payload
                     })
-        
-                    if(response.success) {
+
+                    if (response.success) {
                         navigation.navigate("Home")
                     }
-                } catch(error) {
+                } catch (error) {
                     return
                 }
 
             }
-    
+
             const { available } = await rnBiometrics.isSensorAvailable()
 
             if (available) {
                 const { keysExist } = await rnBiometrics.biometricKeysExist()
 
-                if(!keysExist) {
+                if (!keysExist) {
                     await rnBiometrics.createKeys()
                 }
 
                 signInWithBio()
             }
-        } catch(error) {
+        } catch (error) {
             toast.show("Could not sign in with biometrics", {
                 type: "danger"
             })
             console.error(error)
         }
     }
-  return (
-    <Center>
-        <Text fontSize="2xl" bold>Welcome Back</Text>
-        <PasswordInput label="Password" onChange={setPassword} />
-        <Button marginTop={5} onPress={unlockWithPassword}>UNLOCK WITH PASSWORD</Button>
-        <Button variant="outline" marginTop={5} onPress={unlockWithBiometrics}>UNLOCK WITH BIOMETRICS</Button>
-    </Center>
-  )
+
+    useEffect(() => {
+        unlockWithBiometrics()
+    }, [])
+    return (
+        <Center>
+            <Text fontSize="2xl" bold>Welcome Back</Text>
+            <PasswordInput label="Password" onChange={setPassword} />
+            <Button marginTop={5} onPress={password ? unlockWithPassword : unlockWithBiometrics}>{password ? "SIGN IN" : "SIGN IN WITH BIOMETRICS"}</Button>
+        </Center>
+    )
 }
 
 export default Login
