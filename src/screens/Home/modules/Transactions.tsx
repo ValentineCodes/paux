@@ -16,6 +16,7 @@ export default function Transactions({ }: Props) {
 
   const connectedNetwork: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
   const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
+  const balance = useSelector(state => state.balance)
 
   const [transactions, setTransactions] = useState([])
 
@@ -30,26 +31,27 @@ export default function Transactions({ }: Props) {
 
   const getTransactions = async () => {
     if (!connectedNetwork.txApiDomain) return
-    if (loadingStatus !== 'loading') {
+    if (loadingStatus !== 'loading' && balance === "") {
       setLoadingStatus('loading');
     }
 
     try {
-      const transactions = await TransactionsAPI.getTransactions(connectedNetwork.txApiDomain, connectedNetwork.txApiKey, connectedAccount.address, currentPage)
+      const transactions = await TransactionsAPI.getTransactions(connectedNetwork.txApiDomain, connectedNetwork.txApiKey, connectedAccount.address, 1)
 
       setTransactions(transactions.result)
 
       setLoadingStatus('success')
 
-      setCurrentPage(currentPage => currentPage + 1)
-
+      if (transactions.result > 0) {
+        setCurrentPage(2)
+      }
     } catch (error) {
       setLoadingStatus('error')
     }
   }
 
   const loadMoreTransactions = async () => {
-    if (isLoadingMore) return
+    if (isLoadingMore || transactions.length < 20) return
 
     setIsLoadingMore(true)
 
@@ -59,11 +61,6 @@ export default function Transactions({ }: Props) {
       if (newTransactions.result.length > 0) {
         setTransactions([...transactions, ...newTransactions.result])
         setCurrentPage(currentPage => currentPage + 1)
-      } else {
-        toast.show('No more videos', {
-          type: 'normal',
-          duration: 3000,
-        });
       }
     } catch (error) {
       return
@@ -89,14 +86,11 @@ export default function Transactions({ }: Props) {
     } finally {
       setIsRefreshing(false)
     }
-
-
-    setIsRefreshing(false)
   }
 
   useEffect(() => {
     getTransactions()
-  }, [connectedNetwork, connectedAccount])
+  }, [connectedNetwork, connectedAccount, balance])
 
   return (
     <View style={{ flex: 1 }}>

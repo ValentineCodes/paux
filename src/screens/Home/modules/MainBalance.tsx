@@ -1,7 +1,7 @@
-import { HStack, Image, Text, VStack, Button } from 'native-base'
+import { Image, Text, VStack, Button } from 'native-base'
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { ethers } from 'ethers'
 import redstone from 'redstone-api';
 import { useToast } from 'react-native-toast-notifications'
@@ -9,23 +9,28 @@ import { useToast } from 'react-native-toast-notifications'
 import { Account } from '../../../store/reducers/Accounts'
 import { Network } from '../../../store/reducers/Networks'
 import TransferForm from '../../../components/forms/TransferForm'
+import { setBalance } from '../../../store/reducers/Balance'
 
 type Props = {}
 
 function MainBalance({ }: Props) {
   const connectedNetwork: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
   const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
+  const balance = useSelector(state => state.balance)
 
-  const [balance, setBalance] = useState<string | null>(null)
   const [dollarValue, setDollarValue] = useState<string | null>(null)
   const [refresh, setRefresh] = useState(false)
   const [showTransferForm, setShowTransferForm] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
+  const dispatch = useDispatch()
   const toast = useToast()
 
   const getBalance = async () => {
-    setBalance(null)
-    setDollarValue(null)
+    if (isLoading) return
+
+    setIsLoading(true)
+
     try {
       const provider = new ethers.providers.JsonRpcProvider(connectedNetwork.provider)
       const balance = await provider.getBalance(connectedAccount.address)
@@ -36,9 +41,10 @@ function MainBalance({ }: Props) {
         const dollarValue = Number(_balance) * price.value
         setDollarValue(dollarValue.toFixed(2))
       } catch (error) {
+        setDollarValue(null)
         return
       } finally {
-        setBalance(_balance.toString())
+        dispatch(setBalance(_balance.toString()))
       }
 
     } catch (error) {
@@ -46,6 +52,8 @@ function MainBalance({ }: Props) {
         type: "normal"
       })
       return
+    } finally {
+      setIsLoading(false)
     }
 
   }
@@ -70,7 +78,7 @@ function MainBalance({ }: Props) {
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>{connectedAccount.name}</Text>
         <Image source={require("../../../images/eth-icon.png")} alt="Ethereum" width={50} height={50} />
         <VStack alignItems="center">
-          <Text fontSize="xl" bold>{balance !== null && `${balance} ${connectedNetwork.currencySymbol}`}</Text>
+          <Text fontSize="xl" bold>{balance !== '' && `${balance} ${connectedNetwork.currencySymbol}`}</Text>
           {dollarValue !== null && <Text>${dollarValue}</Text>}
         </VStack>
         <Button.Group justifyContent="space-between">

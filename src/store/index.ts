@@ -15,18 +15,21 @@ import Auth from './reducers/Auth';
 import Networks from './reducers/Networks';
 import Accounts from './reducers/Accounts';
 import Transactions from './reducers/Transactions';
+import Balance from './reducers/Balance';
 
 const persistConfig = {
   key: 'root',
   version: 1,
   storage: AsyncStorage,
+  blacklist: ["balance"]
 };
 
 const reducers = combineReducers({
   auth: Auth,
   networks: Networks,
   accounts: Accounts,
-  transactions: Transactions
+  transactions: Transactions,
+  balance: Balance
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
