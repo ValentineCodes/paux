@@ -16,6 +16,8 @@ import { Network } from '../../store/reducers/Networks';
 import { Wallet } from '../../types/wallet';
 import redstone from 'redstone-api';
 import { addTransaction } from '../../store/reducers/Transactions';
+import { Camera, CameraType } from 'react-native-camera-kit';
+import { Alert, Dimensions, StyleSheet } from 'react-native';
 
 type Props = {
     isVisible: boolean;
@@ -35,6 +37,8 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
 
     const transferFormInitialRef = useRef(null)
     const transferFormFinalRef = useRef(null)
+
+    const [isScanningCode, setIsScanningCode] = useState(false)
 
     const toast = useToast()
 
@@ -128,7 +132,7 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
                     <Input w={{
                         base: "100%",
                         md: "25%"
-                    }} type="text" placeholder='address' InputRightElement={<Pressable>
+                    }} type="text" value={address} placeholder='address' InputRightElement={<Pressable onPress={() => setIsScanningCode(true)}>
                         <Icon as={<Ionicons name="scan-outline" />} size={5} mr="2" color="muted.400" />
                     </Pressable>} onChangeText={value => setAddress(value)} />
                     {address.length !== 0 && !ethers.utils.isAddress(address) && <Text style={{ color: "red" }}>Invalid address</Text>}
@@ -143,6 +147,18 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
                     <Button onPress={transfer} loading={isTransferring}>Send</Button>
                 </Modal.Body>
             </Modal.Content>
+
+            {isScanningCode && <Camera
+                scanBarcode={true}
+                onReadCode={(event) => {
+                    setAddress(event.nativeEvent.codeStringValue)
+                    setIsScanningCode(false)
+                }}
+                showFrame={true}
+                laserColor='blue'
+                frameColor='white'
+                style={StyleSheet.absoluteFill}
+            />}
         </Modal>
     )
 }

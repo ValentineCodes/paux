@@ -45,6 +45,8 @@
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>$(PRODUCT_NAME) needs access to your Camera.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>$(PRODUCT_NAME) needs access to your Photos.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Pocket Authentication with TouchID or FaceID</string>
 	<key>NSAppTransportSecurity</key>
