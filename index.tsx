@@ -2,6 +2,7 @@
  * @format
  */
 
+import "fast-text-encoding"
 import 'react-native-reanimated'
 import { AppRegistry } from 'react-native';
 import App from './src/screens/App';

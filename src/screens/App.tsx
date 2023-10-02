@@ -19,6 +19,33 @@ import PrivateKey from './PrivateKey';
 import { useSelector } from 'react-redux';
 import { MenuProvider } from 'react-native-popup-menu';
 
+import { Core } from '@walletconnect/core'
+// import { ICore } from '@walletconnect/types' <- Add if using TS
+import { Web3Wallet, IWeb3Wallet } from '@walletconnect/web3wallet'
+
+// export let web3wallet: IWeb3Wallet <- Add if using TS
+// export let core: ICore <- Add if using TS
+
+const core = new Core({
+  projectId: '2f4a3105d07d4a522d79d6907b6c4d8f'
+})
+
+export async function createWeb3Wallet() {
+  return await Web3Wallet.init({
+    core, // <- pass the shared `core` instance
+    metadata: {
+      name: 'Pocket',
+      description: 'A crypto wallet for managing funds on evm-compatible chains and interacting with DApps',
+      url: '',
+      icons: []
+    }
+  })
+}
+
+export async function pair(params: { uri: string }) {
+  return await core.pairing.pair({ uri: params.uri })
+}
+
 type AppStackParamsList = {
   Onboarding: undefined;
   GenerateMnemonic: undefined;

@@ -22,6 +22,7 @@
     "@rneui/base": "^4.0.0-rc.8",
     "@rneui/themed": "^4.0.0-rc.8",
     "@walletconnect/react-native-compat": "^2.10.1",
+    "@walletconnect/utils": "^2.10.1",
     "@walletconnect/web3wallet": "^1.9.1",
     "axios": "1.4.0",
     "ethers": "5.7.2",
