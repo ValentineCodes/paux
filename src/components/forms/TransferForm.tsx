@@ -18,6 +18,7 @@ import redstone from 'redstone-api';
 import { addTransaction } from '../../store/reducers/Transactions';
 import { Camera, CameraType } from 'react-native-camera-kit';
 import { Alert, Dimensions, StyleSheet } from 'react-native';
+import QRCodeScanner from '../modals/QRCodeScanner';
 
 type Props = {
     isVisible: boolean;
@@ -148,17 +149,10 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
                 </Modal.Body>
             </Modal.Content>
 
-            {isScanningCode && <Camera
-                scanBarcode={true}
-                onReadCode={(event) => {
-                    setAddress(event.nativeEvent.codeStringValue)
-                    setIsScanningCode(false)
-                }}
-                showFrame={true}
-                laserColor='blue'
-                frameColor='white'
-                style={StyleSheet.absoluteFill}
-            />}
+            <QRCodeScanner isOpen={isScanningCode} onClose={() => setIsScanningCode(false)} onReadCode={address => {
+                setAddress(address)
+                setIsScanningCode(false)
+            }} />
         </Modal>
     )
 }
