@@ -5,6 +5,7 @@ import { useToast } from 'react-native-toast-notifications'
 import { useNavigation } from '@react-navigation/native'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import SInfo from "react-native-sensitive-info";
+import { createWeb3Wallet } from '../../utils/Web3WalletClient'
 
 type Props = {}
 
@@ -13,6 +14,21 @@ function Login({ }: Props) {
     const navigation = useNavigation()
 
     const [password, setPassword] = useState("")
+    const [isInitializing, setIsInitializing] = useState(false)
+
+    const initWallet = async () => {
+        try {
+            setIsInitializing(true)
+            await createWeb3Wallet()
+            navigation.navigate("Home")
+        } catch (error) {
+            toast.show("Failed to initialize wallet", {
+                type: "danger"
+            })
+        } finally {
+            setIsInitializing(false)
+        }
+    }
 
     const unlockWithPassword = async () => {
         if (!password) {
@@ -35,7 +51,8 @@ function Login({ }: Props) {
             return
         }
 
-        navigation.navigate("Home")
+        await initWallet()
+
     }
 
     const unlockWithBiometrics = async () => {
@@ -53,7 +70,7 @@ function Login({ }: Props) {
                     })
 
                     if (response.success) {
-                        navigation.navigate("Home")
+                        await initWallet()
                     }
                 } catch (error) {
                     return
@@ -87,7 +104,7 @@ function Login({ }: Props) {
         <Center>
             <Text fontSize="2xl" bold>Welcome Back</Text>
             <PasswordInput label="Password" onChange={setPassword} />
-            <Button marginTop={5} onPress={password ? unlockWithPassword : unlockWithBiometrics}>{password ? "SIGN IN" : "SIGN IN WITH BIOMETRICS"}</Button>
+            <Button marginTop={5} onPress={password ? unlockWithPassword : unlockWithBiometrics} isLoading={isInitializing} isLoadingText='Initializing' disabled={isInitializing}>{password ? "SIGN IN" : "SIGN IN WITH BIOMETRICS"}</Button>
         </Center>
     )
 }

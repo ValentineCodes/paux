@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native'
 import MainBalance from './modules/MainBalance'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Transactions from './modules/Transactions'
+import { web3wallet } from '../../utils/Web3WalletClient'
 
 const Tab = createMaterialTopTabNavigator();
 
