@@ -16,6 +16,7 @@ import Networks from './reducers/Networks';
 import Accounts from './reducers/Accounts';
 import Transactions from './reducers/Transactions';
 import Balance from './reducers/Balance';
+import ConnectedSites from './reducers/ConnectedSites';
 
 const persistConfig = {
   key: 'root',
@@ -29,7 +30,8 @@ const reducers = combineReducers({
   networks: Networks,
   accounts: Accounts,
   transactions: Transactions,
-  balance: Balance
+  balance: Balance,
+  connectedSites: ConnectedSites
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -28,6 +28,8 @@ import { _pair, web3wallet } from '../../../utils/Web3WalletClient'
 import ApprovalModal from '../../../components/modals/ApprovalModal'
 import { handleDeepLinkRedirect } from '../../../utils/LinkingUtils'
 import { getSdkError } from '@walletconnect/utils';
+import { addConnectedSite } from '../../../store/reducers/ConnectedSites'
+import ConnectedSitesModal from '../../../components/modals/ConnectedSitesModal'
 
 type Props = {}
 
@@ -36,6 +38,8 @@ function Header({ }: Props) {
     const [isAccountModalVisible, setIsAccountModalVisible] = useState(false)
     const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
     const [showAccountDetails, setShowAccountDetails] = useState(false)
+    const [showConnectedSites, setShowConnectedSites] = useState(false)
+
     const [showConnectModal, setShowConnectModal] = useState(false)
     const [showApprovalModal, setShowApprovalModal] = useState(false)
     const [isPairing, setIsPairing] = useState(false)
@@ -178,11 +182,17 @@ function Header({ }: Props) {
                 namespaces,
             });
 
-            console.log("Session:")
-            console.log(session)
             setShowApprovalModal(false)
 
             const sessionMetadata = session?.peer?.metadata;
+
+            const connectedSite = {
+                name: sessionMetadata.url,
+                topic: session.topic
+            }
+
+            dispatch(addConnectedSite(connectedSite))
+
             handleDeepLinkRedirect(sessionMetadata?.redirect);
         }
     }
@@ -227,6 +237,9 @@ function Header({ }: Props) {
                         </MenuOption>
                         <MenuOption onSelect={() => setShowAccountDetails(true)}>
                             <Text>Account details</Text>
+                        </MenuOption>
+                        <MenuOption onSelect={() => setShowConnectedSites(true)}>
+                            <Text>Connected sites</Text>
                         </MenuOption>
                         <MenuOption onSelect={shareAddress}>
                             <Text>Share address</Text>
@@ -279,6 +292,7 @@ function Header({ }: Props) {
 
 
             <AccountDetails isVisible={showAccountDetails} toggleVisibility={toggleAccountDetails} />
+            <ConnectedSitesModal isOpen={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
             <PrivateKeyForm isVisible={showPrivateKeyForm} toggleVisibility={togglePrivateKeyForm} />
         </HStack>
     )
