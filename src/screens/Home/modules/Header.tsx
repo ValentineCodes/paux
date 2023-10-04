@@ -1,15 +1,14 @@
 import { Text, Select, CheckIcon, Box, HStack, Modal, VStack, Button, ScrollView, Icon } from 'native-base'
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Network, switchNetwork } from '../../../store/reducers/Networks'
 import { Account, addAccount, switchAccount } from '../../../store/reducers/Accounts'
-import { Pressable, Linking, StyleSheet } from 'react-native'
+import { Pressable, Linking } from 'react-native'
 import SInfo from "react-native-sensitive-info";
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import Share from 'react-native-share';
-import { createWeb3Wallet, pair } from '../../App'
-import { buildApprovedNamespaces } from '@walletconnect/utils'
+import { SignClientTypes, SessionTypes } from '@walletconnect/types';
 
 
 import "react-native-get-random-values"
@@ -24,8 +23,11 @@ import {
     MenuTrigger,
 } from 'react-native-popup-menu';
 import AccountDetails from '../../../components/AccountDetails'
-import { Camera } from 'react-native-camera-kit'
-import { Web3Wallet } from '@walletconnect/web3wallet/dist/types/client'
+import ConnectModal from '../../../components/modals/ConnectModal'
+import { _pair, web3wallet } from '../../../utils/Web3WalletClient'
+import ApprovalModal from '../../../components/modals/ApprovalModal'
+import { handleDeepLinkRedirect } from '../../../utils/LinkingUtils'
+import { getSdkError } from '@walletconnect/utils';
 
 type Props = {}
 
@@ -34,16 +36,15 @@ function Header({ }: Props) {
     const [isAccountModalVisible, setIsAccountModalVisible] = useState(false)
     const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
     const [showAccountDetails, setShowAccountDetails] = useState(false)
-    const [isScanningCode, setIsScanningCode] = useState(false)
+    const [showConnectModal, setShowConnectModal] = useState(false)
+    const [showApprovalModal, setShowApprovalModal] = useState(false)
+    const [isPairing, setIsPairing] = useState(false)
+    const [proposal, setProposal] =
+        useState<SignClientTypes.EventArguments['session_proposal']>();
+
 
     const accountInitialRef = useRef(null)
     const accountFinalRef = useRef(null)
-    const wcscannerInitialRef = useRef(null)
-    const wcscannerFinalRef = useRef(null)
-
-    const wallet = useRef<Web3Wallet>(null)
-
-
 
     const networks: Network[] = useSelector(state => state.networks)
     const connectedNetwork: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
@@ -130,6 +131,84 @@ function Header({ }: Props) {
         }
     }
 
+    const pair = async (uri: string) => {
+        try {
+            setIsPairing(true)
+            const pairResponse = await _pair({ uri })
+            setShowConnectModal(false)
+            setShowApprovalModal(true)
+            return pairResponse
+
+        } catch (error) {
+            toast.show("Failed to connect. Please try again", {
+                type: "danger"
+            })
+        } finally {
+            setIsPairing(false)
+        }
+    }
+
+    const handleSessionProposal = useCallback((proposal: SignClientTypes.EventArguments['session_proposal']) => {
+        setProposal(proposal)
+    }, [])
+
+    const handleAcceptProposal = async () => {
+        const { id, params } = proposal;
+        const { requiredNamespaces, relays } = params;
+
+        console.log("Required Namespaces:")
+        console.log(requiredNamespaces)
+
+        if (proposal) {
+            // Cooking namespaces
+            const namespaces: SessionTypes.Namespaces = {};
+            Object.keys(requiredNamespaces).forEach(key => {
+                const accounts: string[] = [];
+                requiredNamespaces[key].chains.map(chain => {
+                    [connectedAccount.address].map(acc => accounts.push(`${chain}:${acc}`));
+                });
+
+                namespaces[key] = {
+                    accounts,
+                    methods: requiredNamespaces[key].methods,
+                    events: requiredNamespaces[key].events,
+                };
+            });
+
+            console.log("Namespaces:")
+            console.log(namespaces)
+
+            const session = await web3wallet.approveSession({
+                id,
+                relayProtocol: relays[0].protocol,
+                namespaces,
+            });
+
+            setShowApprovalModal(false)
+
+            const sessionMetadata = session?.peer?.metadata;
+            handleDeepLinkRedirect(sessionMetadata?.redirect);
+        }
+    }
+    const handleRejectProposal = async () => {
+        setShowApprovalModal(false);
+
+        if (!proposal) {
+            return;
+        }
+
+        await web3wallet.rejectSession({
+            id: proposal.id,
+            reason: getSdkError('USER_REJECTED_METHODS'),
+        });
+    }
+
+    useEffect(() => {
+        if (showConnectModal || showApprovalModal) {
+            web3wallet.on("session_proposal", handleSessionProposal)
+        }
+    }, [showConnectModal, showApprovalModal, handleSessionProposal])
+
     return (
         <HStack alignItems="center" justifyContent="space-between" borderBottomWidth={1} borderBottomColor="#ccc" padding={2}>
             <Text fontSize="2xl" bold>Pocket</Text>
@@ -162,13 +241,13 @@ function Header({ }: Props) {
                     </MenuOptions>
                 </Menu>
 
-                <Pressable onPress={async () => {
-                    if (!wallet.current) return
-                    wallet.current.pair({ uri: "wc:6f53f4ed-ea19-4b15-a8ad-957ab69d9004@1?bridge=https%3A%2F%2F4.bridge.walletconnect.org&key=377502b482ec20b4adbc82747c0a377a02b6f3e708b17e088f0acff58d02ba6c" })
-                }}>
+                <Pressable onPress={() => setShowConnectModal(true)}>
                     <Icon as={<Ionicons name="scan-outline" />} size={5} mr="2" color="muted.400" />
                 </Pressable>
             </HStack>
+
+            <ConnectModal isOpen={showConnectModal} isPairing={isPairing} onClose={() => setShowConnectModal(false)} pair={pair} />
+            <ApprovalModal proposal={proposal} isOpen={showApprovalModal} onClose={() => setShowApprovalModal(false)} handleAccept={handleAcceptProposal} handleReject={handleRejectProposal} />
 
             {/* Accounts */}
             <Modal isOpen={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} initialFocusRef={accountInitialRef} finalFocusRef={accountFinalRef}>
@@ -202,21 +281,7 @@ function Header({ }: Props) {
                 </Modal.Content>
             </Modal>
 
-            {isScanningCode && (
-                <Modal isOpen onClose={() => setIsScanningCode(false)} initialFocusRef={wcscannerInitialRef} finalFocusRef={wcscannerFinalRef}>
-                    <Camera
-                        scanBarcode={true}
-                        onReadCode={async (event) => {
-                            console.log(event.nativeEvent.codeStringValue)
-                            setIsScanningCode(false)
-                        }}
-                        showFrame={true}
-                        laserColor='blue'
-                        frameColor='white'
-                        style={{ width: '100%', height: '100%' }}
-                    />
-                </Modal>
-            )}
+
             <AccountDetails isVisible={showAccountDetails} toggleVisibility={toggleAccountDetails} />
             <PrivateKeyForm isVisible={showPrivateKeyForm} toggleVisibility={togglePrivateKeyForm} />
         </HStack>

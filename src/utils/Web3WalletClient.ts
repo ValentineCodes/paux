@@ -10,7 +10,7 @@ export async function createWeb3Wallet() {
   // console.log('ENV_RELAY_URL', ENV_RELAY_URL);
   core = new Core({
     // @notice: If you want the debugger / logs
-    logger: 'debug',
+    // logger: 'debug',
     projectId: "2f4a3105d07d4a522d79d6907b6c4d8f",
     relayUrl: "wss://relay.walletconnect.com",
   });
