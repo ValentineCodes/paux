@@ -12,20 +12,12 @@ export function ModalHeader({ name, url, icon }: IModalHeaderProps) {
     return (
         <View style={styles.modalHeaderContainer}>
             <View style={styles.imageRowContainer}>
-                <Image
+                {icon ? <Image
                     source={{
                         uri: icon,
                     }}
                     style={styles.WCLogoLeft}
-                />
-                {/* <Image
-          style={styles.emojiContainer}
-          source={require('../../assets/Emojications.png')}
-        />
-        <Image
-          source={require('../../assets/WalletConnect.png')}
-          style={styles.WCLogoRight}
-        /> */}
+                /> : null}
             </View>
 
             <Text style={styles.dappTitle}>{name}</Text>

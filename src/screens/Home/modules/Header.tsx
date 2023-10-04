@@ -156,9 +156,6 @@ function Header({ }: Props) {
         const { id, params } = proposal;
         const { requiredNamespaces, relays } = params;
 
-        console.log("Required Namespaces:")
-        console.log(requiredNamespaces)
-
         if (proposal) {
             // Cooking namespaces
             const namespaces: SessionTypes.Namespaces = {};
@@ -175,15 +172,14 @@ function Header({ }: Props) {
                 };
             });
 
-            console.log("Namespaces:")
-            console.log(namespaces)
-
             const session = await web3wallet.approveSession({
                 id,
                 relayProtocol: relays[0].protocol,
                 namespaces,
             });
 
+            console.log("Session:")
+            console.log(session)
             setShowApprovalModal(false)
 
             const sessionMetadata = session?.peer?.metadata;
