@@ -71,14 +71,16 @@ function MainBalance({ }: Props) {
   }
 
   useEffect(() => {
-    getBalance()
-  }, [connectedAccount, connectedNetwork])
-
-  useEffect(() => {
     const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
 
+    provider.off('block')
+
     provider.on('block', blockNumber => getBalance())
-  }, [])
+
+    return () => {
+      provider.off("block")
+    }
+  }, [connectedAccount, connectedNetwork])
   return (
     <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} />}>
       <VStack alignItems="center" space={2} paddingY={5}>
