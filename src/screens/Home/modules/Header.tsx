@@ -30,6 +30,7 @@ import { handleDeepLinkRedirect } from '../../../utils/LinkingUtils'
 import { getSdkError } from '@walletconnect/utils';
 import { addConnectedSite } from '../../../store/reducers/ConnectedSites'
 import ConnectedSitesModal from '../../../components/modals/ConnectedSitesModal'
+import AccountSelection from '../../../components/AccountSelection'
 
 type Props = {}
 
@@ -39,12 +40,15 @@ function Header({ }: Props) {
     const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
     const [showAccountDetails, setShowAccountDetails] = useState(false)
     const [showConnectedSites, setShowConnectedSites] = useState(false)
+    const [showAccountSelection, setShowAccountSelection] = useState(false)
 
     const [showConnectModal, setShowConnectModal] = useState(false)
     const [showApprovalModal, setShowApprovalModal] = useState(false)
     const [isPairing, setIsPairing] = useState(false)
     const [proposal, setProposal] =
         useState<SignClientTypes.EventArguments['session_proposal']>();
+
+    const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
 
 
     const accountInitialRef = useRef(null)
@@ -140,7 +144,7 @@ function Header({ }: Props) {
             setIsPairing(true)
             const pairResponse = await _pair({ uri })
             setShowConnectModal(false)
-            setShowApprovalModal(true)
+            setShowAccountSelection(true)
             return pairResponse
 
         } catch (error) {
@@ -166,7 +170,7 @@ function Header({ }: Props) {
             Object.keys(requiredNamespaces).forEach(key => {
                 const accounts: string[] = [];
                 requiredNamespaces[key].chains.map(chain => {
-                    [connectedAccount.address].map(acc => accounts.push(`${chain}:${acc}`));
+                    selectedAccounts.map(acc => accounts.push(`${chain}:${acc}`));
                 });
 
                 namespaces[key] = {
@@ -214,6 +218,12 @@ function Header({ }: Props) {
             web3wallet.on("session_proposal", handleSessionProposal)
         }
     }, [showConnectModal, showApprovalModal, handleSessionProposal])
+
+    const handleAccountsSelection = (selectedAccounts: string[]) => {
+        setSelectedAccounts(selectedAccounts)
+        setShowAccountSelection(false)
+        setShowApprovalModal(true)
+    }
 
     return (
         <HStack alignItems="center" justifyContent="space-between" borderBottomWidth={1} borderBottomColor="#ccc" padding={2}>
@@ -290,7 +300,7 @@ function Header({ }: Props) {
                 </Modal.Content>
             </Modal>
 
-
+            <AccountSelection isOpen={showAccountSelection} onClose={() => setShowAccountSelection(false)} onSelect={handleAccountsSelection} />
             <AccountDetails isVisible={showAccountDetails} toggleVisibility={toggleAccountDetails} />
             <ConnectedSitesModal isOpen={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
             <PrivateKeyForm isVisible={showPrivateKeyForm} toggleVisibility={togglePrivateKeyForm} />
