@@ -9,39 +9,27 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 type Props = {
     isOpen: boolean;
     onClose: () => void;
-    onSelect: ((selectedAccounts: string[]) => void)
+    onSelect: ((selectedAccounts: string) => void)
 }
 
 export default function AccountSelection({ isOpen, onClose, onSelect }: Props) {
     const accounts: Account[] = useSelector(state => state.accounts)
     const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
-    const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
+    const [selectedAccount, setSelectedAccount] = useState("")
 
     const isAccountSelected = (account: string) => {
-        return selectedAccounts.includes(account)
-    }
-
-    const handleSelectAll = () => {
-        if (accounts.length === selectedAccounts.length) {
-            setSelectedAccounts([])
-        } else {
-            setSelectedAccounts(accounts.map(account => account.address))
-        }
+        return selectedAccount === account
     }
 
     const handleSelection = (account: string) => {
-        if (isAccountSelected(account)) {
-            // remove account
-            setSelectedAccounts(selectedAccounts => selectedAccounts.filter(selectedAccount => selectedAccount !== account))
-        } else {
-            // add account
-            setSelectedAccounts(selectedAccounts => [...selectedAccounts, account])
+        if (!isAccountSelected(account)) {
+            setSelectedAccount(account)
         }
     }
 
     useEffect(() => {
-        setSelectedAccounts([connectedAccount.address])
+        setSelectedAccount(connectedAccount.address)
     }, [])
 
     return isOpen && (
@@ -49,12 +37,6 @@ export default function AccountSelection({ isOpen, onClose, onSelect }: Props) {
             <Modal.Content>
                 <Modal.CloseButton />
                 <Modal.Header>Select account to connect with</Modal.Header>
-                <Pressable onPress={handleSelectAll} style={{ padding: 10 }}>
-                    <HStack alignItems="center" space={2}>
-                        <BouncyCheckbox disableBuiltInState isChecked={accounts.length === selectedAccounts.length} fillColor='blue' onPress={handleSelectAll} />
-                        <Text>Select all</Text>
-                    </HStack>
-                </Pressable>
                 <FlatList
                     keyExtractor={item => item.address}
                     data={accounts}
@@ -67,7 +49,7 @@ export default function AccountSelection({ isOpen, onClose, onSelect }: Props) {
                         </Pressable>
                     )}
                 />
-                <Button disabled={selectedAccounts.length === 0} onPress={() => onSelect(selectedAccounts)}>Next</Button>
+                <Button onPress={() => onSelect(selectedAccount)}>Next</Button>
                 <Button onPress={onClose}>Cancel</Button>
             </Modal.Content>
         </Modal>

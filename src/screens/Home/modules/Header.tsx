@@ -31,6 +31,8 @@ import { getSdkError } from '@walletconnect/utils';
 import { addConnectedSite } from '../../../store/reducers/ConnectedSites'
 import ConnectedSitesModal from '../../../components/modals/ConnectedSitesModal'
 import AccountSelection from '../../../components/AccountSelection'
+import { ActiveSession, addSession } from '../../../store/reducers/ActiveSessions'
+import SwitchAccountModal from '../../../components/modals/SwitchAccountModal'
 
 type Props = {}
 
@@ -41,6 +43,7 @@ function Header({ }: Props) {
     const [showAccountDetails, setShowAccountDetails] = useState(false)
     const [showConnectedSites, setShowConnectedSites] = useState(false)
     const [showAccountSelection, setShowAccountSelection] = useState(false)
+    const [showSwitchAccountModal, setShowSwitchAccountModal] = useState(false)
 
     const [showConnectModal, setShowConnectModal] = useState(false)
     const [showApprovalModal, setShowApprovalModal] = useState(false)
@@ -48,7 +51,7 @@ function Header({ }: Props) {
     const [proposal, setProposal] =
         useState<SignClientTypes.EventArguments['session_proposal']>();
 
-    const [selectedAccounts, setSelectedAccounts] = useState<string[]>([])
+    const [selectedAccount, setSelectedAccount] = useState<string>("")
 
 
     const accountInitialRef = useRef(null)
@@ -60,6 +63,8 @@ function Header({ }: Props) {
     const accounts: Account[] = useSelector(state => state.accounts)
     const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
+    const activeSessions: ActiveSession[] = useSelector(state => state.activeSessions)
+
     const toast = useToast()
 
     const handleNetworkSelecttion = (chainId: string) => {
@@ -70,6 +75,12 @@ function Header({ }: Props) {
         if (account !== connectedAccount.address) {
             dispatch(switchAccount(account))
             setIsAccountModalVisible(false)
+        }
+
+        const canSwitchSessionAccount = activeSessions.some(session => session.account !== account)
+
+        if (canSwitchSessionAccount) {
+            setShowSwitchAccountModal(true)
         }
     }
 
@@ -169,8 +180,8 @@ function Header({ }: Props) {
             const namespaces: SessionTypes.Namespaces = {};
             Object.keys(requiredNamespaces).forEach(key => {
                 const accounts: string[] = [];
-                requiredNamespaces[key].chains.map(chain => {
-                    selectedAccounts.map(acc => accounts.push(`${chain}:${acc}`));
+                requiredNamespaces[key].chains.forEach(chain => {
+                    accounts.push(`${chain}:${selectedAccount}`);
                 });
 
                 namespaces[key] = {
@@ -195,6 +206,15 @@ function Header({ }: Props) {
                 topic: session.topic
             }
 
+            const activeSession = {
+                site: sessionMetadata.url,
+                topic: session.topic,
+                requiredNamespaces,
+                chainId: connectedNetwork.chainId,
+                account: selectedAccount
+            }
+
+            dispatch(addSession(activeSession))
             dispatch(addConnectedSite(connectedSite))
 
             handleDeepLinkRedirect(sessionMetadata?.redirect);
@@ -219,8 +239,8 @@ function Header({ }: Props) {
         }
     }, [showConnectModal, showApprovalModal, handleSessionProposal])
 
-    const handleAccountsSelection = (selectedAccounts: string[]) => {
-        setSelectedAccounts(selectedAccounts)
+    const handleAccountsSelection = (selectedAccount: string) => {
+        setSelectedAccount(selectedAccount)
         setShowAccountSelection(false)
         setShowApprovalModal(true)
     }
@@ -300,6 +320,7 @@ function Header({ }: Props) {
                 </Modal.Content>
             </Modal>
 
+            <SwitchAccountModal isOpen={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
             <AccountSelection isOpen={showAccountSelection} onClose={() => setShowAccountSelection(false)} onSelect={handleAccountsSelection} />
             <AccountDetails isVisible={showAccountDetails} toggleVisibility={toggleAccountDetails} />
             <ConnectedSitesModal isOpen={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
