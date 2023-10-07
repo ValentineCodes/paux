@@ -2,7 +2,7 @@ import {ethers} from 'ethers';
 import { ALCHEMY_KEY } from './constants';
 export interface Providers {
   localhost: string;
-  mainnet: string;
+  ethereum: string;
   sepolia: string;
   goerli: string;
   arbitrum: string;
@@ -14,7 +14,7 @@ export interface Providers {
 }
 const providers = {
   localhost: 'http://127.0.0.1:8545/',
-  mainnet: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
+  ethereum: `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
   sepolia: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_KEY}`,
   goerli: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_KEY}`,
   arbitrum: `https://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}`,
