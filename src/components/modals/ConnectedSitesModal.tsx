@@ -5,6 +5,7 @@ import { ConnectedSite, removeConnectedSite } from '../../store/reducers/Connect
 import { useDispatch, useSelector } from 'react-redux';
 import { web3wallet } from '../../utils/Web3WalletClient';
 import { getSdkError } from '@walletconnect/utils';
+import { removeSession } from '../../store/reducers/ActiveSessions';
 
 type Props = {
     isOpen: boolean;
@@ -18,6 +19,7 @@ export default function ConnectedSitesModal({ isOpen, onClose }: Props) {
 
     const disconnectSession = async (site: ConnectedSite) => {
         dispatch(removeConnectedSite(site.name))
+        dispatch(removeSession(site.name))
         try {
             await web3wallet.disconnectSession({
                 topic: site.topic,
