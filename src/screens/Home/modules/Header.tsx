@@ -33,6 +33,8 @@ import ConnectedSitesModal from '../../../components/modals/ConnectedSitesModal'
 import AccountSelection from '../../../components/AccountSelection'
 import { ActiveSession, addSession } from '../../../store/reducers/ActiveSessions'
 import SwitchAccountModal from '../../../components/modals/SwitchAccountModal'
+import { EIP155_SIGNING_METHODS } from '../../../data/EIP155';
+import { SignModal } from '../../../components/modals/SignModal'
 
 type Props = {}
 
@@ -44,12 +46,18 @@ function Header({ }: Props) {
     const [showConnectedSites, setShowConnectedSites] = useState(false)
     const [showAccountSelection, setShowAccountSelection] = useState(false)
     const [showSwitchAccountModal, setShowSwitchAccountModal] = useState(false)
+    const [showSignModal, setShowSignModal] = useState(false)
+    const [showSignTypedDataModal, setShowSignTypedDataModal] = useState(false)
+    const [showSendTransactionModal, setShowSendTransactionModal] = useState(false)
 
     const [showConnectModal, setShowConnectModal] = useState(false)
     const [showApprovalModal, setShowApprovalModal] = useState(false)
     const [isPairing, setIsPairing] = useState(false)
     const [proposal, setProposal] =
         useState<SignClientTypes.EventArguments['session_proposal']>();
+
+    const [requestEventData, setRequestEventData] = useState();
+    const [requestSession, setRequestSession] = useState();
 
     const [selectedAccount, setSelectedAccount] = useState<string>("")
 
@@ -171,6 +179,36 @@ function Header({ }: Props) {
         setProposal(proposal)
     }, [])
 
+    const handleSessionRequest = useCallback(async (requestEvent: SignClientTypes.EventArguments['session_request']) => {
+        const { topic, params } = requestEvent;
+        const { request } = params;
+        const requestSessionData =
+            web3wallet.engine.signClient.session.get(topic);
+
+        switch (request.method) {
+            case EIP155_SIGNING_METHODS.ETH_SIGN:
+            case EIP155_SIGNING_METHODS.PERSONAL_SIGN:
+                setRequestSession(requestSessionData);
+                setRequestEventData(requestEvent);
+                setShowSignModal(true);
+                return;
+
+            case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA:
+            case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V3:
+            case EIP155_SIGNING_METHODS.ETH_SIGN_TYPED_DATA_V4:
+                setRequestSession(requestSessionData);
+                setRequestEventData(requestEvent);
+                setShowSignTypedDataModal(true);
+                return;
+            case EIP155_SIGNING_METHODS.ETH_SEND_TRANSACTION:
+            case EIP155_SIGNING_METHODS.ETH_SIGN_TRANSACTION:
+                setRequestSession(requestSessionData);
+                setRequestEventData(requestEvent);
+                setShowSendTransactionModal(true);
+                return;
+        }
+    }, [])
+
     const handleAcceptProposal = async () => {
         const { id, params } = proposal;
         const { requiredNamespaces, relays } = params;
@@ -234,10 +272,12 @@ function Header({ }: Props) {
     }
 
     useEffect(() => {
-        if (showConnectModal || showApprovalModal) {
+        if (showConnectModal || showApprovalModal || showSignModal || showSignTypedDataModal || showSendTransactionModal) {
             web3wallet.on("session_proposal", handleSessionProposal)
+            web3wallet.on("session_request", handleSessionRequest)
         }
-    }, [showConnectModal, showApprovalModal, handleSessionProposal])
+    }, [showConnectModal, showApprovalModal, showSignModal, showSignTypedDataModal, showSendTransactionModal, requestEventData,
+        requestSession, handleSessionProposal, handleSessionRequest])
 
     const handleAccountsSelection = (selectedAccount: string) => {
         setSelectedAccount(selectedAccount)
@@ -319,6 +359,15 @@ function Header({ }: Props) {
                     </Modal.Footer>
                 </Modal.Content>
             </Modal>
+
+            {requestEventData && requestSession && showSignModal && (
+                <SignModal
+                    visible={showSignModal}
+                    setVisible={setShowSignModal}
+                    requestEvent={requestEventData}
+                    requestSession={requestSession}
+                />
+            )}
 
             <SwitchAccountModal isOpen={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
             <AccountSelection isOpen={showAccountSelection} onClose={() => setShowAccountSelection(false)} onSelect={handleAccountsSelection} />
