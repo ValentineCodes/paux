@@ -35,6 +35,8 @@ import { ActiveSession, addSession } from '../../../store/reducers/ActiveSession
 import SwitchAccountModal from '../../../components/modals/SwitchAccountModal'
 import { EIP155_SIGNING_METHODS } from '../../../data/EIP155';
 import { SignModal } from '../../../components/modals/SignModal'
+import { SignTypedDataModal } from '../../../components/modals/SignTypedDataModal'
+import { SendTransactionModal } from '../../../components/modals/SendTransactionModal'
 
 type Props = {}
 
@@ -364,6 +366,24 @@ function Header({ }: Props) {
                 <SignModal
                     visible={showSignModal}
                     setVisible={setShowSignModal}
+                    requestEvent={requestEventData}
+                    requestSession={requestSession}
+                />
+            )}
+
+            {requestEventData && requestSession && showSignTypedDataModal && (
+                <SignTypedDataModal
+                    visible={showSignTypedDataModal}
+                    setVisible={setShowSignTypedDataModal}
+                    requestEvent={requestEventData}
+                    requestSession={requestSession}
+                />
+            )}
+
+            {requestEventData && requestSession && showSendTransactionModal && (
+                <SendTransactionModal
+                    visible={showSendTransactionModal}
+                    setVisible={setShowSendTransactionModal}
                     requestEvent={requestEventData}
                     requestSession={requestSession}
                 />

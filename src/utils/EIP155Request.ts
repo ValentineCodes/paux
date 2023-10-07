@@ -21,7 +21,15 @@ import {
     const {params, id} = requestEvent;
     const {chainId, request} = params;
 
-    const connectedAccount = params.request.params[1]
+    let connectedAccount: string;
+
+    if(request.method === "personal_sign") {
+      connectedAccount = request.params[1]
+    } else if(request.method === "eth_sendTransaction") {
+      connectedAccount = request.params[0].from
+    } else {
+      connectedAccount = ""
+    }
 
     const accounts = await SInfo.getItem("accounts", {
         sharedPreferencesName: "pocket.android.storage",
@@ -29,7 +37,6 @@ import {
     })
 
     const activeAccount: Wallet = Array.from(JSON.parse(accounts)).find(account => account.address.toLowerCase() == connectedAccount.toLowerCase())
-
 
     const wallet = new ethers.Wallet(activeAccount.privateKey)
 
@@ -58,6 +65,11 @@ import {
           EIP155_CHAINS[chainId as TEIP155Chain].rpc,
         );
         const sendTransaction = request.params[0];
+
+        if(sendTransaction.hasOwnProperty("gas")) {
+          delete sendTransaction.gas
+        }
+
         const connectedWallet = wallet.connect(provider);
         const {hash} = await connectedWallet.sendTransaction(sendTransaction);
         return formatJsonRpcResult(id, hash);

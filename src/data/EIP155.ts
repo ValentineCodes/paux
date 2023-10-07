@@ -3,6 +3,8 @@
  * @url https://chainlist.org
  */
 
+import { ALCHEMY_KEY } from '../utils/constants';
+
 /**
  * Types
  */
@@ -71,6 +73,13 @@ export const EIP155_TEST_CHAINS = {
     rgb: '235, 0, 25',
     rpc: 'https://goerli.optimism.io',
   },
+  'eip155:11155111': {
+    chainId: 11155111,
+    name: "Sepolia",
+    logo: '',
+    rgb: '207, 181, 240',
+    rpc: `https://eth-sepolia.g.alchemy.com/v2/${ALCHEMY_KEY}`
+  }
 };
 
 export const EIP155_CHAINS = {...EIP155_MAINNET_CHAINS, ...EIP155_TEST_CHAINS};
