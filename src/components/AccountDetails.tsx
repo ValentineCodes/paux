@@ -11,6 +11,7 @@ import { useToast } from 'react-native-toast-notifications'
 import { Account, removeAccount } from '../store/reducers/Accounts';
 import EditAccountNameForm from './forms/EditAccountNameForm';
 import { useNavigation } from '@react-navigation/native';
+import CopyableText from './CopyableText';
 
 
 type Props = {
@@ -78,17 +79,8 @@ export default function AccountDetails({ isVisible, toggleVisibility }: Props) {
                     )
                 }
                 <QRCode value={connectedAccount.address} />
-                <HStack mt={3}>
-                    <Text>{connectedAccount.address}</Text>
-                    {isAddressCopied ? (
-                        <Icon as={<Ionicons name="checkmark-outline" />} size={5} color="muted.400" ml={3} />
-                    ) : (
-                        <Pressable style={{ marginLeft: 3 }} onPress={copyAddress}>
-                            <Icon as={<Ionicons name="copy-outline" />} size={5} color="muted.400" />
-                        </Pressable>
-                    )}
-                </HStack>
-                <Button onPress={showPrivateKey}>Show private key</Button>
+                <CopyableText value={connectedAccount.address} />
+                <Button onPress={showPrivateKey} mt={2}>Show private key</Button>
                 {accounts.length > 1 && <Button onPress={remove}>Remove account</Button>}
             </VStack>
         </Overlay>
