@@ -1,5 +1,5 @@
 import { Image, Text, VStack, Button } from 'native-base'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { ethers } from 'ethers'
@@ -72,6 +72,20 @@ function MainBalance({ }: Props) {
     setShowTransferForm(!showTransferForm)
   }
 
+  const logo = useMemo(() => {
+    let _logo = require("../../../images/eth-icon.png");
+
+    if (["Polygon", "Mumbai"].includes(connectedNetwork.name)) {
+      _logo = require("../../../images/polygon-icon.png")
+    } else if (["Arbitrum", "Arbitrum Goerli"].includes(connectedNetwork.name)) {
+      _logo = require("../../../images/arbitrum-icon.png")
+    } else if (["Optimism", "Optimism Goerli"].includes(connectedNetwork.name)) {
+      _logo = require("../../../images/optimism-icon.png")
+    }
+
+    return <Image key={`${_logo}`} source={_logo} alt="Ethereum" width={50} height={50} />
+  }, [connectedNetwork])
+
   useEffect(() => {
     const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
 
@@ -83,12 +97,13 @@ function MainBalance({ }: Props) {
       provider.off("block")
     }
   }, [connectedAccount, connectedNetwork])
+
   return (
     <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} />}>
       <VStack alignItems="center" space={2} paddingY={5}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>{connectedAccount.name}</Text>
         <CopyableText displayText={truncateAddress(connectedAccount.address)} value={connectedAccount.address} />
-        <Image source={require("../../../images/eth-icon.png")} alt="Ethereum" width={50} height={50} />
+        {logo}
         <VStack alignItems="center">
           <Text fontSize="xl" bold>{balance !== '' && `${balance} ${connectedNetwork.currencySymbol}`}</Text>
           {dollarValue !== null && <Text>${dollarValue}</Text>}
