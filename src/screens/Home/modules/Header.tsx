@@ -136,10 +136,6 @@ function Header({ }: Props) {
         setShowPrivateKeyForm(!showPrivateKeyForm)
     }
 
-    const toggleAccountDetails = () => {
-        setShowAccountDetails(!showAccountDetails)
-    }
-
     const shareAddress = async () => {
         try {
             await Share.open({ message: connectedAccount.address })
@@ -392,7 +388,7 @@ function Header({ }: Props) {
 
             <SwitchAccountModal isOpen={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
             <AccountSelection isOpen={showAccountSelection} onClose={() => setShowAccountSelection(false)} onSelect={handleAccountsSelection} />
-            <AccountDetails isVisible={showAccountDetails} toggleVisibility={toggleAccountDetails} />
+            <AccountDetails isOpen={showAccountDetails} onClose={() => setShowAccountDetails(false)} />
             <ConnectedSitesModal isOpen={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
             <PrivateKeyForm isVisible={showPrivateKeyForm} toggleVisibility={togglePrivateKeyForm} />
         </HStack>

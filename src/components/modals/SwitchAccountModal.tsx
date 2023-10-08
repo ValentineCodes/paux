@@ -52,6 +52,10 @@ export default function SwitchAccountModal({ isOpen, onClose }: Props) {
             }
 
             dispatch(switchSessionAccount(sessionUpdate))
+
+            if (activeSessions.filter(session => session.account !== connectedAccount.address).length === 1) {
+                onClose()
+            }
         } catch (error) {
             toast.show("Failed to switch network", {
                 type: "danger"
