@@ -10,7 +10,6 @@ import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import Share from 'react-native-share';
 import { SignClientTypes, SessionTypes } from '@walletconnect/types';
 
-
 import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { ethers } from "ethers";
@@ -37,6 +36,7 @@ import { EIP155_SIGNING_METHODS } from '../../../data/EIP155';
 import { SignModal } from '../../../components/modals/SignModal'
 import { SignTypedDataModal } from '../../../components/modals/SignTypedDataModal'
 import { SendTransactionModal } from '../../../components/modals/SendTransactionModal'
+import { truncateAddress } from '../../../utils/helperFunctions'
 
 type Props = {}
 
@@ -342,6 +342,7 @@ function Header({ }: Props) {
                                     <HStack alignItems="center" justifyContent="space-between" paddingY={3} borderBottomWidth={index === accounts.length - 1 ? 0 : 1} borderBottomColor="#ccc">
                                         <VStack>
                                             <Text>{account.name}</Text>
+                                            <Text>{truncateAddress(account.address)}</Text>
                                         </VStack>
                                         {account.isConnected && <CheckIcon />}
                                     </HStack>
