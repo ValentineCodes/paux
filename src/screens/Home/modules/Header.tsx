@@ -9,6 +9,7 @@ import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import Share from 'react-native-share';
 import { SignClientTypes, SessionTypes } from '@walletconnect/types';
+import Blockie from '../../../components/Blockie'
 
 import "react-native-get-random-values"
 import "@ethersproject/shims"
@@ -296,9 +297,9 @@ function Header({ }: Props) {
                 </Select>
             </Box>
 
-            <HStack>
-                <Menu >
-                    <MenuTrigger><Icon as={<Ionicons name="ellipsis-vertical-outline" />} size={5} color="black" /></MenuTrigger>
+            <HStack alignItems="center" space={4}>
+                <Menu>
+                    <MenuTrigger><Blockie address={connectedAccount.address} size={35} /></MenuTrigger>
                     <MenuOptions>
                         <MenuOption onSelect={() => setIsAccountModalVisible(true)}>
                             <Text>Accounts</Text>
@@ -319,7 +320,7 @@ function Header({ }: Props) {
                 </Menu>
 
                 <Pressable onPress={() => setShowConnectModal(true)}>
-                    <Icon as={<Ionicons name="scan-outline" />} size={5} mr="2" color="muted.400" />
+                    <Icon as={<Ionicons name="scan-outline" />} size={7} mr="2" color="muted.400" />
                 </Pressable>
             </HStack>
 
