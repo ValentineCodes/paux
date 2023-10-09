@@ -42,11 +42,10 @@ export const accountsSlice = createSlice({
       });
     },
     removeAccount: (state, action) => {
-      const _state = state
-      const newState = _state.filter(account => account.address != action.payload);
-      newState[0].isConnected = true
-
-      return newState
+      return state.filter(account => account.address != action.payload).map((account, index) => {
+        if(index === 0) return {...account, isConnected: true}
+        return account
+      });
     },
     changeName: (state, action) => {
       return state.map(account => {
