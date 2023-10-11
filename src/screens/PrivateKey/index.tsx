@@ -11,6 +11,7 @@ import { Account } from '../../store/reducers/Accounts'
 import { Wallet } from '../../types/wallet'
 import QRCode from 'react-native-qrcode-svg';
 import Clipboard from '@react-native-clipboard/clipboard';
+import CopyableText from '../../components/CopyableText'
 
 type Props = {}
 
@@ -70,14 +71,9 @@ export default function PrivateKey({ }: Props) {
 
             {
                 privateKey ? (
-                    <VStack alignItems="center">
+                    <VStack alignItems="center" px="6">
                         <QRCode value={privateKey} />
-                        <HStack mt={3} ml={3} w="80%" alignItems="center">
-                            <Text textAlign="center">{privateKey}</Text>
-                            <Pressable style={{ marginLeft: 3 }} onPress={copyPrivateKey}>
-                                <Icon as={<Ionicons name="copy-outline" />} size={5} color="muted.400" />
-                            </Pressable>
-                        </HStack>
+                        <CopyableText value={privateKey} />
                     </VStack>
                 ) : (
                     <>

@@ -19,7 +19,7 @@ export default function CopyableText({ value, displayText }: Props) {
     }
     return (
         <HStack alignItems="center" space={1}>
-            <Text>{displayText || value}</Text>
+            <Text textAlign="center">{displayText || value}</Text>
             <Icon as={<Ionicons name="copy-outline" />} size={5} color="muted.400" onPress={copy} />
         </HStack>
     )
