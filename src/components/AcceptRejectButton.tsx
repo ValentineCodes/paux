@@ -1,14 +1,18 @@
 import React from 'react';
-import { TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { TouchableOpacity, StyleSheet, Text, ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 interface IAcceptRejectButtonProps {
     accept: boolean;
+    disabled?: boolean;
+    isLoading?: boolean;
     onPress: () => void;
 }
 
 export function AcceptRejectButton({
     accept,
+    disabled,
+    isLoading,
     onPress,
 }: IAcceptRejectButtonProps) {
     const acceptButtonColor = accept
@@ -20,9 +24,9 @@ export function AcceptRejectButton({
     return (
         <TouchableOpacity
             style={!accept ? styles.accept : null}
-            onPress={() => onPress()}>
+            onPress={() => onPress()} disabled={disabled}>
             <LinearGradient colors={acceptButtonColor} style={styles.buttonContainer}>
-                <Text style={styles.mainText}>{buttonText}</Text>
+                {isLoading ? <ActivityIndicator size="small" color="white" /> : <Text style={styles.mainText}>{buttonText}</Text>}
             </LinearGradient>
         </TouchableOpacity>
     );

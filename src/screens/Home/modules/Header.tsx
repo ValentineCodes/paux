@@ -56,6 +56,7 @@ function Header({ }: Props) {
     const [showConnectModal, setShowConnectModal] = useState(false)
     const [showApprovalModal, setShowApprovalModal] = useState(false)
     const [isPairing, setIsPairing] = useState(false)
+    const [isApprovingSession, setIsApprovingSession] = useState(false)
     const [proposal, setProposal] =
         useState<SignClientTypes.EventArguments['session_proposal']>();
 
@@ -228,33 +229,42 @@ function Header({ }: Props) {
                 };
             });
 
-            const session = await web3wallet.approveSession({
-                id,
-                relayProtocol: relays[0].protocol,
-                namespaces,
-            });
+            setIsApprovingSession(true)
 
-            setShowApprovalModal(false)
+            try {
+                const session = await web3wallet.approveSession({
+                    id,
+                    relayProtocol: relays[0].protocol,
+                    namespaces,
+                });
 
-            const sessionMetadata = session?.peer?.metadata;
+                setShowApprovalModal(false)
 
-            const connectedSite = {
-                name: sessionMetadata.url,
-                topic: session.topic
+                const sessionMetadata = session?.peer?.metadata;
+
+                const connectedSite = {
+                    name: sessionMetadata.url,
+                    topic: session.topic
+                }
+
+                const activeSession = {
+                    site: sessionMetadata.url,
+                    topic: session.topic,
+                    requiredNamespaces,
+                    chainId: connectedNetwork.chainId,
+                    account: selectedAccount
+                }
+
+                dispatch(addSession(activeSession))
+                dispatch(addConnectedSite(connectedSite))
+
+                handleDeepLinkRedirect(sessionMetadata?.redirect);
+            } catch (error) {
+                console.error(error)
+                return
+            } finally {
+                setIsApprovingSession(false)
             }
-
-            const activeSession = {
-                site: sessionMetadata.url,
-                topic: session.topic,
-                requiredNamespaces,
-                chainId: connectedNetwork.chainId,
-                account: selectedAccount
-            }
-
-            dispatch(addSession(activeSession))
-            dispatch(addConnectedSite(connectedSite))
-
-            handleDeepLinkRedirect(sessionMetadata?.redirect);
         }
     }
     const handleRejectProposal = async () => {
@@ -325,7 +335,7 @@ function Header({ }: Props) {
             </HStack>
 
             <ConnectModal isOpen={showConnectModal} isPairing={isPairing} onClose={() => setShowConnectModal(false)} pair={pair} />
-            <ApprovalModal proposal={proposal} isOpen={showApprovalModal} onClose={() => setShowApprovalModal(false)} handleAccept={handleAcceptProposal} handleReject={handleRejectProposal} />
+            <ApprovalModal proposal={proposal} isOpen={showApprovalModal} isApproving={isApprovingSession} onClose={() => setShowApprovalModal(false)} handleAccept={handleAcceptProposal} handleReject={handleRejectProposal} />
 
             {/* Accounts */}
             <Modal isOpen={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} initialFocusRef={accountInitialRef} finalFocusRef={accountFinalRef}>

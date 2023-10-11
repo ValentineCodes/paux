@@ -10,12 +10,13 @@ import { ModalHeader } from './modules/ModalHeader';
 type Props = {
     proposal: SignClientTypes.EventArguments['session_proposal'];
     isOpen: boolean;
+    isApproving: boolean;
     onClose: () => void;
     handleAccept: () => void;
     handleReject: () => void;
 }
 
-export default function ApprovalModal({ proposal, isOpen, onClose, handleAccept, handleReject }: Props) {
+export default function ApprovalModal({ proposal, isOpen, isApproving, onClose, handleAccept, handleReject }: Props) {
     const name = proposal?.params?.proposer?.metadata?.name;
     const url = proposal?.params?.proposer?.metadata.url;
     const methods = proposal?.params?.requiredNamespaces.eip155.methods;
@@ -47,7 +48,7 @@ export default function ApprovalModal({ proposal, isOpen, onClose, handleAccept,
 
                     <View style={styles.flexRow}>
                         <AcceptRejectButton accept={false} onPress={handleReject} />
-                        <AcceptRejectButton accept={true} onPress={handleAccept} />
+                        <AcceptRejectButton accept={true} onPress={handleAccept} disabled={!Boolean(proposal)} isLoading={isApproving} />
                     </View>
                 </View>
             </View>

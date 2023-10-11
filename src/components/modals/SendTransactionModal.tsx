@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { SignClientTypes } from '@walletconnect/types';
@@ -40,31 +40,48 @@ export function SendTransactionModal({
     const { request } = params;
     const transaction = request.params[0];
 
+    const [isApproving, setIsApproving] = useState(false)
+    const [isRejecting, setIsRejecting] = useState(false)
+
     function onRedirect() {
         handleDeepLinkRedirect(requestMetadata?.redirect);
     }
 
     async function onApprove() {
         if (requestEvent) {
-            const response = await approveEIP155Request(requestEvent);
-            await web3wallet.respondSessionRequest({
-                topic,
-                response,
-            });
-            setVisible(false);
-            onRedirect();
+            try {
+                setIsApproving(true)
+                const response = await approveEIP155Request(requestEvent);
+                await web3wallet.respondSessionRequest({
+                    topic,
+                    response,
+                });
+                setVisible(false);
+                onRedirect();
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setIsApproving(false)
+            }
         }
     }
 
     async function onReject() {
         if (requestEvent) {
-            const response = rejectEIP155Request(requestEvent);
-            await web3wallet.respondSessionRequest({
-                topic,
-                response,
-            });
-            setVisible(false);
-            onRedirect();
+            try {
+                setIsRejecting(true)
+                const response = rejectEIP155Request(requestEvent);
+                await web3wallet.respondSessionRequest({
+                    topic,
+                    response,
+                });
+                setVisible(false);
+                onRedirect();
+            } catch (error) {
+                console.error(error)
+            } finally {
+                setIsRejecting(false)
+            }
         }
     }
 
@@ -84,8 +101,8 @@ export function SendTransactionModal({
                 </View>
 
                 <View style={styles.flexRow}>
-                    <AcceptRejectButton accept={false} onPress={onReject} />
-                    <AcceptRejectButton accept={true} onPress={onApprove} />
+                    <AcceptRejectButton accept={false} onPress={onReject} isLoading={isRejecting} />
+                    <AcceptRejectButton accept={true} onPress={onApprove} disabled={!Boolean(requestEvent)} isLoading={isApproving} />
                 </View>
             </View>
         </Modal>
