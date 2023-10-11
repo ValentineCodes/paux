@@ -10,6 +10,7 @@ import "@ethersproject/shims"
 import { ethers } from "ethers";
 import { useDispatch, useSelector } from 'react-redux';
 import { Account, addAccount } from '../../store/reducers/Accounts';
+import QRCodeScanner from '../modals/QRCodeScanner';
 
 type Props = {
     isVisible: boolean;
@@ -21,6 +22,8 @@ export default function PrivateKeyForm({ isVisible, toggleVisibility }: Props) {
     const toast = useToast()
     const dispatch = useDispatch()
     const accounts: Account[] = useSelector(state => state.accounts)
+
+    const [isScanningKey, setIsScanningKey] = useState(false)
 
     const importWallet = async () => {
         try {
@@ -63,11 +66,17 @@ export default function PrivateKeyForm({ isVisible, toggleVisibility }: Props) {
             <Input w={{
                 base: "100%",
                 md: "25%"
-            }} type="text" placeholder='private key' InputRightElement={<Pressable>
+            }} type="text" placeholder='private key' InputRightElement={<Pressable onPress={() => setIsScanningKey(true)}>
                 <Icon as={<Ionicons name="scan-outline" />} size={5} mr="2" color="muted.400" />
             </Pressable>} onChangeText={value => setPrivateKey(value)} />
 
             <Button onPress={importWallet}>Import</Button>
+
+            <QRCodeScanner isOpen={isScanningKey} onClose={() => setIsScanningKey(false)} onReadCode={privateKey => {
+                setPrivateKey(privateKey)
+                setIsScanningKey(false)
+                importWallet()
+            }} />
         </Overlay>
     )
 }

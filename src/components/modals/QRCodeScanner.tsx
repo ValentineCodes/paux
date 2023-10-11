@@ -11,8 +11,8 @@ type Props = {
 }
 
 export default function QRCodeScanner({ isOpen, onClose, onReadCode }: Props) {
-    return (
-        <Modal isOpen={isOpen} onClose={onClose}>
+    return isOpen && (
+        <Modal isOpen onClose={onClose}>
             <Camera
                 scanBarcode={true}
                 onReadCode={(event) => {
