@@ -83,7 +83,7 @@ function MainBalance({ }: Props) {
       _logo = require("../../../images/optimism-icon.png")
     }
 
-    return <Image key={`${_logo}`} source={_logo} alt="Ethereum" width={50} height={50} />
+    return <Image key={`${_logo}`} source={_logo} alt={connectedNetwork.name} width={50} height={50} />
   }, [connectedNetwork])
 
   useEffect(() => {
