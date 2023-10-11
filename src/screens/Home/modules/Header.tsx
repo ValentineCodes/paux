@@ -163,7 +163,13 @@ function Header({ }: Props) {
             setIsPairing(true)
             const pairResponse = await _pair({ uri })
             setShowConnectModal(false)
-            setShowAccountSelection(true)
+
+            if (accounts.length > 1) {
+                setShowAccountSelection(true)
+            } else {
+                setSelectedAccount(connectedAccount.address)
+                setShowApprovalModal(true)
+            }
             return pairResponse
 
         } catch (error) {
@@ -253,6 +259,10 @@ function Header({ }: Props) {
                     requiredNamespaces,
                     chainId: connectedNetwork.chainId,
                     account: selectedAccount
+                }
+
+                if (connectedAccount.address !== selectedAccount) {
+                    dispatch(switchAccount(selectedAccount))
                 }
 
                 dispatch(addSession(activeSession))
