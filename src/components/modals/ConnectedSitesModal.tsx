@@ -20,6 +20,9 @@ export default function ConnectedSitesModal({ isOpen, onClose }: Props) {
     const disconnectSession = async (site: ConnectedSite) => {
         dispatch(removeConnectedSite(site.name))
         dispatch(removeSession(site.name))
+        if (connectedSites.length === 1) {
+            onClose()
+        }
         try {
             await web3wallet.disconnectSession({
                 topic: site.topic,

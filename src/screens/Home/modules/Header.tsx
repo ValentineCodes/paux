@@ -304,6 +304,7 @@ function Header({ }: Props) {
         setShowApprovalModal(true)
     }
 
+
     return (
         <HStack alignItems="center" justifyContent="space-between" borderBottomWidth={1} borderBottomColor="#ccc" padding={2}>
             <Text fontSize="2xl" bold>Pocket</Text>
