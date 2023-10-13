@@ -12,7 +12,7 @@ export default function Onboarding({ }: Props) {
     const navigation = useNavigation()
     return (
         <View style={styles.container}>
-            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: 300, height: 300 }} />
+            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: 400, height: 400 }} />
             <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Welcome to Pocket Wallet</Text>
             <Text textAlign="center" fontSize="md" my="4">A safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more</Text>
 

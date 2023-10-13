@@ -14,7 +14,7 @@ export default function WalletSetup({ }: Props) {
     return (
         <View style={styles.container}>
             <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" style={styles.navBtn} onPress={() => navigation.goBack()} />
-            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: 300, height: 300 }} />
+            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: 400, height: 400 }} />
             <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Wallet Setup</Text>
             <Text textAlign="center" fontSize="md" my="4">Create your new Wallet or import using a seed phrase if you already have an account</Text>
 
