@@ -111,7 +111,7 @@ function ImportWallet({ }: Props) {
 
       navigation.navigate("Home")
     } catch (error) {
-      toast.show("Failed to import wallet", {
+      toast.show("Failed to import wallet. Please ensure you have a stable network connection and try again", {
         type: "danger"
       })
     } finally {

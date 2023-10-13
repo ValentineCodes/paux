@@ -18,7 +18,7 @@ export default function WalletSetup({ }: Props) {
             <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Wallet Setup</Text>
             <Text textAlign="center" fontSize="md" my="4">Create your new Wallet or import using a seed phrase if you already have an account</Text>
 
-            <Button text="Create a New Wallet" onPress={() => navigation.navigate("CreateWallet")} style={{ marginTop: 40 }} />
+            <Button text="Create a New Wallet" onPress={() => navigation.navigate("CreatePassword")} style={{ marginTop: 40 }} />
             <Button text="Import Using Seed Phrase" type="outline" onPress={() => navigation.navigate("ImportWallet")} style={{ marginTop: 20 }} />
         </View>
     )

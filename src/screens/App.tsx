@@ -14,6 +14,7 @@ import WalletSetup from './Authentication/WalletSetup';
 import CreateWallet from './Authentication/CreateWallet';
 import ConfirmMnemonic from './Authentication/ConfirmMnemonic';
 import ImportWallet from './Authentication/ImportWallet'
+import SecureWallet from './Authentication/SecureWallet'
 import CreatePassword from './Authentication/CreatePassword';
 import Login from './Authentication/Login'
 import Home from './Home'
@@ -26,6 +27,7 @@ type AppStackParamsList = {
   WalletSetup: undefined;
   ImportWallet: undefined;
   CreateWallet: undefined;
+  SecureWallet: undefined;
   ConfirmMnemonic: undefined;
   CreatePassword: undefined;
   Login: undefined;
@@ -57,6 +59,7 @@ function App(): JSX.Element {
                       <AppStack.Screen name="WalletSetup" component={WalletSetup} />
                       <AppStack.Screen name="CreateWallet" component={CreateWallet} />
                       <AppStack.Screen name="ImportWallet" component={ImportWallet} />
+                      <AppStack.Screen name="SecureWallet" component={SecureWallet} />
                       <AppStack.Screen name="ConfirmMnemonic" component={ConfirmMnemonic} />
                       <AppStack.Screen name="CreatePassword" component={CreatePassword} />
                     </>
