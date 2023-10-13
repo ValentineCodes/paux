@@ -1,37 +1,40 @@
 import React from 'react'
-import { View, Text, VStack, Button, Center } from 'native-base'
+import { StyleSheet } from 'react-native'
+import { View, Image, Text, Icon } from 'native-base'
 
-import styles from "../../styles/authentication/onboarding"
+import Button from '../../components/Button'
+import { COLORS } from '../../utils/constants'
 import { useNavigation } from '@react-navigation/native'
+import Ionicons from "react-native-vector-icons/dist/Ionicons"
 
 type Props = {}
 
-const WalletSetup = (props: Props) => {
+export default function WalletSetup({ }: Props) {
     const navigation = useNavigation()
-
     return (
         <View style={styles.container}>
-            <View style={styles.logo}>
-                <Text fontSize="2xl" bold>Pocket</Text>
-            </View>
+            <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" style={styles.navBtn} onPress={() => navigation.goBack()} />
+            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: 300, height: 300 }} />
+            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Wallet Setup</Text>
+            <Text textAlign="center" fontSize="md" my="4">Create your new Wallet or import using a seed phrase if you already have an account</Text>
 
-            <VStack space={10} alignItems="center" marginTop={50}>
-                <Text fontSize="xl" bold>First time?</Text>
-
-                <Center style={styles.contentCard}>
-                    <Text fontSize="md" bold>Yeah, get me started!</Text>
-                    <Text style={styles.contentCaption}>This will create a new wallet, secret recovery phrase and a new password for your pocket</Text>
-                    <Button onPress={() => navigation.navigate("GenerateMnemonic")}>Get started!</Button>
-                </Center>
-
-                <Center style={styles.contentCard}>
-                    <Text fontSize="md" bold>Nope, I've got a secret recovery phrase</Text>
-                    <Text style={styles.contentCaption}>Import your wallet and create a new password for your pocket</Text>
-                    <Button variant="outline" onPress={() => navigation.navigate("ImportMnemonic")}>Import it!</Button>
-                </Center>
-            </VStack>
+            <Button text="Create a New Wallet" onPress={() => navigation.navigate("CreateWallet")} style={{ marginTop: 40 }} />
+            <Button text="Import Using Seed Phrase" type="outline" onPress={() => navigation.navigate("ImportWallet")} style={{ marginTop: 20 }} />
         </View>
     )
 }
 
-export default WalletSetup
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+        paddingHorizontal: 15,
+        paddingTop: 100,
+        backgroundColor: 'white'
+    },
+    navBtn: {
+        position: "absolute",
+        top: 15,
+        left: 15
+    }
+})

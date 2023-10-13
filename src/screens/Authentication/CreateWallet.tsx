@@ -20,7 +20,7 @@ interface Wallet {
     privateKey: string;
     address: string;
 }
-function GenerateMnemonic({ }: Props) {
+function CreateWallet({ }: Props) {
     const navigation = useNavigation()
 
     const dispatch = useDispatch()
@@ -106,4 +106,4 @@ function GenerateMnemonic({ }: Props) {
     )
 }
 
-export default GenerateMnemonic
+export default CreateWallet
