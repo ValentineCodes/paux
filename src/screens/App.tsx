@@ -1,14 +1,16 @@
 import React from 'react';
 import {
   SafeAreaView,
-  StyleSheet
+  StyleSheet,
+  StatusBar
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ToastProvider } from 'native-base';
 
-import Onboarding from './Authentication/Onboarding';
+import Onboarding from './Authentication/Onboarding'
+import WalletSetup from './Authentication/WalletSetup';
 import GenerateMnemonic from './Authentication/GenerateMnemonic';
 import ConfirmMnemonic from './Authentication/ConfirmMnemonic';
 import ImportMnemonic from './Authentication/ImportMnemonic'
@@ -21,6 +23,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 
 type AppStackParamsList = {
   Onboarding: undefined;
+  WalletSetup: undefined;
   GenerateMnemonic: undefined;
   ConfirmMnemonic: undefined;
   ImportMnemonic: undefined;
@@ -40,6 +43,7 @@ function App(): JSX.Element {
       <MenuProvider>
         <SafeAreaProvider>
           <SafeAreaView style={styles.container}>
+            <StatusBar barStyle="dark-content" backgroundColor="white" />
             <NavigationContainer>
               <AppStack.Navigator
                 screenOptions={{
@@ -50,6 +54,7 @@ function App(): JSX.Element {
                   !auth.isLoggedIn && (
                     <>
                       <AppStack.Screen name="Onboarding" component={Onboarding} />
+                      <AppStack.Screen name="WalletSetup" component={WalletSetup} />
                       <AppStack.Screen name="GenerateMnemonic" component={GenerateMnemonic} />
                       <AppStack.Screen name="ConfirmMnemonic" component={ConfirmMnemonic} />
                       <AppStack.Screen name="ImportMnemonic" component={ImportMnemonic} />
@@ -72,7 +77,8 @@ function App(): JSX.Element {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white"
+    backgroundColor: "white",
+    paddingHorizontal: 5
   }
 })
 

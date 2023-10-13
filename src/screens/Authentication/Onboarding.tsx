@@ -1,37 +1,32 @@
 import React from 'react'
-import { View, Text, VStack, Button, Center } from 'native-base'
+import { StyleSheet } from 'react-native'
+import { View, Image, Text } from 'native-base'
 
-import styles from "../../styles/authentication/onboarding"
+import Button from '../../components/Button'
+import { COLORS } from '../../utils/constants'
 import { useNavigation } from '@react-navigation/native'
 
 type Props = {}
 
-const Onboarding = (props: Props) => {
+export default function Onboarding({ }: Props) {
     const navigation = useNavigation()
-    
-  return (
-    <View style={styles.container}>
-        <View style={styles.logo}>
-            <Text fontSize="2xl" bold>Pocket</Text>
+    return (
+        <View style={styles.container}>
+            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: 300, height: 300 }} />
+            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Welcome to Pocket Wallet</Text>
+            <Text textAlign="center" fontSize="md" my="4">A safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more</Text>
+
+            <Button text="Get Started" onPress={() => navigation.navigate("WalletSetup")} style={{ marginTop: 40 }} />
         </View>
-
-        <VStack space={10} alignItems="center" marginTop={50}>
-            <Text fontSize="xl" bold>First time?</Text>
-            
-            <Center style={styles.contentCard}>
-                <Text fontSize="md" bold>Yeah, get me started!</Text>
-                <Text style={styles.contentCaption}>This will create a new wallet, secret recovery phrase and a new password for your pocket</Text>
-                <Button onPress={() => navigation.navigate("GenerateMnemonic")}>Get started!</Button>
-            </Center>
-
-            <Center style={styles.contentCard}>
-                <Text fontSize="md" bold>Nope, I've got a secret recovery phrase</Text>
-                <Text style={styles.contentCaption}>Import your wallet and create a new password for your pocket</Text>
-                <Button variant="outline" onPress={() => navigation.navigate("ImportMnemonic")}>Import it!</Button>
-            </Center>
-        </VStack>
-    </View>
-  )
+    )
 }
 
-export default Onboarding
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+        paddingHorizontal: 15,
+        paddingTop: 100,
+        backgroundColor: 'white'
+    }
+})
