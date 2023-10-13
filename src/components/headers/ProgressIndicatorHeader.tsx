@@ -3,12 +3,15 @@ import React from 'react'
 import { Dimensions } from 'react-native'
 import Ionicons from 'react-native-vector-icons/dist/Ionicons'
 import ProgressStepIndicator from '../ProgressStepIndicator'
+import { useNavigation } from '@react-navigation/native'
 
 type Props = {
     progress: number;
 }
 
 const ProgressIndicatorHeader = ({ progress }: Props) => {
+    const navigation = useNavigation()
+
     return (
         <HStack alignItems="center">
             <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" onPress={() => navigation.goBack()} />
