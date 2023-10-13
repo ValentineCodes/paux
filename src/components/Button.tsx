@@ -7,7 +7,7 @@ type Props = {
   type?: "normal" | "outline";
   loading?: boolean;
   disabled?: boolean;
-  syyle?: any;
+  style?: any;
   onPress: () => void;
 }
 

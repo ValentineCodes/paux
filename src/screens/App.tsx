@@ -56,8 +56,8 @@ function App(): JSX.Element {
                       <AppStack.Screen name="Onboarding" component={Onboarding} />
                       <AppStack.Screen name="WalletSetup" component={WalletSetup} />
                       <AppStack.Screen name="CreateWallet" component={CreateWallet} />
-                      <AppStack.Screen name="ConfirmMnemonic" component={ConfirmMnemonic} />
                       <AppStack.Screen name="ImportWallet" component={ImportWallet} />
+                      <AppStack.Screen name="ConfirmMnemonic" component={ConfirmMnemonic} />
                       <AppStack.Screen name="CreatePassword" component={CreatePassword} />
                     </>
                   )
