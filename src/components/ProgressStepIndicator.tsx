@@ -21,7 +21,7 @@ export default function ProgressStepIndicator({ steps, progress, width, size }: 
                 justifyContent: "space-between",
                 alignItems: "center"
             }}>
-                {Array(steps).fill(null).map((_, index) => <View style={{ width: size || 20, aspectRatio: 1, borderRadius: 100 }} bgColor={index <= progress - 1 ? COLORS.primary : "muted.200"} />)}
+                {Array(steps).fill(null).map((_, index) => <View key={Math.random().toString()} style={{ width: size || 20, aspectRatio: 1, borderRadius: 100 }} bgColor={index <= progress - 1 ? COLORS.primary : "muted.200"} />)}
 
             </HStack>
         </HStack>
