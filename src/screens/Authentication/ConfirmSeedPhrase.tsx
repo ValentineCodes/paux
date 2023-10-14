@@ -1,103 +1,40 @@
-import { HStack, Text, VStack, Button } from 'native-base'
-import React, { useEffect, useState } from 'react'
-import { View, Pressable, ScrollView } from "react-native"
+import { Divider, Button as RNButton, ScrollView, Text, VStack, View, Icon } from 'native-base'
+import React, { useState, useEffect } from 'react'
+import { ActivityIndicator, StyleSheet } from 'react-native'
+import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
+import { COLORS } from '../../utils/constants'
+import { BlurView } from "@react-native-community/blur";
+import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 
-import styles from "../../styles/authentication/confirmMnemonic"
+import "react-native-get-random-values"
+import "@ethersproject/shims"
+import { ethers } from "ethers";
+import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
-import { shuffleArray } from '../../utils/helperFunctions'
-import { useToast } from 'react-native-toast-notifications'
+import { useDispatch } from 'react-redux'
 import SInfo from "react-native-sensitive-info";
 
 type Props = {}
 
-function ConfirmSeedPhrase({ }: Props) {
-    const navigation = useNavigation()
-    const toast = useToast();
-    const [mnemonic, setMnemonic] = useState<string[]>([])
-    const [shuffledMnemonic, setShuffledMnemonic] = useState<string[]>([])
-
-    const handleWordSelection = (word: string) => {
-        let _mnemonic = mnemonic.slice()
-
-        if (_mnemonic.includes(word)) {
-            _mnemonic = _mnemonic.filter(el => el !== word)
-        } else {
-            _mnemonic.push(word)
-        }
-
-        setMnemonic(_mnemonic)
-    }
-
-    const confirm = async () => {
-        if (mnemonic.length !== 12) {
-            toast.show("Incomplete mnemonic", {
-                type: "warning"
-            })
-            return
-        }
-
-        try {
-            const _mnemonic = await SInfo.getItem("mnemonic", {
-                sharedPreferencesName: "pocket.android.storage",
-                keychainService: "pocket.ios.storage",
-            });
-            const selectedMnemonic = mnemonic.join(" ")
-            if (_mnemonic === selectedMnemonic) {
-                navigation.navigate("CreatePassword")
-            } else {
-                toast.show("Incorrect mnemonic order", {
-                    type: "danger"
-                })
-            }
-        } catch (error) {
-            console.log("Failed to get mnemonic")
-            console.error(error)
-        }
-    }
-
-    useEffect(() => {
-        (async () => {
-            const mnemonic = await SInfo.getItem("mnemonic", {
-                sharedPreferencesName: "pocket.android.storage",
-                keychainService: "pocket.ios.storage",
-            });
-            if (mnemonic) {
-                const _mnemonic: string[] = mnemonic.split(" ")
-                const shuffledMnemonic = shuffleArray(_mnemonic)
-                setShuffledMnemonic(shuffledMnemonic)
-            }
-        })()
-    }, [])
-
+export default function ConfirmSeedPhrase({ }: Props) {
     return (
         <ScrollView style={styles.container}>
-            <View>
-                <Text fontSize="2xl" bold>Pocket</Text>
-            </View>
+            <ProgressIndicatorHeader progress={3} />
 
-            <VStack space={2} alignItems="center">
-                <Text fontSize="xl">Confirm Secret Recovery Phrase</Text>
-                <Text>Select each phrase in order</Text>
+            <Divider bgColor="muted.100" mt="8" mb="4" />
 
-                <View style={styles.selectedMnemonic}>
-                    {mnemonic.map(word => <Text key={word} textAlign="center" style={[styles.word, { margin: 10, borderWidth: 0 }]}>{word}</Text>)}
-                </View>
+            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" lineHeight="40" bold>Confirm Seed Phrase</Text>
+            <Text textAlign="center" fontSize="lg" my="2">Select each word in the order it was presented to you.</Text>
 
-                <View style={[styles.mnemonicWrapper, { borderWidth: 0 }]}>
-                    {shuffledMnemonic.map(word => (
-                        <Pressable key={word} onPress={() => handleWordSelection(word)} style={{ margin: 10, width: "33%" }}>
-                            <Text textAlign="center" style={mnemonic.includes(word) ? styles.selectedWord : styles.word}>{word}</Text>
-                        </Pressable>
-                    ))}
-                </View>
-
-                <HStack space={2}>
-                    <Button variant="outline" borderColor="red.300" onPress={() => setMnemonic([])}>Clear</Button>
-                    <Button onPress={confirm}>Confirm</Button>
-                </HStack>
-            </VStack>
+            <Divider bgColor="muted.100" my="4" />
         </ScrollView>
     )
 }
 
-export default ConfirmSeedPhrase
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: "white",
+        padding: 15
+    },
+})

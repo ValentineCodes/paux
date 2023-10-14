@@ -5,6 +5,7 @@ import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorH
 import { COLORS } from '../../utils/constants'
 import { BlurView } from "@react-native-community/blur";
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
+import Clipboard from '@react-native-clipboard/clipboard';
 
 import "react-native-get-random-values"
 import "@ethersproject/shims"
@@ -14,6 +15,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import SInfo from "react-native-sensitive-info";
 import { initAccount } from '../../store/reducers/Accounts'
+import { useToast } from 'react-native-toast-notifications'
 
 interface Wallet {
     mnemonic: string;
@@ -26,14 +28,29 @@ type Props = {}
 export default function GenerateSeedPhrase({ }: Props) {
     const navigation = useNavigation()
 
+    const toast = useToast()
+
     const dispatch = useDispatch()
 
     const [wallet, setWallet] = useState<Wallet>()
     const [showSeedPhrase, setShowSeedPhrase] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
+    const copySeedPhrase = () => {
+        if (!wallet) {
+            toast.show("Still generating wallet")
+            return
+        }
+
+        Clipboard.setString(wallet.mnemonic)
+        toast.show("Seed phrase copied to clipboard")
+    }
+
     const saveWallet = async () => {
-        if (!wallet) return
+        if (!wallet || !showSeedPhrase) {
+            toast.show("Reveal your seed phrase before proceeding to the next step")
+            return
+        }
         try {
             await SInfo.setItem("mnemonic", wallet.mnemonic, {
                 sharedPreferencesName: "pocket.android.storage",
@@ -81,15 +98,14 @@ export default function GenerateSeedPhrase({ }: Props) {
 
             <Divider bgColor="muted.100" my="4" />
 
-            <View style={styles.seedPhraseContainer}>
-                {isLoading ? <View style={styles.loader}>
-                    <ActivityIndicator size="large" color={COLORS.primary} />
-                </View> :
-                    <View style={styles.seedPhraseWrapper}>
-                        {wallet?.mnemonic.split(" ").map((word, index) => (
-                            <Text key={word} style={styles.word}>{index + 1}. {word}</Text>
-                        ))}
-                    </View>}
+            {isLoading ? <View style={styles.loader}>
+                <ActivityIndicator size="large" color={COLORS.primary} />
+            </View> : <View style={styles.seedPhraseContainer}>
+                <View style={styles.seedPhraseWrapper}>
+                    {wallet?.mnemonic.split(" ").map((word, index) => (
+                        <Text key={word} style={styles.word}>{index + 1}. {word}</Text>
+                    ))}
+                </View>
 
 
                 {
@@ -110,11 +126,13 @@ export default function GenerateSeedPhrase({ }: Props) {
                     )
                 }
 
-            </View>
+            </View>}
+
 
             <Divider bgColor="muted.100" my="4" />
 
-            <Button text="Next" disabled={isLoading || !showSeedPhrase} onPress={saveWallet} style={{ marginBottom: 50 }} />
+            <Button type="outline" text="Copy To Clipboard" disabled={isLoading} onPress={copySeedPhrase} />
+            <Button text="Next" disabled={isLoading} onPress={saveWallet} style={{ marginBottom: 50, marginTop: 20 }} />
         </ScrollView>
     )
 }
