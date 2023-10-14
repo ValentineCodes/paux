@@ -1,6 +1,7 @@
 import React from 'react'
 import { ActivityIndicator } from 'react-native'
 import { Button as RNButton, Text } from "native-base"
+import { COLORS } from '../utils/constants'
 
 type Props = {
   text: string;
@@ -13,9 +14,10 @@ type Props = {
 
 export default function Button({ text, type, loading, disabled, style, onPress }: Props) {
   if (type === "outline") {
-    return <RNButton py="4" borderRadius={25} bgColor="#E8F7ED" disabled={disabled || loading} style={[style]} w="full" onPress={onPress}>{loading ? <ActivityIndicator color="#2AB858" /> : <Text color="#2AB858" bold fontSize="md">{text}</Text>}</RNButton>
+    return <RNButton py="4" borderRadius={25} bgColor="#E8F7ED" disabled={disabled || loading} style={[style]} w="full" onPress={onPress}>{loading ? <ActivityIndicator color={COLORS.primary} /> : <Text color={COLORS.primary} bold fontSize="md">{text}</Text>
+    }</RNButton >
   }
   return (
-    <RNButton py="4" borderRadius={25} bgColor={disabled ? "#2A974D" : "#2AB858"} disabled={disabled || loading} style={[style]} w="full" onPress={onPress}>{loading ? <ActivityIndicator color="white" /> : <Text color="white" bold fontSize="md">{text}</Text>}</RNButton>
+    <RNButton py="4" borderRadius={25} bgColor={disabled ? "#2A974D" : COLORS.primary} disabled={disabled || loading} style={[style]} w="full" onPress={onPress}>{loading ? <ActivityIndicator color="white" /> : <Text color="white" bold fontSize="md">{text}</Text>}</RNButton>
   )
 }

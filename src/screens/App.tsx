@@ -11,8 +11,8 @@ import { ToastProvider } from 'native-base';
 
 import Onboarding from './Authentication/Onboarding'
 import WalletSetup from './Authentication/WalletSetup';
-import CreateWallet from './Authentication/CreateWallet';
-import ConfirmMnemonic from './Authentication/ConfirmMnemonic';
+import GenerateSeedPhrase from './Authentication/GenerateSeedPhrase';
+import ConfirmSeedPhrase from './Authentication/ConfirmSeedPhrase';
 import ImportWallet from './Authentication/ImportWallet'
 import SecureWallet from './Authentication/SecureWallet'
 import CreatePassword from './Authentication/CreatePassword';
@@ -26,9 +26,9 @@ type AppStackParamsList = {
   Onboarding: undefined;
   WalletSetup: undefined;
   ImportWallet: undefined;
-  CreateWallet: undefined;
+  GenerateSeedPhrase: undefined;
   SecureWallet: undefined;
-  ConfirmMnemonic: undefined;
+  ConfirmSeedPhrase: undefined;
   CreatePassword: undefined;
   Login: undefined;
   Home: undefined;
@@ -57,10 +57,10 @@ function App(): JSX.Element {
                     <>
                       <AppStack.Screen name="Onboarding" component={Onboarding} />
                       <AppStack.Screen name="WalletSetup" component={WalletSetup} />
-                      <AppStack.Screen name="CreateWallet" component={CreateWallet} />
                       <AppStack.Screen name="ImportWallet" component={ImportWallet} />
                       <AppStack.Screen name="SecureWallet" component={SecureWallet} />
-                      <AppStack.Screen name="ConfirmMnemonic" component={ConfirmMnemonic} />
+                      <AppStack.Screen name="GenerateSeedPhrase" component={GenerateSeedPhrase} />
+                      <AppStack.Screen name="ConfirmSeedPhrase" component={ConfirmSeedPhrase} />
                       <AppStack.Screen name="CreatePassword" component={CreatePassword} />
                     </>
                   )

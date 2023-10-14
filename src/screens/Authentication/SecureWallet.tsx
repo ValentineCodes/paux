@@ -7,10 +7,13 @@ import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorH
 import { COLORS } from '../../utils/constants'
 import BulletText from '../../components/BulletText'
 import Button from '../../components/Button'
+import { useNavigation } from '@react-navigation/native';
 
 type Props = {}
 
 export default function SecureWallet({ }: Props) {
+    const navigation = useNavigation()
+
     const [isSeedPhraseDescriptionVisible, setIsSeedPhraseDescriptionVisible] = useState(false)
 
     return (
@@ -52,7 +55,7 @@ export default function SecureWallet({ }: Props) {
 
                 <Divider bgColor="muted.100" mt="10" />
 
-                <Button text="Start" onPress={() => console.log("Pressed!")} />
+                <Button text="Start" onPress={() => navigation.navigate("GenerateSeedPhrase")} />
             </VStack>
 
             <BottomSheet isVisible={isSeedPhraseDescriptionVisible} onBackdropPress={() => setIsSeedPhraseDescriptionVisible(false)}>

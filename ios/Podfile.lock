@@ -339,6 +339,8 @@ PODS:
     - ReactCommon/turbomodule/core
   - react-native-biometrics (3.0.1):
     - React-Core
+  - react-native-blur (4.3.2):
+    - React-Core
   - react-native-get-random-values (1.9.0):
     - React-Core
   - react-native-netinfo (9.4.1):
@@ -448,7 +450,7 @@ PODS:
     - React-Core
   - RNCClipboard (1.12.1):
     - React-Core
-  - RNGestureHandler (2.13.1):
+  - RNGestureHandler (2.13.2):
     - React-Core
   - RNReanimated (3.1.0):
     - DoubleConversion
@@ -538,6 +540,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-bignumber (from `../node_modules/react-native-bignumber`)
   - react-native-biometrics (from `../node_modules/react-native-biometrics`)
+  - "react-native-blur (from `../node_modules/@react-native-community/blur`)"
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
@@ -634,6 +637,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-bignumber"
   react-native-biometrics:
     :path: "../node_modules/react-native-biometrics"
+  react-native-blur:
+    :path: "../node_modules/@react-native-community/blur"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-netinfo:
@@ -732,6 +737,7 @@ SPEC CHECKSUMS:
   React-logger: 186dd536128ae5924bc38ed70932c00aa740cd5b
   react-native-bignumber: 9850896db4534ea31e89dfd88182e7412eace199
   react-native-biometrics: 352e5a794bfffc46a0c86725ea7dc62deb085bdc
+  react-native-blur: cfdad7b3c01d725ab62a8a729f42ea463998afa2
   react-native-get-random-values: dee677497c6a740b71e5612e8dbd83e7539ed5bb
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975
@@ -756,7 +762,7 @@ SPEC CHECKSUMS:
   ReactNativeCameraKit: 9d46a5d7dd544ca64aa9c03c150d2348faf437eb
   RNCAsyncStorage: c913ede1fa163a71cea118ed4670bbaaa4b511bb
   RNCClipboard: d77213bfa269013bf4b857b7a9ca37ee062d8ef1
-  RNGestureHandler: 38aa38413896620338948fbb5c90579a7b1c3fde
+  RNGestureHandler: bb86e378287f7713baf3ca205423eb8109790022
   RNReanimated: b1220a0e5168745283ff5d53bfc7d2144b2cee1b
   RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
   RNShare: 32e97adc8d8c97d4a26bcdd3c45516882184f8b6
