@@ -124,7 +124,7 @@ export default function Login({ }: Props) {
     }, [])
     return (
         <VStack style={styles.container} space={4}>
-            <Image source={require("../../assets/images/pocket_logo.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
+            <Image source={require("../../assets/images/pocket.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
             <Text fontSize={2 * FONT_SIZE['xl']} color={COLORS.primary} bold>Welcome Back!</Text>
 
             <VStack mt="5" space={2} w="full">

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import { ScrollView, Image, Text, Icon } from 'native-base'
+import { ScrollView, Image, Text, Icon, VStack } from 'native-base'
 
 import Button from '../../components/Button'
 import { COLORS } from '../../utils/constants'
@@ -20,11 +20,14 @@ export default function WalletSetup({ }: Props) {
         }} style={styles.container}>
             <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" style={styles.navBtn} onPress={() => navigation.goBack()} />
             <Image source={require("../../assets/icons/wallet_icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
-            <Text textAlign="center" color={COLORS.primary} fontSize={1.5 * FONT_SIZE["xl"]} bold mt="10">Wallet Setup</Text>
-            <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="4">Create your new Wallet or import using a seed phrase if you already have an account</Text>
 
-            <Button text="Create a New Wallet" onPress={() => navigation.navigate("CreatePassword")} style={{ marginTop: 40 }} />
-            <Button text="Import Using Seed Phrase" type="outline" onPress={() => navigation.navigate("ImportWallet")} style={{ marginTop: 20 }} />
+            <VStack w="full" mt="10">
+                <Text textAlign="center" color={COLORS.primary} fontSize={2 * FONT_SIZE["xl"]} bold mt="10">Wallet Setup</Text>
+                <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="4">Create your new Wallet or import using a seed phrase if you already have an account</Text>
+
+                <Button text="Create a New Wallet" onPress={() => navigation.navigate("CreatePassword")} style={{ marginTop: 40 }} />
+                <Button text="Import Using Seed Phrase" type="outline" onPress={() => navigation.navigate("ImportWallet")} style={{ marginTop: 20 }} />
+            </VStack>
         </ScrollView>
     )
 }
