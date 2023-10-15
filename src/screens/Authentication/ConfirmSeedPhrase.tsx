@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { ActivityIndicator, Dimensions, StyleSheet } from 'react-native'
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
 import { COLORS } from '../../utils/constants'
+import { FONT_SIZE } from '../../utils/styles'
 import Modal from "react-native-modal";
 
 import Button from '../../components/Button'
@@ -104,8 +105,8 @@ export default function ConfirmSeedPhrase({ }: Props) {
 
             <Divider bgColor="muted.100" mt="8" mb="4" />
 
-            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" lineHeight="40" bold>Confirm Seed Phrase</Text>
-            <Text textAlign="center" fontSize="lg" my="2">Select each word in the order it was presented to you.</Text>
+            <Text textAlign="center" color={COLORS.primary} fontSize={1.7 * FONT_SIZE['xl']} lineHeight="40" bold>Confirm Seed Phrase</Text>
+            <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="2">Select each word in the order it was presented to you.</Text>
 
             <Divider bgColor="muted.100" my="4" />
 
@@ -147,10 +148,10 @@ export default function ConfirmSeedPhrase({ }: Props) {
             {/* Success modal */}
             <Modal isVisible={showSuccessModal} animationIn="zoomIn" animationOut="zoomOut" onBackdropPress={() => setShowSuccessModal(false)} onBackButtonPress={() => setShowSuccessModal(false)}>
                 <VStack bgColor="white" borderRadius="40" px="7" py="5" alignItems="center" space="4">
-                    <Image source={require("../../images/eth-icon.png")} alt="Success!" style={{ width: Dimensions.get("window").width * 0.5, height: Dimensions.get("window").width * 0.5 }} />
-                    <Text color={COLORS.primary} bold fontSize="2xl">Successful!</Text>
-                    <Text fontSize="lg" textAlign="center">You've successfully protected your wallet. Remember to keep your seed phrase safe. It's your responsibility!</Text>
-                    <Text fontSize="lg" textAlign="center">Pocket cannot recover your wallet should you lose it.</Text>
+                    <Image source={require("../../assets/images/success_icon.png")} alt="Success!" style={{ width: Dimensions.get("window").height * 0.25, height: Dimensions.get("window").height * 0.25 }} />
+                    <Text color={COLORS.primary} bold fontSize={1.5 * FONT_SIZE['xl']}>Successful!</Text>
+                    <Text fontSize={FONT_SIZE['xl']} textAlign="center">You've successfully protected your wallet. Remember to keep your seed phrase safe. It's your responsibility!</Text>
+                    <Text fontSize={FONT_SIZE['xl']} textAlign="center">Pocket cannot recover your wallet should you lose it.</Text>
                     <Button text="Ok" onPress={handleSuccess} />
                 </VStack>
             </Modal>

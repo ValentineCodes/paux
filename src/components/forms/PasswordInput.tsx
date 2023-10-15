@@ -2,6 +2,7 @@ import { Text, VStack, Input, Icon, Pressable, HStack } from 'native-base'
 import React, { useState } from 'react'
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 import { COLORS } from '../../utils/constants';
+import { FONT_SIZE } from '../../utils/styles';
 
 type Props = {
   label: string;
@@ -15,7 +16,7 @@ function PasswordInput({ label, value, infoText, errorText, onChange }: Props) {
   const [show, setShow] = useState(false)
   return (
     <VStack space={2}>
-      <Text fontSize="xl" bold>{label}</Text>
+      <Text fontSize={FONT_SIZE["xl"]} bold>{label}</Text>
       <Input
         value={value}
         borderRadius="lg"

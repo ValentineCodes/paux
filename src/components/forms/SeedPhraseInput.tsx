@@ -2,6 +2,7 @@ import { Text, VStack, HStack, Input, Icon, Pressable } from 'native-base'
 import React, { useState } from 'react'
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 import { COLORS } from '../../utils/constants';
+import { FONT_SIZE } from '../../utils/styles';
 
 type Props = {
     value?: string;
@@ -15,7 +16,7 @@ export default function SeedPhraseInput({ value, infoText, errorText, onChange, 
     const [show, setShow] = useState(false)
     return (
         <VStack space={2}>
-            <Text fontSize="xl" bold>Seed Phrase</Text>
+            <Text fontSize={FONT_SIZE["xl"]} bold>Seed Phrase</Text>
             <Input
                 borderRadius="lg"
                 variant="filled"

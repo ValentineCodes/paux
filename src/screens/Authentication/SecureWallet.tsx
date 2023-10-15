@@ -5,6 +5,7 @@ import Modal from "react-native-modal";
 
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
 import { COLORS } from '../../utils/constants'
+import { FONT_SIZE } from '../../utils/styles';
 import BulletText from '../../components/BulletText'
 import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native';
@@ -22,32 +23,32 @@ export default function SecureWallet({ }: Props) {
 
             <Divider bgColor="muted.100" mt="8" mb="4" />
 
-            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Secure Your Wallet</Text>
-            <Text textAlign="center" fontSize="lg" my="2">Secure your wallet's "<Text color={COLORS.primary} onPress={() => setIsSeedPhraseDescriptionVisible(true)}>Seed Phrase</Text>"</Text>
+            <Text textAlign="center" color={COLORS.primary} fontSize={1.7 * FONT_SIZE["xl"]} bold>Secure Your Wallet</Text>
+            <Text textAlign="center" fontSize={FONT_SIZE['lg']} my="2">Secure your wallet's "<Text color={COLORS.primary} onPress={() => setIsSeedPhraseDescriptionVisible(true)}>Seed Phrase</Text>"</Text>
 
             <Divider bgColor="muted.100" my="4" />
 
             <VStack space={4} mb="50">
-                <Text bold fontSize="xl">Manual</Text>
-                <Text fontSize="lg">Write down your seed phrase on a piece of paper and store in a safe place.</Text>
+                <Text bold fontSize={FONT_SIZE['xl']}>Manual</Text>
+                <Text fontSize={FONT_SIZE['lg']}>Write down your seed phrase on a piece of paper and store in a safe place.</Text>
 
-                <Text fontSize="lg">Security level: Very strong</Text>
+                <Text fontSize={FONT_SIZE['lg']}>Security level: Very strong</Text>
 
                 <HStack alignItems="center" space={4}>
                     {Array(3).fill(null).map(_ => <Divider key={Math.random().toString()} w="12" h="1" bgColor={COLORS.primary} />)}
                 </HStack>
 
                 <VStack>
-                    <Text fontSize="lg">Risks are:</Text>
+                    <Text fontSize={FONT_SIZE['lg']}>Risks are:</Text>
                     <BulletText text="You lose it" />
                     <BulletText text="You forget where you put it" />
                     <BulletText text="Someone else finds it" />
                 </VStack>
 
-                <Text fontSize="lg">Other options: Doesn't have to be paper!</Text>
+                <Text fontSize={FONT_SIZE['lg']}>Other options: Doesn't have to be paper!</Text>
 
                 <VStack>
-                    <Text fontSize="lg">Tips:</Text>
+                    <Text fontSize={FONT_SIZE['lg']}>Tips:</Text>
                     <BulletText text="Store in bank vault" />
                     <BulletText text="Store in a safe" />
                     <BulletText text="Store in multiple secret places" />

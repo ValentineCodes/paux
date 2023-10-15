@@ -1,8 +1,9 @@
 import { Divider, Button as RNButton, ScrollView, Text, VStack, View, Icon } from 'native-base'
 import React, { useState, useEffect } from 'react'
-import { ActivityIndicator, Dimensions, StyleSheet } from 'react-native'
+import { ActivityIndicator, StyleSheet } from 'react-native'
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
 import { COLORS } from '../../utils/constants'
+import { FONT_SIZE } from '../../utils/styles'
 import { BlurView } from "@react-native-community/blur";
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -93,8 +94,8 @@ export default function GenerateSeedPhrase({ }: Props) {
 
             <Divider bgColor="muted.100" mt="8" mb="4" />
 
-            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" lineHeight="40" bold>Write Down Your Seed Phrase</Text>
-            <Text textAlign="center" fontSize="lg" my="2">This is your seed phrase. Write it down on a piece of paper and keep it in a safe place. You'll be asked to re-enter this phrase (in order) on the next step.</Text>
+            <Text textAlign="center" color={COLORS.primary} fontSize={1.7 * FONT_SIZE["xl"]} lineHeight="40" bold>Write Down Your Seed Phrase</Text>
+            <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="2">This is your seed phrase. Write it down on a piece of paper and keep it in a safe place. You'll be asked to re-enter this phrase (in order) on the next step.</Text>
 
             <Divider bgColor="muted.100" my="4" />
 
@@ -118,9 +119,9 @@ export default function GenerateSeedPhrase({ }: Props) {
                                 reducedTransparencyFallbackColor="white"
                             />
                             <VStack style={styles.seedPhraseMask} space={2}>
-                                <Text fontSize="xl" bold textAlign="center">Tap to reveal your seed phrase</Text>
-                                <Text fontSize="sm" textAlign="center">Make sure no one is watching your screen</Text>
-                                <RNButton py="3" borderRadius={25} bgColor="#2AB858" w="24" mt="2" leftIcon={<Icon as={<MaterialIcons name="visibility" color="white" />} size="md" />} onPress={() => setShowSeedPhrase(true)}><Text color="white" bold fontSize="lg">View</Text></RNButton>
+                                <Text fontSize={FONT_SIZE['xl']} bold textAlign="center">Tap to reveal your seed phrase</Text>
+                                <Text fontSize={FONT_SIZE['md']} textAlign="center">Make sure no one is watching your screen</Text>
+                                <RNButton py="3" borderRadius={25} bgColor="#2AB858" w="24" mt="2" leftIcon={<Icon as={<MaterialIcons name="visibility" color="white" />} size="md" />} onPress={() => setShowSeedPhrase(true)}><Text color="white" bold fontSize={FONT_SIZE['lg']}>View</Text></RNButton>
                             </VStack>
                         </>
                     )

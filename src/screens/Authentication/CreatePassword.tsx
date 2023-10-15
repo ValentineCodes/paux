@@ -7,14 +7,11 @@ import PasswordInput from '../../components/forms/PasswordInput'
 import { useDispatch } from 'react-redux'
 import { useToast } from 'react-native-toast-notifications'
 import SInfo from "react-native-sensitive-info";
-import Ionicons from "react-native-vector-icons/dist/Ionicons"
 
-import { loginUser } from '../../store/reducers/Auth'
 import { COLORS } from '../../utils/constants'
 import Button from '../../components/Button'
-import ProgressStepIndicator from '../../components/ProgressStepIndicator'
-import { Dimensions } from 'react-native'
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
+import { FONT_SIZE } from '../../utils/styles'
 
 type Props = {}
 
@@ -78,8 +75,8 @@ function CreatePassword({ }: Props) {
 
             <Divider bgColor="muted.100" my="8" />
 
-            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Create Password</Text>
-            <Text textAlign="center" fontSize="lg" my="2">This password will unlock your Pocket wallet only on this device</Text>
+            <Text textAlign="center" color={COLORS.primary} fontSize={1.7 * FONT_SIZE["xl"]} bold>Create Password</Text>
+            <Text textAlign="center" fontSize={FONT_SIZE['lg']} my="2">This password will unlock your Pocket wallet only on this device</Text>
 
             <VStack space={6} mb="50" mt="4">
                 <PasswordInput label="New Password" value={password} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
@@ -88,7 +85,7 @@ function CreatePassword({ }: Props) {
                 <Divider bgColor="muted.100" />
 
                 <HStack alignItems="center" justifyContent="space-between">
-                    <Text fontSize="lg">Sign in with Biometrics</Text>
+                    <Text fontSize={FONT_SIZE['xl']}>Sign in with Biometrics</Text>
                     <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
                 </HStack>
 

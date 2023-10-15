@@ -21,6 +21,7 @@ import QRCodeScanner from '../../components/modals/QRCodeScanner'
 import { initAccount } from '../../store/reducers/Accounts'
 import { loginUser } from '../../store/reducers/Auth'
 import { createWeb3Wallet } from '../../utils/Web3WalletClient'
+import { FONT_SIZE } from '../../utils/styles'
 
 type Props = {}
 
@@ -123,7 +124,7 @@ function ImportWallet({ }: Props) {
       <HStack alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" space={2}>
           <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" onPress={() => navigation.goBack()} />
-          <Text fontSize="2xl" bold>Import From Seed</Text>
+          <Text fontSize={1.2 * FONT_SIZE["xl"]} bold>Import From Seed</Text>
         </HStack>
 
         <TouchableWithoutFeedback onPress={() => setIsScanningSeedPhrase(true)}>
@@ -139,7 +140,7 @@ function ImportWallet({ }: Props) {
         <Divider bgColor="muted.100" />
 
         <HStack alignItems="center" justifyContent="space-between">
-          <Text fontSize="lg">Sign in with Biometrics</Text>
+          <Text fontSize={FONT_SIZE['lg']}>Sign in with Biometrics</Text>
           <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
         </HStack>
 
