@@ -10,12 +10,17 @@ import { FONT_SIZE } from '../../utils/styles'
 import { COLORS } from '../../utils/constants'
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 import Button from '../../components/Button'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUser, logoutUser } from '../../store/reducers/Auth'
 
 type Props = {}
 
 export default function Login({ }: Props) {
     const toast = useToast()
     const navigation = useNavigation()
+    const dispatch = useDispatch()
+
+    const auth = useSelector(state => state.auth)
 
     const [password, setPassword] = useState("")
     const [isInitializing, setIsInitializing] = useState(false)
@@ -24,6 +29,11 @@ export default function Login({ }: Props) {
         try {
             setIsInitializing(true)
             await createWeb3Wallet()
+
+            if (!auth.isLoggedIn) {
+                dispatch(loginUser())
+            }
+
             navigation.navigate("Home")
         } catch (error) {
             toast.show("Failed to initialize wallet", {
@@ -97,12 +107,20 @@ export default function Login({ }: Props) {
             toast.show("Could not sign in with biometrics", {
                 type: "danger"
             })
-            console.error(error)
         }
     }
 
+    const resetWallet = () => {
+        dispatch(logoutUser())
+
+        setTimeout(() => {
+            navigation.navigate("WalletSetup")
+        }, 100)
+
+    }
+
     useEffect(() => {
-        // unlockWithBiometrics()
+        unlockWithBiometrics()
     }, [])
     return (
         <VStack style={styles.container} space={4}>
@@ -130,7 +148,7 @@ export default function Login({ }: Props) {
 
             <Text fontSize={FONT_SIZE['lg']} textAlign="center">Wallet won't unlock? You can ERASE your current wallet and setup a new one</Text>
 
-            <Pressable><Text fontSize={FONT_SIZE['xl']} color={COLORS.primary}>Reset Wallet</Text></Pressable>
+            <Pressable onPress={resetWallet}><Text fontSize={FONT_SIZE['xl']} color={COLORS.primary}>Reset Wallet</Text></Pressable>
         </VStack>
     )
 }
