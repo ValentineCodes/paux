@@ -1,7 +1,7 @@
 import { Divider, ScrollView, Text, VStack, HStack } from 'native-base'
 import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
-import { BottomSheet } from '@rneui/themed';
+import Modal from "react-native-modal";
 
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
 import { COLORS } from '../../utils/constants'
@@ -58,8 +58,8 @@ export default function SecureWallet({ }: Props) {
                 <Button text="Start" onPress={() => navigation.navigate("GenerateSeedPhrase")} />
             </VStack>
 
-            <BottomSheet isVisible={isSeedPhraseDescriptionVisible} onBackdropPress={() => setIsSeedPhraseDescriptionVisible(false)}>
-                <VStack space={4} bgColor="white" borderTopLeftRadius={25} borderTopRightRadius={25} p="5">
+            <Modal isVisible={isSeedPhraseDescriptionVisible} animationIn="slideInUp" animationOut="slideOutDown" onBackdropPress={() => setIsSeedPhraseDescriptionVisible(false)} onBackButtonPress={() => setIsSeedPhraseDescriptionVisible(false)} style={{ justifyContent: "flex-end" }}>
+                <VStack space={4} bgColor="white" borderTopLeftRadius={40} borderTopRightRadius={40} p="5">
                     <Text textAlign="center" fontSize="2xl" bold>What is a "Seed Phrase"?</Text>
 
                     <Divider bgColor="muted.100" my="2" />
@@ -72,7 +72,7 @@ export default function SecureWallet({ }: Props) {
 
                     <Button text="OK, I Got It" onPress={() => setIsSeedPhraseDescriptionVisible(false)} />
                 </VStack>
-            </BottomSheet>
+            </Modal>
         </ScrollView>
     )
 }

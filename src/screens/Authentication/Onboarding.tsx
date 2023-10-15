@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import { View, Image, Text } from 'native-base'
+import { ScrollView, Image, Text } from 'native-base'
 
 import Button from '../../components/Button'
 import { COLORS } from '../../utils/constants'
@@ -11,22 +11,23 @@ type Props = {}
 export default function Onboarding({ }: Props) {
     const navigation = useNavigation()
     return (
-        <View style={styles.container}>
-            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").width * 0.7, height: Dimensions.get("window").width * 0.7 }} />
+        <ScrollView contentContainerStyle={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+        }} style={styles.container}>
+            <Image source={require("../../assets/images/pocket_logo.png")} alt='Pocket' style={{ width: Dimensions.get("window").width, height: Dimensions.get("window").width }} />
             <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Welcome to Pocket Wallet</Text>
             <Text textAlign="center" fontSize="md" my="4">A safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more</Text>
 
-            <Button text="Get Started" onPress={() => navigation.navigate("WalletSetup")} style={{ marginTop: 40 }} />
-        </View>
+            <Button text="Get Started" onPress={() => navigation.navigate("WalletSetup")} style={{ marginTop: 40, marginBottom: 50 }} />
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: "center",
         paddingHorizontal: 15,
-        paddingTop: 50,
         backgroundColor: 'white'
     }
 })

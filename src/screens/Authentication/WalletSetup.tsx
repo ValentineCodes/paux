@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import { View, Image, Text, Icon } from 'native-base'
+import { ScrollView, Image, Text, Icon } from 'native-base'
 
 import Button from '../../components/Button'
 import { COLORS } from '../../utils/constants'
@@ -12,24 +12,25 @@ type Props = {}
 export default function WalletSetup({ }: Props) {
     const navigation = useNavigation()
     return (
-        <View style={styles.container}>
+        <ScrollView contentContainerStyle={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center"
+        }} style={styles.container}>
             <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" style={styles.navBtn} onPress={() => navigation.goBack()} />
-            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").width * 0.7, height: Dimensions.get("window").width * 0.7 }} />
-            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Wallet Setup</Text>
+            <Image source={require("../../assets/icons/wallet_icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").width * 0.6, height: Dimensions.get("window").width * 0.6 }} />
+            <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold mt="10">Wallet Setup</Text>
             <Text textAlign="center" fontSize="md" my="4">Create your new Wallet or import using a seed phrase if you already have an account</Text>
 
             <Button text="Create a New Wallet" onPress={() => navigation.navigate("CreatePassword")} style={{ marginTop: 40 }} />
             <Button text="Import Using Seed Phrase" type="outline" onPress={() => navigation.navigate("ImportWallet")} style={{ marginTop: 20 }} />
-        </View>
+        </ScrollView>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: "center",
         paddingHorizontal: 15,
-        paddingTop: 50,
         backgroundColor: 'white'
     },
     navBtn: {
