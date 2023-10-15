@@ -1,15 +1,19 @@
-import { Button, Center, Text } from 'native-base'
+import { Image, Input, Text, VStack, Icon, Pressable } from 'native-base'
 import React, { useState, useEffect } from 'react'
-import PasswordInput from '../../components/forms/PasswordInput'
 import { useToast } from 'react-native-toast-notifications'
 import { useNavigation } from '@react-navigation/native'
 import ReactNativeBiometrics from 'react-native-biometrics'
 import SInfo from "react-native-sensitive-info";
 import { createWeb3Wallet } from '../../utils/Web3WalletClient'
+import { Dimensions, StyleSheet } from 'react-native'
+import { FONT_SIZE } from '../../utils/styles'
+import { COLORS } from '../../utils/constants'
+import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
+import Button from '../../components/Button'
 
 type Props = {}
 
-function Login({ }: Props) {
+export default function Login({ }: Props) {
     const toast = useToast()
     const navigation = useNavigation()
 
@@ -98,15 +102,45 @@ function Login({ }: Props) {
     }
 
     useEffect(() => {
-        unlockWithBiometrics()
+        // unlockWithBiometrics()
     }, [])
     return (
-        <Center>
-            <Text fontSize="2xl" bold>Welcome Back</Text>
-            <PasswordInput label="Password" onChange={setPassword} />
-            <Button marginTop={5} onPress={password ? unlockWithPassword : unlockWithBiometrics} isLoading={isInitializing} isLoadingText='Initializing' disabled={isInitializing}>{password ? "SIGN IN" : "SIGN IN WITH BIOMETRICS"}</Button>
-        </Center>
+        <VStack style={styles.container} space={4}>
+            <Image source={require("../../assets/images/pocket_logo.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
+            <Text fontSize={2 * FONT_SIZE['xl']} color={COLORS.primary} bold>Welcome Back!</Text>
+
+            <VStack mt="5" space={2} w="full">
+                <Text fontSize={FONT_SIZE['xl']} bold>Password</Text>
+                <Input
+                    value={password}
+                    borderRadius="lg"
+                    variant="filled"
+                    fontSize="md"
+                    focusOutlineColor={COLORS.primary}
+                    InputLeftElement={
+                        <Icon as={<MaterialIcons name="lock" />} size={5} ml="4" color="muted.400" />
+                    }
+                    secureTextEntry
+                    placeholder='Password'
+                    onChangeText={setPassword}
+                />
+            </VStack>
+
+            <Button text={password ? "SIGN IN" : "SIGN IN WITH BIOMETRICS"} onPress={password ? unlockWithPassword : unlockWithBiometrics} loading={isInitializing} style={{ marginTop: 10 }} />
+
+            <Text fontSize={FONT_SIZE['lg']} textAlign="center">Wallet won't unlock? You can ERASE your current wallet and setup a new one</Text>
+
+            <Pressable><Text fontSize={FONT_SIZE['xl']} color={COLORS.primary}>Reset Wallet</Text></Pressable>
+        </VStack>
     )
 }
 
-export default Login
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 15,
+        backgroundColor: 'white',
+        alignItems: "center",
+        justifyContent: "center"
+    }
+})
