@@ -1,6 +1,7 @@
 import { Text, VStack, Input, Icon, Pressable, HStack } from 'native-base'
 import React, { useState } from 'react'
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
+import { COLORS } from '../../utils/constants';
 
 type Props = {
   label: string;
@@ -20,6 +21,7 @@ function PasswordInput({ label, value, infoText, errorText, onChange }: Props) {
         borderRadius="lg"
         variant="filled"
         fontSize="md"
+        focusOutlineColor={COLORS.primary}
         InputLeftElement={
           <Icon as={<MaterialIcons name="lock" />} size={5} ml="4" color="muted.400" />
         }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import { View, Image, Text } from 'native-base'
 
 import Button from '../../components/Button'
@@ -12,7 +12,7 @@ export default function Onboarding({ }: Props) {
     const navigation = useNavigation()
     return (
         <View style={styles.container}>
-            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: 400, height: 400 }} />
+            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").width * 0.7, height: Dimensions.get("window").width * 0.7 }} />
             <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Welcome to Pocket Wallet</Text>
             <Text textAlign="center" fontSize="md" my="4">A safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more</Text>
 
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         paddingHorizontal: 15,
-        paddingTop: 100,
+        paddingTop: 50,
         backgroundColor: 'white'
     }
 })

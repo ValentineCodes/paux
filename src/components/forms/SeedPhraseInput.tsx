@@ -24,6 +24,7 @@ export default function SeedPhraseInput({ value, infoText, errorText, onChange, 
                 pr="20"
                 pb="12"
                 fontSize="md"
+                focusOutlineColor={COLORS.primary}
                 value={value}
                 InputRightElement={
                     <HStack space={1} position="absolute" right="2" top="5">

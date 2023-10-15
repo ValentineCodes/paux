@@ -1,22 +1,103 @@
-import { Divider, Button as RNButton, ScrollView, Text, VStack, View, Icon } from 'native-base'
+import { Divider, ScrollView, Text, VStack, View, HStack, Input, Image } from 'native-base'
 import React, { useState, useEffect } from 'react'
-import { ActivityIndicator, StyleSheet } from 'react-native'
+import { ActivityIndicator, Dimensions, StyleSheet } from 'react-native'
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
 import { COLORS } from '../../utils/constants'
-import { BlurView } from "@react-native-community/blur";
-import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
+import Modal from "react-native-modal";
 
-import "react-native-get-random-values"
-import "@ethersproject/shims"
-import { ethers } from "ethers";
 import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
+import { loginUser } from '../../store/reducers/Auth'
 import SInfo from "react-native-sensitive-info";
+import { useToast } from 'react-native-toast-notifications'
+import { shuffleArray } from '../../utils/helperFunctions'
 
 type Props = {}
 
 export default function ConfirmSeedPhrase({ }: Props) {
+    const navigation = useNavigation()
+
+    const dispatch = useDispatch()
+
+    const toast = useToast();
+
+    const [seedPhrase, setSeedPhrase] = useState<string[]>([])
+    const [shuffledSeedPhrase, setShuffledSeedPhrase] = useState<string[]>([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
+
+    const handleWordSelection = (word: string) => {
+        let _seedPhrase = seedPhrase.slice()
+
+        if (_seedPhrase.includes(word)) {
+            _seedPhrase = _seedPhrase.filter(el => el !== word)
+        } else if (seedPhrase.length >= 12) {
+            toast.show("Invalid seed phrase input", {
+                type: "danger"
+            })
+            return
+        } else {
+            _seedPhrase.push(word)
+        }
+
+        setSeedPhrase(_seedPhrase)
+    }
+
+    const handleValueChange = (value: string, index: number) => {
+        let _seedPhrase = seedPhrase.slice()
+
+        _seedPhrase[index] = value.trim()
+        setSeedPhrase(_seedPhrase)
+    }
+
+    const confirm = async () => {
+        if (seedPhrase.length !== 12) {
+            toast.show("Please complete seed phrase", {
+                type: "warning"
+            })
+            return
+        }
+
+        try {
+            const _seedPhrase = await SInfo.getItem("mnemonic", {
+                sharedPreferencesName: "pocket.android.storage",
+                keychainService: "pocket.ios.storage",
+            });
+            const selectedSeedPhrase = seedPhrase.join(" ")
+            if (_seedPhrase === selectedSeedPhrase) {
+                setShowSuccessModal(true)
+            } else {
+                toast.show("Incorrect seed phrase order", {
+                    type: "danger"
+                })
+            }
+        } catch (error) {
+            console.log("Failed to get mnemonic")
+            console.error(error)
+        }
+    }
+
+    const handleSuccess = () => {
+        setShowSuccessModal(false)
+        dispatch(loginUser())
+        navigation.navigate("Home")
+    }
+
+    useEffect(() => {
+        (async () => {
+            const seedPhrase = await SInfo.getItem("mnemonic", {
+                sharedPreferencesName: "pocket.android.storage",
+                keychainService: "pocket.ios.storage",
+            });
+            if (seedPhrase) {
+                const _seedPhrase: string[] = seedPhrase.split(" ")
+                const shuffledSeedPhrase = shuffleArray(_seedPhrase)
+                setShuffledSeedPhrase(shuffledSeedPhrase)
+                setIsLoading(false)
+            }
+        })()
+    }, [])
     return (
         <ScrollView style={styles.container}>
             <ProgressIndicatorHeader progress={3} />
@@ -27,6 +108,52 @@ export default function ConfirmSeedPhrase({ }: Props) {
             <Text textAlign="center" fontSize="lg" my="2">Select each word in the order it was presented to you.</Text>
 
             <Divider bgColor="muted.100" my="4" />
+
+            {isLoading ? <View style={styles.loader}>
+                <ActivityIndicator size="large" color={COLORS.primary} />
+            </View> : <ScrollView contentContainerStyle={styles.seedPhraseWrapper} style={styles.seedPhraseContainer}>
+                {shuffledSeedPhrase.map((word) => (
+                    <Text key={word} style={[styles.word, { backgroundColor: seedPhrase.includes(word) ? COLORS.primary : "#F5F5F5", color: seedPhrase.includes(word) ? "white" : "black" }]} onPress={() => handleWordSelection(word)}>{word}</Text>
+                ))}
+            </ScrollView>}
+
+
+            <HStack my="10" w="full" justifyContent="space-between" alignItems="center">
+                {shuffledSeedPhrase.map((word, index) => <Divider key={word} w={`${100 / 15}%`} bgColor={index <= seedPhrase.length - 1 ? COLORS.primary : "muted.200"} />)}
+            </HStack>
+
+            <HStack style={styles.seedPhraseInputContainer}>
+                {Array(12).fill(null).map((word, index) => <Input borderRadius="lg"
+                    variant="filled"
+                    fontSize="md"
+                    w="32%"
+                    mb="2"
+                    value={seedPhrase[index]}
+                    onChangeText={(value) => handleValueChange(value, index)}
+                    InputLeftElement={<Text ml="2">{index + 1}.</Text>}
+                    _input={{
+                        selectionColor: COLORS.primary,
+                        cursorColor: '#303030',
+                    }}
+                    focusOutlineColor={COLORS.primary}
+                    onSubmitEditing={confirm}
+                />)}
+            </HStack>
+
+            <Divider bgColor="muted.100" mt="4" mb="3" />
+
+            <Button text="Confirm" style={{ backgroundColor: seedPhrase.length === 12 ? COLORS.primary : "#2A974D", marginBottom: 50 }} disabled={seedPhrase.length !== 12} onPress={confirm} />
+
+            {/* Success modal */}
+            <Modal isVisible={showSuccessModal} animationIn="zoomIn" animationOut="zoomOut" onBackdropPress={() => setShowSuccessModal(false)} onBackButtonPress={() => setShowSuccessModal(false)}>
+                <VStack bgColor="white" borderRadius="40" px="7" py="5" alignItems="center" space="4">
+                    <Image source={require("../../images/eth-icon.png")} alt="Success!" style={{ width: Dimensions.get("window").width * 0.5, height: Dimensions.get("window").width * 0.5 }} />
+                    <Text color={COLORS.primary} bold fontSize="2xl">Successful!</Text>
+                    <Text fontSize="lg" textAlign="center">You've successfully protected your wallet. Remember to keep your seed phrase safe. It's your responsibility!</Text>
+                    <Text fontSize="lg" textAlign="center">Pocket cannot recover your wallet should you lose it.</Text>
+                    <Button text="Ok" onPress={handleSuccess} />
+                </VStack>
+            </Modal>
         </ScrollView>
     )
 }
@@ -37,4 +164,38 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         padding: 15
     },
+    loader: {
+        height: 280,
+        justifyContent: 'center',
+        alignItems: "center",
+    },
+    seedPhraseContainer: {
+        width: '100%',
+        borderWidth: 2,
+        borderColor: COLORS.primary,
+        borderRadius: 40,
+        padding: 15
+    },
+    seedPhraseWrapper: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%'
+    },
+    word: {
+        width: '45%',
+        padding: 10,
+        textAlign: "center",
+        fontWeight: 'bold',
+        marginBottom: 10,
+        borderRadius: 25
+    },
+    seedPhraseInputContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%'
+    }
 })

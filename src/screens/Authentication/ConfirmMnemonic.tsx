@@ -43,7 +43,7 @@ function ConfirmMnemonic({ }: Props) {
             });
             const selectedMnemonic = mnemonic.join(" ")
             if (_mnemonic === selectedMnemonic) {
-                navigation.navigate("CreatePassword")
+                console.log("Success!")
             } else {
                 toast.show("Incorrect mnemonic order", {
                     type: "danger"

@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import { View, Image, Text, Icon } from 'native-base'
 
 import Button from '../../components/Button'
@@ -14,7 +14,7 @@ export default function WalletSetup({ }: Props) {
     return (
         <View style={styles.container}>
             <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" style={styles.navBtn} onPress={() => navigation.goBack()} />
-            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: 400, height: 400 }} />
+            <Image source={require("../../images/eth-icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").width * 0.7, height: Dimensions.get("window").width * 0.7 }} />
             <Text textAlign="center" color={COLORS.primary} fontSize="4xl" bold>Wallet Setup</Text>
             <Text textAlign="center" fontSize="md" my="4">Create your new Wallet or import using a seed phrase if you already have an account</Text>
 
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         paddingHorizontal: 15,
-        paddingTop: 100,
+        paddingTop: 50,
         backgroundColor: 'white'
     },
     navBtn: {
