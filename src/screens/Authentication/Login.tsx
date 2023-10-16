@@ -12,6 +12,7 @@ import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 import Button from '../../components/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logoutUser } from '../../store/reducers/Auth'
+import ConsentModal from '../../components/modals/ConsentModal'
 
 type Props = {}
 
@@ -25,6 +26,7 @@ export default function Login({ }: Props) {
     const [password, setPassword] = useState("")
     const [isInitializing, setIsInitializing] = useState(false)
     const [isBiometricsEnabled, setIsBiometricsEnabled] = useState(false)
+    const [showResetWalletConsentModal, setShowResetWalletConsentModal] = useState(false)
 
     const initWallet = async () => {
         try {
@@ -161,7 +163,18 @@ export default function Login({ }: Props) {
 
             <Text fontSize={FONT_SIZE['lg']} textAlign="center" my="4">Wallet won't unlock? You can ERASE your current wallet and setup a new one</Text>
 
-            <Pressable onPress={resetWallet}><Text fontSize={FONT_SIZE['xl']} color={COLORS.primary}>Reset Wallet</Text></Pressable>
+            <Pressable onPress={() => setShowResetWalletConsentModal(true)}><Text fontSize={FONT_SIZE['xl']} color={COLORS.primary}>Reset Wallet</Text></Pressable>
+
+            <ConsentModal
+                isVisible={showResetWalletConsentModal}
+                title="Reset Wallet!"
+                subTitle="This will erase all your current wallet data. Are you sure you want to go through with this?"
+                onClose={() => setShowResetWalletConsentModal(false)}
+                onAccept={() => {
+                    setShowResetWalletConsentModal(false)
+                    resetWallet()
+                }}
+            />
         </ScrollView>
     )
 }
