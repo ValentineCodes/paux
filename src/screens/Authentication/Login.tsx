@@ -24,6 +24,7 @@ export default function Login({ }: Props) {
 
     const [password, setPassword] = useState("")
     const [isInitializing, setIsInitializing] = useState(false)
+    const [isBiometricsEnabled, setIsBiometricsEnabled] = useState(false)
 
     const initWallet = async () => {
         try {
@@ -120,7 +121,18 @@ export default function Login({ }: Props) {
     }
 
     useEffect(() => {
-        unlockWithBiometrics()
+        (async () => {
+            const _security = await SInfo.getItem("security", {
+                sharedPreferencesName: "pocket.android.storage",
+                keychainService: "pocket.ios.storage",
+            });
+            const security = JSON.parse(_security!)
+
+            setIsBiometricsEnabled(security.isBiometricsEnabled)
+            if (security.isBiometricsEnabled) {
+                unlockWithBiometrics()
+            }
+        })()
     }, [])
     return (
         <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} style={styles.container}>
@@ -145,7 +157,7 @@ export default function Login({ }: Props) {
                 />
             </VStack>
 
-            <Button text={password ? "SIGN IN" : "SIGN IN WITH BIOMETRICS"} onPress={password ? unlockWithPassword : unlockWithBiometrics} loading={isInitializing} style={{ marginTop: 20 }} />
+            <Button text={isBiometricsEnabled ? password ? "SIGN IN" : "SIGN IN WITH BIOMETRICS" : "SIGN IN"} onPress={isBiometricsEnabled ? password ? unlockWithPassword : unlockWithBiometrics : unlockWithPassword} loading={isInitializing} style={{ marginTop: 20 }} />
 
             <Text fontSize={FONT_SIZE['lg']} textAlign="center" my="4">Wallet won't unlock? You can ERASE your current wallet and setup a new one</Text>
 
