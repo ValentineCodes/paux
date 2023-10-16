@@ -159,7 +159,7 @@ export default function Login({ }: Props) {
                 />
             </VStack>
 
-            <Button text={isBiometricsEnabled ? password ? "SIGN IN" : "SIGN IN WITH BIOMETRICS" : "SIGN IN"} onPress={isBiometricsEnabled ? password ? unlockWithPassword : unlockWithBiometrics : unlockWithPassword} loading={isInitializing} style={{ marginTop: 20 }} />
+            <Button text={isBiometricsEnabled && !password ? "SIGN IN WITH BIOMETRICS" : "SIGN IN"} onPress={isBiometricsEnabled && !password ? unlockWithBiometrics : unlockWithPassword} loading={isInitializing} style={{ marginTop: 20 }} />
 
             <Text fontSize={FONT_SIZE['lg']} textAlign="center" my="4">Wallet won't unlock? You can ERASE your current wallet and setup a new one</Text>
 
