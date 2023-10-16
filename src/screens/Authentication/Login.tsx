@@ -70,7 +70,7 @@ export default function Login({ }: Props) {
     }
 
     const unlockWithBiometrics = async () => {
-        const rnBiometrics = new ReactNativeBiometrics({ allowDeviceCredentials: true })
+        const rnBiometrics = new ReactNativeBiometrics()
 
         try {
             const signInWithBio = async () => {
