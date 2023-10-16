@@ -141,6 +141,7 @@ export default function Login({ }: Props) {
                     secureTextEntry
                     placeholder='Password'
                     onChangeText={setPassword}
+                    onSubmitEditing={unlockWithPassword}
                 />
             </VStack>
 
