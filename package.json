@@ -33,6 +33,7 @@
     "react-native": "0.71.11",
     "react-native-bignumber": "^0.2.1",
     "react-native-biometrics": "^3.0.1",
+    "react-native-bootsplash": "5.0.4",
     "react-native-bouncy-checkbox": "^3.0.7",
     "react-native-camera-kit": "^13.0.0",
     "react-native-gesture-handler": "^2.13.1",

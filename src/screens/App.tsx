@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -21,6 +21,7 @@ import Home from './Home'
 import PrivateKey from './PrivateKey';
 import { useSelector } from 'react-redux';
 import { MenuProvider } from 'react-native-popup-menu';
+import BootSplash from "react-native-bootsplash";
 
 type AppStackParamsList = {
   Onboarding: undefined;
@@ -39,6 +40,12 @@ const AppStack = createNativeStackNavigator<AppStackParamsList>();
 
 function App(): JSX.Element {
   const auth = useSelector(state => state.auth)
+
+  useEffect(() => {
+    (async () => {
+      await BootSplash.hide({ fade: true });
+    })()
+  }, [])
 
   return (
     <ToastProvider>
