@@ -1,9 +1,10 @@
-import { VStack, Text, HStack, Icon, Image, Divider, Switch } from 'native-base'
+import { VStack, Text, HStack, Icon, Divider, Switch, Pressable } from 'native-base'
 import React, { useCallback, useState } from 'react'
-import { ScrollView, TouchableWithoutFeedback } from 'react-native'
+import { ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
+import MaterialCommunityIcons from "react-native-vector-icons/dist/MaterialCommunityIcons"
 import { useNavigation } from '@react-navigation/native'
 import SInfo from "react-native-sensitive-info";
 
@@ -12,7 +13,6 @@ import "@ethersproject/shims"
 import { ethers } from "ethers";
 
 import styles from "../../styles/authentication/importWallet"
-import globalStyles from '../../styles/globalStyles'
 import SeedPhraseInput from '../../components/forms/SeedPhraseInput'
 import PasswordInput from '../../components/forms/PasswordInput'
 import Button from '../../components/Button'
@@ -123,13 +123,13 @@ function ImportWallet({ }: Props) {
     <ScrollView style={styles.container}>
       <HStack alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" space={2}>
-          <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" onPress={() => navigation.goBack()} />
+          <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" onPress={() => navigation.goBack()} />
           <Text fontSize={1.2 * FONT_SIZE["xl"]} bold>Import From Seed</Text>
         </HStack>
 
-        <TouchableWithoutFeedback onPress={() => setIsScanningSeedPhrase(true)}>
-          <Image source={require("../../assets/icons/scan_icon.png")} alt="Scan" style={globalStyles.scanIcon} />
-        </TouchableWithoutFeedback>
+        <Pressable onPress={() => setIsScanningSeedPhrase(true)}>
+          <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+        </Pressable>
       </HStack>
 
       <VStack space={6} mt="6" mb="50">

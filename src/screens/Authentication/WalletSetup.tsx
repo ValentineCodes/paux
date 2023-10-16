@@ -18,7 +18,7 @@ export default function WalletSetup({ }: Props) {
             justifyContent: "center",
             alignItems: "center"
         }} style={styles.container}>
-            <Icon as={<Ionicons name="arrow-back-outline" />} size={7} color="black" style={styles.navBtn} onPress={() => navigation.goBack()} />
+            <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" style={styles.navBtn} onPress={() => navigation.goBack()} />
             <Image source={require("../../assets/icons/wallet_icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
 
             <VStack w="full" mt="10">
