@@ -17,7 +17,7 @@ import {
     MenuOption,
     MenuTrigger,
 } from 'react-native-popup-menu';
-import AccountDetails from '../../../components/AccountDetails'
+import AccountDetailsModal from '../../../components/modals/AccountDetailsModal'
 import ConnectModal from '../../../components/modals/ConnectModal'
 import { _pair, web3wallet } from '../../../utils/Web3WalletClient'
 import ApprovalModal from '../../../components/modals/ApprovalModal'
@@ -42,7 +42,7 @@ export default function Header({ }: Props) {
     const dispatch = useDispatch()
     const [isAccountModalVisible, setIsAccountModalVisible] = useState(false)
     const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
-    const [showAccountDetails, setShowAccountDetails] = useState(false)
+    const [showAccountDetailsModal, setShowAccountDetailsModal] = useState(false)
     const [showConnectedSites, setShowConnectedSites] = useState(false)
     const [showAccountSelection, setShowAccountSelection] = useState(false)
     const [showSwitchAccountModal, setShowSwitchAccountModal] = useState(false)
@@ -270,7 +270,7 @@ export default function Header({ }: Props) {
                             <Icon as={<Ionicons name="layers-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
                             <Text fontSize={FONT_SIZE['lg']}>Accounts</Text>
                         </MenuOption>
-                        <MenuOption onSelect={() => setShowAccountDetails(true)} style={styles.menuOption}>
+                        <MenuOption onSelect={() => setShowAccountDetailsModal(true)} style={styles.menuOption}>
                             <Icon as={<Ionicons name="grid-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
                             <Text fontSize={FONT_SIZE['lg']}>Account details</Text>
                         </MenuOption>
@@ -330,7 +330,7 @@ export default function Header({ }: Props) {
 
             <SwitchAccountModal isOpen={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
             <AccountSelection isOpen={showAccountSelection} onClose={() => setShowAccountSelection(false)} onSelect={handleAccountsSelection} />
-            <AccountDetails isOpen={showAccountDetails} onClose={() => setShowAccountDetails(false)} />
+            <AccountDetailsModal isVisible={showAccountDetailsModal} onClose={() => setShowAccountDetailsModal(false)} />
             <ConnectedSitesModal isOpen={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
         </HStack>
     )
