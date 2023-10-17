@@ -23,10 +23,6 @@ export default function Transaction({ tx }: Props) {
 
     const [showTxDetails, setShowTxDetails] = useState(false)
 
-    const toggleTxDetails = () => {
-        setShowTxDetails(!showTxDetails)
-    }
-
     const renderAction = () => {
         if (tx.functionName === '') {
             if (tx.from.toLowerCase() == connectedAccount.address.toLowerCase()) {
@@ -81,7 +77,7 @@ export default function Transaction({ tx }: Props) {
     }
 
     return (
-        <Pressable onPress={toggleTxDetails}>
+        <Pressable onPress={() => setShowTxDetails(true)}>
             <HStack justifyContent="space-between" alignItems="center" py="2">
                 <HStack alignItems="center" space={4}>
                     {renderActionIcon()}
@@ -96,7 +92,7 @@ export default function Transaction({ tx }: Props) {
                 <Text fontSize={FONT_SIZE['lg']} bold>{Number(ethers.utils.formatEther(BigNumber.from(tx.value))) ? Number(ethers.utils.formatEther(BigNumber.from(tx.value))).toFixed(2) : 0} {connectedNetwork.currencySymbol}</Text>
             </HStack>
 
-            {showTxDetails && <TransactionDetails isVisible={showTxDetails} toggleVisibility={toggleTxDetails} tx={tx} />}
+            <TransactionDetails isVisible={showTxDetails} onClose={() => setShowTxDetails(false)} tx={tx} />
         </Pressable>
     )
 }
