@@ -71,7 +71,7 @@ export default function Transaction({ tx }: Props) {
             )
         } else {
             return (
-                <Text fontSize={FONT_SIZE['md']}>Address: {tx.to || tx.contractAddress}</Text>
+                <Text fontSize={FONT_SIZE['md']}>Address: {truncateAddress(tx.to || tx.contractAddress)}</Text>
             )
         }
     }
