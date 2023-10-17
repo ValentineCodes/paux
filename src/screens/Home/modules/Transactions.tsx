@@ -5,12 +5,11 @@ import Transaction from '../../../components/Transaction'
 import { Account } from '../../../store/reducers/Accounts'
 import TransactionsAPI from "../../../apis/transactions"
 import { Network } from '../../../store/reducers/Networks'
-import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
+import { ActivityIndicator, StyleSheet } from 'react-native'
 import { useToast } from "react-native-toast-notifications"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import { COLORS } from '../../../utils/constants'
 import { FONT_SIZE } from '../../../utils/styles'
-import Button from '../../../components/Button'
 
 type Props = {}
 

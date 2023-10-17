@@ -25,7 +25,7 @@ import { handleDeepLinkRedirect } from '../../../utils/LinkingUtils'
 import { getSdkError } from '@walletconnect/utils';
 import { addConnectedSite } from '../../../store/reducers/ConnectedSites'
 import ConnectedSitesModal from '../../../components/modals/ConnectedSitesModal'
-import AccountSelection from '../../../components/AccountSelection'
+import AccountSelectionModal from '../../../components/modals/AccountSelectionModal'
 import { ActiveSession, addSession } from '../../../store/reducers/ActiveSessions'
 import SwitchAccountModal from '../../../components/modals/SwitchAccountModal'
 import { EIP155_SIGNING_METHODS } from '../../../data/EIP155';
@@ -44,7 +44,7 @@ export default function Header({ }: Props) {
     const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
     const [showAccountDetailsModal, setShowAccountDetailsModal] = useState(false)
     const [showConnectedSites, setShowConnectedSites] = useState(false)
-    const [showAccountSelection, setShowAccountSelection] = useState(false)
+    const [showAccountSelectionModal, setShowAccountSelectionModal] = useState(false)
     const [showSwitchAccountModal, setShowSwitchAccountModal] = useState(false)
     const [showSignModal, setShowSignModal] = useState(false)
     const [showSignTypedDataModal, setShowSignTypedDataModal] = useState(false)
@@ -107,7 +107,7 @@ export default function Header({ }: Props) {
             setShowConnectModal(false)
 
             if (accounts.length > 1) {
-                setShowAccountSelection(true)
+                setShowAccountSelectionModal(true)
             } else {
                 setSelectedAccount(connectedAccount.address)
                 setShowApprovalModal(true)
@@ -242,7 +242,7 @@ export default function Header({ }: Props) {
 
     const handleAccountsSelection = (selectedAccount: string) => {
         setSelectedAccount(selectedAccount)
-        setShowAccountSelection(false)
+        setShowAccountSelectionModal(false)
         setShowApprovalModal(true)
     }
 
@@ -329,7 +329,7 @@ export default function Header({ }: Props) {
             )}
 
             <SwitchAccountModal isOpen={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
-            <AccountSelection isOpen={showAccountSelection} onClose={() => setShowAccountSelection(false)} onSelect={handleAccountsSelection} />
+            <AccountSelectionModal isVisible={showAccountSelectionModal} onClose={() => setShowAccountSelectionModal(false)} onSelect={handleAccountsSelection} />
             <AccountDetailsModal isVisible={showAccountDetailsModal} onClose={() => setShowAccountDetailsModal(false)} />
             <ConnectedSitesModal isVisible={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
         </HStack>
