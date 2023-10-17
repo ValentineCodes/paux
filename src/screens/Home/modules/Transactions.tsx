@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, FlatList } from 'native-base'
+import { View, Text, FlatList, VStack, Icon, Image, Divider } from 'native-base'
 import { useSelector } from 'react-redux'
 import Transaction from '../../../components/Transaction'
 import { Account } from '../../../store/reducers/Accounts'
@@ -7,6 +7,10 @@ import TransactionsAPI from "../../../apis/transactions"
 import { Network } from '../../../store/reducers/Networks'
 import { ActivityIndicator, Pressable, StyleSheet } from 'react-native'
 import { useToast } from "react-native-toast-notifications"
+import Ionicons from "react-native-vector-icons/dist/Ionicons"
+import { COLORS } from '../../../utils/constants'
+import { FONT_SIZE } from '../../../utils/styles'
+import Button from '../../../components/Button'
 
 type Props = {}
 
@@ -46,6 +50,7 @@ export default function Transactions({ }: Props) {
         setCurrentPage(2)
       }
     } catch (error) {
+      console.log(error)
       setLoadingStatus('error')
     }
   }
@@ -94,21 +99,34 @@ export default function Transactions({ }: Props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text>Transaction:</Text>
-      {loadingStatus === 'loading' ? (<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
-      </View>) : loadingStatus === 'error' ? <View>
-        <Text>Failed to load transactions</Text>
-        <Pressable onPress={getTransactions}><Text>Retry</Text></Pressable>
-      </View> : transactions.length > 0 ? <FlatList
-        keyExtractor={(item) => item.hash}
-        data={transactions}
-        renderItem={({ item }) => <Transaction tx={item} />}
-        onRefresh={handleRefresh}
-        refreshing={isRefreshing}
-        onEndReached={loadMoreTransactions}
-        onEndReachedThreshold={0.2}
-      /> : <Text>No transactions</Text>}
+      {loadingStatus === 'loading' ? (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <ActivityIndicator size={3 * FONT_SIZE['xl']} color={COLORS.primary} />
+        </View>
+      ) : loadingStatus === 'error' ? (
+        <VStack flex="1" justifyContent="center" alignItems="center" space="4">
+          <Image source={require("../../../assets/icons/failed_icon.png")} alt="Retry" style={styles.failedIcon} />
+          <Text fontSize={1.1 * FONT_SIZE['lg']}>Failed to load transactions. <Text onPress={getTransactions} color={COLORS.primary} bold>Retry</Text></Text>
+        </VStack>
+      ) : transactions.length > 0 ? (
+        <FlatList
+          keyExtractor={(item) => item.hash}
+          data={transactions}
+          renderItem={({ item }) => <Transaction tx={item} />}
+          ItemSeparatorComponent={<Divider bgColor="muted.100" my="2" />}
+          onRefresh={handleRefresh}
+          refreshing={isRefreshing}
+          onEndReached={loadMoreTransactions}
+          onEndReachedThreshold={0.2}
+        />
+      ) : (
+        <VStack flex="1" justifyContent="center" alignItems="center" space="4">
+          <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
+            <Icon as={<Ionicons name="swap-horizontal-outline" />} size={3 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
+          </View>
+          <Text fontSize={1.2 * FONT_SIZE['xl']} bold color="muted.400">No Transactions</Text>
+        </VStack>
+      )}
 
       {isLoadingMore && <ActivityIndicator size="small" color="blue" style={styles.loadingIndicator} />}
 
@@ -118,4 +136,8 @@ export default function Transactions({ }: Props) {
 
 const styles = StyleSheet.create({
   loadingIndicator: { position: 'absolute', bottom: 10, right: 10 },
+  failedIcon: {
+    width: 7 * FONT_SIZE['xl'],
+    height: 7 * FONT_SIZE['xl']
+  }
 })

@@ -24,7 +24,9 @@ function Home({ }: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 5
+    paddingVertical: 5,
+    backgroundColor: 'white',
+    paddingHorizontal: 10,
   }
 })
 export default Home

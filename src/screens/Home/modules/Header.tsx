@@ -1,12 +1,13 @@
-import { Text, Select, CheckIcon, Box, HStack, Modal, VStack, Button, ScrollView, Icon } from 'native-base'
+import { Text, Select, CheckIcon, HStack, Modal, VStack, Button, ScrollView, Icon, Image } from 'native-base'
 import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Network, switchNetwork } from '../../../store/reducers/Networks'
 import { Account, addAccount, switchAccount } from '../../../store/reducers/Accounts'
-import { Pressable, Linking } from 'react-native'
+import { Pressable, Linking, StyleSheet } from 'react-native'
 import SInfo from "react-native-sensitive-info";
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
+import MaterialCommunityIcons from "react-native-vector-icons/dist/MaterialCommunityIcons"
 import Share from 'react-native-share';
 import { SignClientTypes, SessionTypes } from '@walletconnect/types';
 import Blockie from '../../../components/Blockie'
@@ -38,10 +39,12 @@ import { SignModal } from '../../../components/modals/SignModal'
 import { SignTypedDataModal } from '../../../components/modals/SignTypedDataModal'
 import { SendTransactionModal } from '../../../components/modals/SendTransactionModal'
 import { truncateAddress } from '../../../utils/helperFunctions'
+import { FONT_SIZE } from '../../../utils/styles'
+import { COLORS } from '../../../utils/constants'
 
 type Props = {}
 
-function Header({ }: Props) {
+export default function Header({ }: Props) {
     const dispatch = useDispatch()
     const [isAccountModalVisible, setIsAccountModalVisible] = useState(false)
     const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
@@ -306,43 +309,46 @@ function Header({ }: Props) {
 
 
     return (
-        <HStack alignItems="center" justifyContent="space-between" borderBottomWidth={1} borderBottomColor="#ccc" padding={2}>
-            <Text fontSize="2xl" bold>Pocket</Text>
+        <HStack alignItems="center" justifyContent="space-between" py="4" borderBottomColor="#ccc">
+            <Image source={require("../../../assets/images/pocket.png")} alt="Pocket" style={styles.logo} />
 
-            <Box maxW="200">
-                <Select selectedValue={connectedNetwork.chainId.toString()} minWidth="200" accessibilityLabel="Choose Network" placeholder="Choose Network" _selectedItem={{
-                    bg: "teal.600",
-                    endIcon: <CheckIcon size="5" />
-                }} mt={1} onValueChange={handleNetworkSelecttion}>
-                    {networks.map((network: Network) => <Select.Item key={network.chainId} label={network.name} value={network.chainId.toString()} />)}
-                </Select>
-            </Box>
+            <Select selectedValue={connectedNetwork.chainId.toString()} flex="1" borderRadius={25} mx="10" accessibilityLabel="Choose Network" placeholder="Choose Network" _selectedItem={{
+                bg: COLORS.primary,
+                endIcon: <CheckIcon size={5} color="white" />
+            }} dropdownIcon={<Icon as={<Ionicons name="chevron-down" />} size={1.3 * FONT_SIZE['xl']} color="black" mr="2" />} fontSize={FONT_SIZE['md']} onValueChange={handleNetworkSelecttion}>
+                {networks.map((network: Network) => <Select.Item key={network.chainId} label={network.name} value={network.chainId.toString()} />)}
+            </Select>
 
-            <HStack alignItems="center" space={4}>
+            <HStack alignItems="center" space={6}>
+                <Pressable onPress={() => setShowConnectModal(true)}>
+                    <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+                </Pressable>
+
                 <Menu>
-                    <MenuTrigger><Blockie address={connectedAccount.address} size={35} /></MenuTrigger>
+                    <MenuTrigger><Blockie address={connectedAccount.address} size={1.7 * FONT_SIZE["xl"]} /></MenuTrigger>
                     <MenuOptions>
-                        <MenuOption onSelect={() => setIsAccountModalVisible(true)}>
-                            <Text>Accounts</Text>
+                        <MenuOption onSelect={() => setIsAccountModalVisible(true)} style={styles.menuOption}>
+                            <Icon as={<Ionicons name="layers-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
+                            <Text fontSize={FONT_SIZE['lg']}>Accounts</Text>
                         </MenuOption>
-                        <MenuOption onSelect={() => setShowAccountDetails(true)}>
-                            <Text>Account details</Text>
+                        <MenuOption onSelect={() => setShowAccountDetails(true)} style={styles.menuOption}>
+                            <Icon as={<Ionicons name="grid-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
+                            <Text fontSize={FONT_SIZE['lg']}>Account details</Text>
                         </MenuOption>
-                        <MenuOption onSelect={() => setShowConnectedSites(true)}>
-                            <Text>Connected sites</Text>
+                        <MenuOption onSelect={() => setShowConnectedSites(true)} style={styles.menuOption}>
+                            <Icon as={<Ionicons name="radio-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
+                            <Text fontSize={FONT_SIZE['lg']}>Connected sites</Text>
                         </MenuOption>
-                        <MenuOption onSelect={shareAddress}>
-                            <Text>Share address</Text>
+                        <MenuOption onSelect={shareAddress} style={styles.menuOption}>
+                            <Icon as={<Ionicons name="share-social-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
+                            <Text fontSize={FONT_SIZE['lg']}>Share address</Text>
                         </MenuOption>
-                        {connectedNetwork.blockExplorer && <MenuOption onSelect={viewOnBlockExplorer}>
-                            <Text>View on block explorer</Text>
+                        {connectedNetwork.blockExplorer && <MenuOption onSelect={viewOnBlockExplorer} style={styles.menuOption}>
+                            <Icon as={<Ionicons name="open-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
+                            <Text fontSize={FONT_SIZE['lg']}>View on block explorer</Text>
                         </MenuOption>}
                     </MenuOptions>
                 </Menu>
-
-                <Pressable onPress={() => setShowConnectModal(true)}>
-                    <Icon as={<Ionicons name="scan-outline" />} size={7} mr="2" color="muted.400" />
-                </Pressable>
             </HStack>
 
             <ConnectModal isOpen={showConnectModal} isPairing={isPairing} onClose={() => setShowConnectModal(false)} pair={pair} />
@@ -417,4 +423,14 @@ function Header({ }: Props) {
     )
 }
 
-export default Header
+const styles = StyleSheet.create({
+    logo: {
+        width: 1.7 * FONT_SIZE["xl"],
+        height: 1.7 * FONT_SIZE["xl"],
+    },
+    menuOption: {
+        flexDirection: 'row',
+        alignItems: "center",
+        padding: 10,
+    }
+})

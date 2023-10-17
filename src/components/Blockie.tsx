@@ -21,7 +21,7 @@ const Blockie = ({ address, size }: Props) => {
                     <!DOCTYPE html>
                         <head>
                         <style>
-                            body { background: #f1f1f1; margin: 0px;} img,canvas { display: inline-block; margin: 0px; border-radius: 100%}
+                            body { background: #ffffff; margin: 0px;} img,canvas { display: inline-block; margin: 0px; border-radius: 100%}
                         </style>
                         </head>
                         <body>

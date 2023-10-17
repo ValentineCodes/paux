@@ -1,10 +1,10 @@
-import { Image, Text, VStack, Button } from 'native-base'
+import { Image, Text, VStack, Button, Divider, Pressable, Icon, View, HStack } from 'native-base'
 import React, { useState, useEffect, useMemo } from 'react'
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
 import { ethers } from 'ethers'
 import redstone from 'redstone-api';
-import { useToast } from 'react-native-toast-notifications'
+import Ionicons from "react-native-vector-icons/dist/Ionicons"
 
 import { Account } from '../../../store/reducers/Accounts'
 import { Network } from '../../../store/reducers/Networks'
@@ -13,6 +13,8 @@ import { setBalance } from '../../../store/reducers/Balance'
 import { getProviderWithName, Providers } from '../../../utils/providers'
 import CopyableText from '../../../components/CopyableText'
 import { truncateAddress } from '../../../utils/helperFunctions'
+import { FONT_SIZE } from '../../../utils/styles'
+import { COLORS } from '../../../utils/constants'
 
 type Props = {}
 
@@ -27,7 +29,6 @@ function MainBalance({ }: Props) {
   const [isLoading, setIsLoading] = useState(false)
 
   const dispatch = useDispatch()
-  const toast = useToast()
 
   const getBalance = async () => {
     if (isLoading) return
@@ -37,12 +38,12 @@ function MainBalance({ }: Props) {
     try {
       const provider = new ethers.providers.JsonRpcProvider(connectedNetwork.provider)
       const balance = await provider.getBalance(connectedAccount.address)
-      const _balance = Number(ethers.utils.formatEther(balance)).toFixed(4)
+      const _balance = Number(ethers.utils.formatEther(balance)) ? Number(ethers.utils.formatEther(balance)).toFixed(4) : 0
 
       try {
         const price = await redstone.getPrice(connectedNetwork.currencySymbol);
         const dollarValue = Number(_balance) * price.value
-        setDollarValue(dollarValue.toFixed(2))
+        setDollarValue(dollarValue ? dollarValue.toFixed(2) : "0")
       } catch (error) {
         setDollarValue(null)
         return
@@ -51,9 +52,6 @@ function MainBalance({ }: Props) {
       }
 
     } catch (error) {
-      toast.show("Failed to load balance", {
-        type: "normal"
-      })
       return
     } finally {
       setIsLoading(false)
@@ -83,7 +81,7 @@ function MainBalance({ }: Props) {
       _logo = require("../../../images/optimism-icon.png")
     }
 
-    return <Image key={`${_logo}`} source={_logo} alt={connectedNetwork.name} width={50} height={50} />
+    return <Image key={`${_logo}`} source={_logo} alt={connectedNetwork.name} style={styles.networkLogo} />
   }, [connectedNetwork])
 
   useEffect(() => {
@@ -101,16 +99,34 @@ function MainBalance({ }: Props) {
   return (
     <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} />}>
       <VStack alignItems="center" space={2} paddingY={5}>
-        <Text style={{ fontSize: 20, fontWeight: "bold" }}>{connectedAccount.name}</Text>
+        <Text fontSize={FONT_SIZE["xl"]} bold textAlign="center">{connectedAccount.name}</Text>
         <CopyableText displayText={truncateAddress(connectedAccount.address)} value={connectedAccount.address} />
         {logo}
         <VStack alignItems="center">
-          <Text fontSize="xl" bold>{balance !== '' && `${balance} ${connectedNetwork.currencySymbol}`}</Text>
-          {dollarValue !== null && <Text>${dollarValue}</Text>}
+          <Text fontSize={2 * FONT_SIZE["xl"]} bold textAlign="center">{balance !== '' && `${balance} ${connectedNetwork.currencySymbol}`}</Text>
+          {dollarValue !== null && <Text fontSize={FONT_SIZE['lg']} bold textAlign="center" mt="2">${dollarValue}</Text>}
         </VStack>
-        <Button.Group justifyContent="space-between">
-          <Button onPress={() => setShowTransferForm(!showTransferForm)}>Transfer</Button>
-        </Button.Group>
+
+        <Divider bgColor="muted.100" my="2" />
+
+        <HStack alignItems="center" space="10">
+          <Pressable alignItems="center" onPress={() => setShowTransferForm(!showTransferForm)}>
+            <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
+              <Icon as={<Ionicons name="paper-plane" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
+            </View>
+            <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Send</Text>
+          </Pressable>
+
+          <Pressable alignItems="center">
+            <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
+              <Icon as={<Ionicons name="download" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
+            </View>
+            <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Receive</Text>
+          </Pressable>
+        </HStack>
+
+        <Divider bgColor="muted.100" my="2" />
+
         {showTransferForm && <TransferForm isVisible={showTransferForm} toggleVisibility={toggleTransferForm} />}
       </VStack>
     </ScrollView>
@@ -123,6 +139,10 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     paddingVertical: 5,
     paddingHorizontal: 5
+  },
+  networkLogo: {
+    width: 4 * FONT_SIZE["xl"],
+    height: 4 * FONT_SIZE["xl"],
   }
 })
 
