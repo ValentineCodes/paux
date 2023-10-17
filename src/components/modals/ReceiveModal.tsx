@@ -46,7 +46,7 @@ export default function ReceiveModal({ isVisible, onClose }: Props) {
 
                 <Divider bgColor="muted.100" />
 
-                <QRCode value={connectedAccount.address} size={15 * FONT_SIZE['xl']} />
+                <QRCode value={connectedAccount.address} size={12 * FONT_SIZE['xl']} />
 
                 <Text fontSize={FONT_SIZE['xl']} fontWeight="medium" textAlign="center">{connectedAccount.address}</Text>
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Dimensions } from "react-native"
-import { Icon, Text, VStack, HStack, Button as RNButton } from 'native-base';
+import { Icon, Text, VStack, HStack, Button as RNButton, View } from 'native-base';
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import QRCode from 'react-native-qrcode-svg';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +13,7 @@ import Modal from "react-native-modal"
 import Blockie from '../Blockie';
 import { FONT_SIZE } from '../../utils/styles';
 import Button from '../Button';
+import { COLORS } from '../../utils/constants';
 
 
 type Props = {
@@ -64,7 +65,9 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
                     )
                 }
                 <QRCode value={connectedAccount.address} size={12 * FONT_SIZE['xl']} />
-                <CopyableText value={connectedAccount.address} />
+
+
+                <CopyableText value={connectedAccount.address} containerStyle={{ paddingHorizontal: 15 }} textStyle={{ fontSize: FONT_SIZE['xl'] }} />
 
                 <Button type="outline" text="Show private key" onPress={showPrivateKey} />
 

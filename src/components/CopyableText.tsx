@@ -3,14 +3,16 @@ import React from 'react'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from 'react-native-toast-notifications';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
 
 type Props = {
     value: string;
+    containerStyle?: ViewStyle;
+    textStyle?: TextStyle;
     displayText?: string;
 }
 
-export default function CopyableText({ value, displayText }: Props) {
+export default function CopyableText({ value, containerStyle, textStyle, displayText }: Props) {
     const toast = useToast()
 
     const copy = () => {
@@ -18,8 +20,8 @@ export default function CopyableText({ value, displayText }: Props) {
         toast.show("Copied to clipboard")
     }
     return (
-        <HStack alignItems="center" space={1}>
-            <Text textAlign="center">{displayText || value}</Text>
+        <HStack alignItems="center" space={1} style={containerStyle}>
+            <Text textAlign="center" style={textStyle}>{displayText || value}</Text>
             <Icon as={<Ionicons name="copy-outline" />} size={5} color="muted.400" onPress={copy} />
         </HStack>
     )
