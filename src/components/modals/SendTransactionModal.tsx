@@ -86,7 +86,7 @@ export function SendTransactionModal({
     }
 
     return (
-        <Modal backdropOpacity={0.6} isVisible={visible}>
+        <Modal isVisible={visible}>
             <View style={styles.modalContainer}>
                 <ModalHeader name={requestName} url={requestURL} icon={requestIcon} />
 
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 34,
         paddingTop: 30,
-        backgroundColor: 'rgba(242, 242, 247, 0.9)',
+        backgroundColor: 'white',
         width: '100%',
         position: 'absolute',
         bottom: 44,

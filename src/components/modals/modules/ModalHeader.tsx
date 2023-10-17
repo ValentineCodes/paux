@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
         width: 60,
         height: 60,
         borderRadius: 30,
-        right: -30,
         top: -8,
         zIndex: 1,
         borderWidth: 1,
@@ -68,12 +67,15 @@ const styles = StyleSheet.create({
         fontSize: 22,
         lineHeight: 28,
         fontWeight: '700',
+        color: "black",
+        textAlign: 'center'
     },
     wouldLikeToConnectText: {
         fontSize: 22,
         lineHeight: 28,
         fontWeight: '400',
         opacity: 0.6,
+        color: "black"
     },
     urlText: {
         paddingTop: 8,
@@ -81,6 +83,7 @@ const styles = StyleSheet.create({
         fontSize: 13,
         lineHeight: 18,
         fontWeight: '500',
+        textAlign: 'center'
     },
     divider: {
         height: 1,

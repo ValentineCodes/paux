@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import Modal from 'react-native-modal';
 import { SignClientTypes } from '@walletconnect/types';
-import { Tag } from '../Tag';
 import { Methods } from './modules/Methods';
 import { Message } from './modules/Message';
 import { getSignParamsMessage } from "../../utils/helperFunctions";
@@ -14,6 +13,7 @@ import {
 } from '../../utils/EIP155Request';
 import { web3wallet } from '../../utils/Web3WalletClient';
 import { handleDeepLinkRedirect } from '../../utils/LinkingUtils';
+import { Tag } from '../Tag'
 
 interface SignModalProps {
     visible: boolean;
@@ -86,7 +86,7 @@ export function SignModal({
     }
 
     return (
-        <Modal backdropOpacity={0.6} isVisible={visible}>
+        <Modal isVisible={visible}>
             <View style={styles.modalContainer}>
                 <ModalHeader name={requestName} url={requestURL} icon={requestIcon} />
 
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 34,
         paddingTop: 30,
-        backgroundColor: 'rgba(242, 242, 247, 0.9)',
+        backgroundColor: 'white',
         width: '100%',
         position: 'absolute',
         bottom: 44,

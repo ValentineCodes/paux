@@ -1,22 +1,24 @@
 import React from 'react'
-import { Modal, Tag, Text, View } from 'native-base';
+import { Text, View } from 'native-base';
 import { SignClientTypes } from '@walletconnect/types';
 import { StyleSheet } from 'react-native';
 import { AcceptRejectButton } from '../AcceptRejectButton';
 import { Events } from './modules/Events';
 import { Methods } from './modules/Methods';
 import { ModalHeader } from './modules/ModalHeader';
+import Modal from "react-native-modal"
+import { Tag } from '../Tag'
 
 type Props = {
     proposal: SignClientTypes.EventArguments['session_proposal'];
-    isOpen: boolean;
+    isVisible: boolean;
     isApproving: boolean;
     onClose: () => void;
     handleAccept: () => void;
     handleReject: () => void;
 }
 
-export default function ApprovalModal({ proposal, isOpen, isApproving, onClose, handleAccept, handleReject }: Props) {
+export default function ApprovalModal({ proposal, isVisible, isApproving, onClose, handleAccept, handleReject }: Props) {
     const name = proposal?.params?.proposer?.metadata?.name;
     const url = proposal?.params?.proposer?.metadata.url;
     const methods = proposal?.params?.requiredNamespaces.eip155.methods;
@@ -24,8 +26,8 @@ export default function ApprovalModal({ proposal, isOpen, isApproving, onClose, 
     const chains = proposal?.params?.requiredNamespaces.eip155.chains;
     const icon = proposal?.params.proposer.metadata.icons[0];
 
-    return isOpen && (
-        <Modal isOpen onClose={onClose}>
+    return (
+        <Modal isVisible={isVisible} animationIn="slideInUp" animationOut="slideOutUp">
             <View style={styles.container}>
                 <View style={styles.modalContainer}>
                     <ModalHeader name={name} url={url} icon={icon} />
@@ -37,7 +39,7 @@ export default function ApprovalModal({ proposal, isOpen, isApproving, onClose, 
                         <View style={styles.flexRowWrapped}>
                             {chains?.map((chain: string, index: number) => {
                                 return (
-                                    <Tag key={index} value={chain.toUpperCase()} grey={true} />
+                                    <Tag key={index} value={chain.toUpperCase()} grey />
                                 );
                             })}
                         </View>
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 34,
-        backgroundColor: 'rgba(242, 242, 247, 0.8)',
+        backgroundColor: 'white',
         width: '100%',
         paddingTop: 30,
         minHeight: '70%',
