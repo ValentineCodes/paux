@@ -1,0 +1,134 @@
+import { HStack, VStack, Icon, Text, Input, Pressable } from 'native-base'
+import React, { useState } from 'react'
+import Modal from 'react-native-modal';
+import Ionicons from "react-native-vector-icons/dist/Ionicons"
+import { FONT_SIZE } from '../../utils/styles';
+import { COLORS } from '../../utils/constants';
+import Blockie from '../Blockie';
+import CopyableText from '../CopyableText';
+import { useSelector } from 'react-redux';
+import { Account } from '../../store/reducers/Accounts';
+import { truncateAddress } from '../../utils/helperFunctions'
+import SInfo from "react-native-sensitive-info";
+import Button from '../Button';
+import Clipboard from '@react-native-clipboard/clipboard';
+import { useToast } from 'react-native-toast-notifications';
+
+type Props = {
+    isVisible: boolean;
+    onClose: () => void;
+}
+
+export default function PrivateKeyModal({ isVisible, onClose }: Props) {
+    const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
+
+    const toast = useToast()
+
+    const [password, setPassword] = useState("")
+    const [error, setError] = useState("")
+    const [privateKey, setPrivateKey] = useState("")
+
+    const showPrivateKey = async () => {
+        if (!password) {
+            setError("Password cannot be empty")
+            return
+        }
+
+        const _security = await SInfo.getItem("security", {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        });
+        const security = JSON.parse(_security!)
+
+        if (password !== security.password) {
+            setError("Incorrect password!")
+            return
+        }
+
+        const accounts = await SInfo.getItem("accounts", {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        })
+
+        const wallet: Wallet = Array.from(JSON.parse(accounts)).find(wallet => wallet.address == connectedAccount.address)
+
+        setPrivateKey(wallet.privateKey)
+    }
+
+    const handleInputChange = (value: string) => {
+        setPassword(value)
+        if (error) {
+            setError("")
+        }
+    }
+
+    const copyPrivateKey = () => {
+        Clipboard.setString(privateKey)
+        toast.show("Copied to clipboard", {
+
+        })
+    }
+
+    const handleOnClose = () => {
+        onClose()
+        setPrivateKey("")
+        setPassword("")
+    }
+
+    return (
+        <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={handleOnClose} onBackdropPress={handleOnClose}>
+            <VStack bgColor="white" borderRadius="20" p="5" alignItems="center" space="4" w="full">
+                <HStack alignItems="center" space="2" w="full">
+                    <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+                    <Text fontSize={1.1 * FONT_SIZE['xl']} bold>Show private key</Text>
+                </HStack>
+
+                <VStack alignItems="center" space="1">
+                    <Blockie address={connectedAccount.address} size={2.5 * FONT_SIZE['xl']} />
+                    <Text fontSize={FONT_SIZE['xl']} fontWeight="medium">{connectedAccount.name}</Text>
+                    <CopyableText value={connectedAccount.address} displayText={truncateAddress(connectedAccount.address)} containerStyle={{ paddingHorizontal: 15, paddingVertical: 5, backgroundColor: '#efefef', borderRadius: 15 }} textStyle={{ fontSize: FONT_SIZE['md'] }} />
+                </VStack>
+
+                {privateKey ? (
+                    <HStack alignItems="center" w="full" borderWidth="1" borderColor={COLORS.primary} borderRadius={10} p="4">
+                        <Text fontSize={FONT_SIZE['lg']} w="90%" mr="2">{privateKey}</Text>
+                        <Pressable onPress={copyPrivateKey}><Icon as={<Ionicons name="copy" />} size={5} color={COLORS.primary} /></Pressable>
+                    </HStack>
+                ) : (
+                    <VStack w="full" space={2}>
+                        <Text fontSize={FONT_SIZE["xl"]} fontWeight="medium">Enter your password</Text>
+                        <Input
+                            value={password}
+                            borderRadius="lg"
+                            variant="filled"
+                            fontSize="md"
+                            focusOutlineColor={COLORS.primary}
+                            secureTextEntry
+                            placeholder="Password"
+                            onChangeText={handleInputChange}
+                            onSubmitEditing={showPrivateKey}
+                            _input={{
+                                selectionColor: COLORS.primary,
+                                cursorColor: COLORS.primary,
+                            }}
+                        />
+                        {error && <Text fontSize="sm" color="red.400">{error}</Text>}
+                    </VStack>
+                )}
+
+
+                <HStack alignItems="center" w="full" borderWidth="1" borderColor="red.400" borderRadius={10} p="4" bgColor="red.100">
+                    <Icon as={<Ionicons name="eye-off" />} size={1.3 * FONT_SIZE['xl']} color="red.400" />
+                    <Text fontSize={FONT_SIZE["md"]} mx="4">Never disclose this key. Anyone with your private key can fully control your account, including transferring away any of your funds.</Text>
+                </HStack>
+
+                {privateKey ? (
+                    <Button text="Done" onPress={handleOnClose} />
+                ) : (<HStack w="full" alignItems="center" justifyContent="space-between">
+                    <Button type="outline" text="Cancel" onPress={handleOnClose} style={{ width: "50%", borderRadius: 0 }} />
+                    <Button text="Reveal" onPress={showPrivateKey} style={{ width: "50%", borderRadius: 0 }} />
+                </HStack>)}
+            </VStack>
+        </Modal>
+    )
+}

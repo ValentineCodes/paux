@@ -13,7 +13,7 @@ import Modal from "react-native-modal"
 import Blockie from '../Blockie';
 import { FONT_SIZE } from '../../utils/styles';
 import Button from '../Button';
-import { COLORS } from '../../utils/constants';
+import PrivateKeyModal from './PrivateKeyModal';
 
 
 type Props = {
@@ -31,6 +31,7 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
     const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
     const [isEditingAccountName, setIsEditingAccountName] = useState(false)
+    const [showPrivateKeyModal, setShowPrivateKeyModal] = useState(false)
     const [showRemoveAccountConsentModal, setShowRemoveAccountConsentModal] = useState(false)
 
     const handleOnClose = () => {
@@ -39,11 +40,6 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
         }
         onClose()
 
-    }
-
-    const showPrivateKey = () => {
-        navigation.navigate("PrivateKey")
-        handleOnClose()
     }
 
     const handleAccountRemoval = () => {
@@ -69,10 +65,12 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
 
                 <CopyableText value={connectedAccount.address} containerStyle={{ paddingHorizontal: 15 }} textStyle={{ fontSize: FONT_SIZE['xl'] }} />
 
-                <Button type="outline" text="Show private key" onPress={showPrivateKey} />
+                <Button type="outline" text="Show private key" onPress={() => setShowPrivateKeyModal(true)} />
 
                 {accounts.length > 1 && <RNButton py="4" borderRadius={25} bgColor="red.100" w="full" onPress={() => setShowRemoveAccountConsentModal(true)}><Text color="red.400" bold fontSize="md">Remove account</Text></RNButton>}
             </VStack>
+
+            <PrivateKeyModal isVisible={showPrivateKeyModal} onClose={() => setShowPrivateKeyModal(false)} />
 
             <Modal isVisible={showRemoveAccountConsentModal} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={() => setShowRemoveAccountConsentModal(false)} onBackdropPress={() => setShowRemoveAccountConsentModal(false)}>
                 <VStack bgColor="white" borderRadius="40" px="7" py="5" alignItems="center" space="4">

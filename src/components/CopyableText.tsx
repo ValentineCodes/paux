@@ -1,4 +1,4 @@
-import { HStack, Text, Icon } from 'native-base'
+import { HStack, Text, Icon, Pressable } from 'native-base'
 import React from 'react'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import Clipboard from '@react-native-clipboard/clipboard';
@@ -20,9 +20,11 @@ export default function CopyableText({ value, containerStyle, textStyle, display
         toast.show("Copied to clipboard")
     }
     return (
-        <HStack alignItems="center" space={1} style={containerStyle}>
-            <Text textAlign="center" style={textStyle}>{displayText || value}</Text>
-            <Icon as={<Ionicons name="copy-outline" />} size={5} color="muted.400" onPress={copy} />
-        </HStack>
+        <Pressable onPress={copy}>
+            <HStack alignItems="center" space={1} style={containerStyle}>
+                <Text textAlign="center" style={textStyle}>{displayText || value}</Text>
+                <Icon as={<Ionicons name="copy-outline" />} size={5} color="muted.400" />
+            </HStack>
+        </Pressable>
     )
 }
