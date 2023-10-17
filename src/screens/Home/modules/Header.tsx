@@ -1,21 +1,15 @@
-import { Text, Select, CheckIcon, HStack, Modal, VStack, Button, ScrollView, Icon, Image } from 'native-base'
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { Text, Select, CheckIcon, HStack, Icon, Image } from 'native-base'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Network, switchNetwork } from '../../../store/reducers/Networks'
-import { Account, addAccount, switchAccount } from '../../../store/reducers/Accounts'
+import { Account, switchAccount } from '../../../store/reducers/Accounts'
 import { Pressable, Linking, StyleSheet } from 'react-native'
-import SInfo from "react-native-sensitive-info";
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import MaterialCommunityIcons from "react-native-vector-icons/dist/MaterialCommunityIcons"
 import Share from 'react-native-share';
 import { SignClientTypes, SessionTypes } from '@walletconnect/types';
 import Blockie from '../../../components/Blockie'
-
-import "react-native-get-random-values"
-import "@ethersproject/shims"
-import { ethers } from "ethers";
-import PrivateKeyForm from '../../../components/forms/PrivateKeyForm'
 
 import {
     Menu,
@@ -38,9 +32,9 @@ import { EIP155_SIGNING_METHODS } from '../../../data/EIP155';
 import { SignModal } from '../../../components/modals/SignModal'
 import { SignTypedDataModal } from '../../../components/modals/SignTypedDataModal'
 import { SendTransactionModal } from '../../../components/modals/SendTransactionModal'
-import { truncateAddress } from '../../../utils/helperFunctions'
 import { FONT_SIZE } from '../../../utils/styles'
 import { COLORS } from '../../../utils/constants'
+import AccountsModal from '../../../components/modals/AccountsModal'
 
 type Props = {}
 
@@ -68,10 +62,6 @@ export default function Header({ }: Props) {
 
     const [selectedAccount, setSelectedAccount] = useState<string>("")
 
-
-    const accountInitialRef = useRef(null)
-    const accountFinalRef = useRef(null)
-
     const networks: Network[] = useSelector(state => state.networks)
     const connectedNetwork: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
 
@@ -84,57 +74,6 @@ export default function Header({ }: Props) {
 
     const handleNetworkSelecttion = (chainId: string) => {
         dispatch(switchNetwork(chainId))
-    }
-
-    const handleAccountSelection = (account: string) => {
-        if (account !== connectedAccount.address) {
-            dispatch(switchAccount(account))
-            setIsAccountModalVisible(false)
-        }
-
-        const canSwitchSessionAccount = activeSessions.some(session => session.account !== account)
-
-        if (canSwitchSessionAccount) {
-            setShowSwitchAccountModal(true)
-        }
-    }
-
-    const createAccount = async () => {
-        const mnemonic = await SInfo.getItem("mnemonic", {
-            sharedPreferencesName: "pocket.android.storage",
-            keychainService: "pocket.ios.storage",
-        })
-        const node = ethers.utils.HDNode.fromMnemonic(mnemonic)
-
-        let wallet
-
-        for (let i = 0; i < Infinity; i++) {
-            const path = "m/44'/60'/0'/0/" + i
-            const _wallet = node.derivePath(path)
-
-            if (accounts.find(account => account.address == _wallet.address) == undefined) {
-                wallet = _wallet
-                break
-            }
-        }
-
-        const createdAccounts = await SInfo.getItem("accounts", {
-            sharedPreferencesName: "pocket.android.storage",
-            keychainService: "pocket.ios.storage",
-        })
-
-        await SInfo.setItem("accounts", JSON.stringify([...JSON.parse(createdAccounts), { privateKey: wallet.privateKey, address: wallet.address }]), {
-            sharedPreferencesName: "pocket.android.storage",
-            keychainService: "pocket.ios.storage",
-        })
-
-        dispatch(addAccount({ address: wallet.address, isImported: false }))
-
-        toast.show("Account created", {
-            type: "success"
-        })
-
-        setIsAccountModalVisible(false)
     }
 
     const togglePrivateKeyForm = () => {
@@ -354,38 +293,13 @@ export default function Header({ }: Props) {
             <ConnectModal isOpen={showConnectModal} isPairing={isPairing} onClose={() => setShowConnectModal(false)} pair={pair} />
             <ApprovalModal proposal={proposal} isOpen={showApprovalModal} isApproving={isApprovingSession} onClose={() => setShowApprovalModal(false)} handleAccept={handleAcceptProposal} handleReject={handleRejectProposal} />
 
-            {/* Accounts */}
-            <Modal isOpen={isAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} initialFocusRef={accountInitialRef} finalFocusRef={accountFinalRef}>
-                <Modal.Content>
-                    <Modal.CloseButton />
-                    <Modal.Header>My Accounts</Modal.Header>
-                    <Modal.Body maxHeight={200}>
-                        <ScrollView>
-                            {accounts.map((account, index) => (
-                                <Pressable key={account.address} onPress={() => handleAccountSelection(account.address)}>
-                                    <HStack alignItems="center" justifyContent="space-between" paddingY={3} borderBottomWidth={index === accounts.length - 1 ? 0 : 1} borderBottomColor="#ccc">
-                                        <VStack>
-                                            <Text>{account.name}</Text>
-                                            <Text>{truncateAddress(account.address)}</Text>
-                                        </VStack>
-                                        {account.isConnected && <CheckIcon />}
-                                    </HStack>
-                                </Pressable>
-                            ))}
-                        </ScrollView>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button.Group space={2}>
-                            <Button onPress={createAccount}>
-                                Create
-                            </Button>
-                            <Button variant="outline" onPress={togglePrivateKeyForm}>
-                                Import
-                            </Button>
-                        </Button.Group>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+            <AccountsModal isVisible={isAccountModalVisible} setVisibility={setIsAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} onSelect={(account) => {
+                const canSwitchSessionAccount = activeSessions.some(session => session.account !== account)
+
+                if (canSwitchSessionAccount) {
+                    setShowSwitchAccountModal(true)
+                }
+            }} />
 
             {requestEventData && requestSession && showSignModal && (
                 <SignModal
@@ -418,7 +332,6 @@ export default function Header({ }: Props) {
             <AccountSelection isOpen={showAccountSelection} onClose={() => setShowAccountSelection(false)} onSelect={handleAccountsSelection} />
             <AccountDetails isOpen={showAccountDetails} onClose={() => setShowAccountDetails(false)} />
             <ConnectedSitesModal isOpen={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
-            <PrivateKeyForm isVisible={showPrivateKeyForm} toggleVisibility={togglePrivateKeyForm} />
         </HStack>
     )
 }
