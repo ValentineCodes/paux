@@ -9,6 +9,7 @@ import { removeSession } from '../../store/reducers/ActiveSessions';
 import Modal from "react-native-modal"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import { FONT_SIZE } from '../../utils/styles';
+import { Account } from '../../store/reducers/Accounts';
 
 type Props = {
     isVisible: boolean;
@@ -19,6 +20,7 @@ export default function ConnectedSitesModal({ isVisible, onClose }: Props) {
     const dispatch = useDispatch()
 
     const connectedSites: ConnectedSite[] = useSelector(state => state.connectedSites)
+    const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
     const disconnectSession = async (site: ConnectedSite) => {
         dispatch(removeConnectedSite(site.name))
@@ -42,6 +44,7 @@ export default function ConnectedSitesModal({ isVisible, onClose }: Props) {
                     <Text fontSize={FONT_SIZE['xl']} bold>Connected sites</Text>
                     <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} onPress={onClose} />
                 </HStack>
+                <Text fontSize={1.1 * FONT_SIZE['md']}>{connectedAccount.name} is connected to these sites. They can view your account address.</Text>
 
                 <Divider bgColor="muted.300" my="2" />
 
