@@ -46,11 +46,10 @@ export default function Transactions({ }: Props) {
 
       setLoadingStatus('success')
 
-      if (transactions.result > 0) {
+      if (transactions.result.length > 0) {
         setCurrentPage(2)
       }
     } catch (error) {
-      console.log(error)
       setLoadingStatus('error')
     }
   }
@@ -61,10 +60,12 @@ export default function Transactions({ }: Props) {
     setIsLoadingMore(true)
 
     try {
-      const newTransactions = await TransactionsAPI.getTransactions(connectedNetwork.txApiDomain, connectedNetwork.txApiKey, connectedAccount.address, currentPage)
+      const [results] = await TransactionsAPI.getTransactions(connectedNetwork.txApiDomain, connectedNetwork.txApiKey, connectedAccount.address, currentPage)
 
-      if (newTransactions.result.length > 0) {
-        setTransactions([...transactions, ...newTransactions.result])
+      const newTransactions = results.filter((result: any) => !transactions.some((transaction: any) => transaction.hash === result.hash))
+
+      if (newTransactions.length > 0) {
+        setTransactions([...transactions, ...newTransactions])
         setCurrentPage(currentPage => currentPage + 1)
       }
     } catch (error) {
@@ -109,16 +110,19 @@ export default function Transactions({ }: Props) {
           <Text fontSize={1.1 * FONT_SIZE['lg']}>Failed to load transactions. <Text onPress={getTransactions} color={COLORS.primary} bold>Retry</Text></Text>
         </VStack>
       ) : transactions.length > 0 ? (
-        <FlatList
-          keyExtractor={(item) => item.hash}
-          data={transactions}
-          renderItem={({ item }) => <Transaction tx={item} />}
-          ItemSeparatorComponent={<Divider bgColor="muted.100" my="2" />}
-          onRefresh={handleRefresh}
-          refreshing={isRefreshing}
-          onEndReached={loadMoreTransactions}
-          onEndReachedThreshold={0.2}
-        />
+        <>
+          <FlatList
+            keyExtractor={(item) => item.hash}
+            data={transactions}
+            renderItem={({ item }) => <Transaction tx={item} />}
+            ItemSeparatorComponent={<Divider bgColor="muted.100" my="2" />}
+            ListFooterComponent={isLoadingMore ? <View py="4"><ActivityIndicator size="small" color={COLORS.primary} style={styles.loadingIndicator} /></View> : null}
+            onRefresh={handleRefresh}
+            refreshing={isRefreshing}
+            onEndReached={loadMoreTransactions}
+            onEndReachedThreshold={0.2}
+          />
+        </>
       ) : (
         <VStack flex="1" justifyContent="center" alignItems="center" space="4">
           <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
@@ -128,14 +132,14 @@ export default function Transactions({ }: Props) {
         </VStack>
       )}
 
-      {isLoadingMore && <ActivityIndicator size="small" color="blue" style={styles.loadingIndicator} />}
+
 
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  loadingIndicator: { position: 'absolute', bottom: 10, right: 10 },
+  loadingIndicator: {},
   failedIcon: {
     width: 7 * FONT_SIZE['xl'],
     height: 7 * FONT_SIZE['xl']
