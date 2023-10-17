@@ -41,9 +41,32 @@ export default function TransactionDetails({ isVisible, onClose, tx }: Props) {
     }
 
     const renderTimestamp = () => {
+        const MONTHS = [
+            'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'May',
+            'Jun',
+            'Jul',
+            'Aug',
+            'Sep',
+            'Oct',
+            'Nov',
+            'Dec',
+        ];
+
         const d = new Date(Number(tx.timeStamp) * 1000)
 
-        return `${d.toLocaleDateString()}, ${d.toLocaleTimeString()}`
+        let hour = d.getHours();
+        let minutes = d.getMinutes();
+        let day = d.getDate();
+        let monthIndex = d.getMonth();
+        let year = d.getFullYear();
+
+        const currentYear = (new Date()).getFullYear()
+
+        return `${MONTHS[monthIndex]} ${day}${year !== currentYear ? `, ${year}` : ""} at ${hour}:${minutes}${hour >= 0 && hour < 12 ? ' am' : ' pm'}`
     }
 
     const calcGasFee = () => {
