@@ -53,10 +53,10 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
     return (
         <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={handleOnClose} onBackdropPress={handleOnClose}>
             <VStack bgColor="white" borderRadius="20" p="5" alignItems="center" space="4" w="full">
+                <Blockie address={connectedAccount.address} size={2.5 * FONT_SIZE['xl']} />
                 {
                     isEditingAccountName ? <EditAccountNameForm close={() => setIsEditingAccountName(false)} /> : (
                         <VStack alignItems="center" space="2">
-                            <Blockie address={connectedAccount.address} size={2.5 * FONT_SIZE['xl']} />
                             <HStack alignItems="center" space="2">
                                 <Text fontSize={FONT_SIZE['xl']} bold>{connectedAccount.name}</Text>
                                 <Icon as={<Ionicons name="create-outline" />} size={1.5 * FONT_SIZE['xl']} color="muted.400" onPress={() => setIsEditingAccountName(true)} />
