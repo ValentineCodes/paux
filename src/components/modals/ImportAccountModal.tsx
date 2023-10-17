@@ -103,7 +103,7 @@ export default function ImportAccountModal({ isVisible, onClose, onImport }: Pro
                 </HStack>
             </VStack>
 
-            <QRCodeScanner isOpen={showScanner} onClose={() => setShowScanner} onReadCode={privateKey => {
+            <QRCodeScanner isOpen={showScanner} onClose={() => setShowScanner(false)} onReadCode={privateKey => {
                 setPrivateKey(privateKey)
                 setShowScanner(false)
             }} />
