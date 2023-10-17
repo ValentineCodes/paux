@@ -81,8 +81,8 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
                     <Text fontSize={FONT_SIZE['xl']} textAlign="center">This action cannot be reversed. Are you sure you want to go through with this?</Text>
 
                     <HStack w="full" mt="5" alignItems="center" justifyContent="space-between">
-                        <RNButton py="4" bgColor="red.100" w="50%" onPress={() => setShowRemoveAccountConsentModal(false)}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
-                        <RNButton py="4" bgColor="red.400" w="50%" onPress={handleAccountRemoval}><Text color="white" bold fontSize="md">Remove account</Text></RNButton>
+                        <RNButton py="4" bgColor="red.100" w="50%" onPress={() => setShowRemoveAccountConsentModal(false)}><Text color="red.400" bold fontSize="md">Not really</Text></RNButton>
+                        <RNButton py="4" bgColor="red.400" w="50%" onPress={handleAccountRemoval}><Text color="white" bold fontSize="md">Yes, I'm sure</Text></RNButton>
                     </HStack>
                 </VStack>
             </Modal>
