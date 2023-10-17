@@ -290,7 +290,7 @@ export default function Header({ }: Props) {
                 </Menu>
             </HStack>
 
-            <ConnectModal isOpen={showConnectModal} isPairing={isPairing} onClose={() => setShowConnectModal(false)} pair={pair} />
+            <ConnectModal isVisible={showConnectModal} isPairing={isPairing} onClose={() => setShowConnectModal(false)} pair={pair} />
             <ApprovalModal proposal={proposal} isOpen={showApprovalModal} isApproving={isApprovingSession} onClose={() => setShowApprovalModal(false)} handleAccept={handleAcceptProposal} handleReject={handleRejectProposal} />
 
             <AccountsModal isVisible={isAccountModalVisible} setVisibility={setIsAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} onSelect={(account) => {
