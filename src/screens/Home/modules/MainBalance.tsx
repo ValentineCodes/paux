@@ -100,7 +100,7 @@ function MainBalance({ }: Props) {
 
   return (
     <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} />}>
-      <VStack alignItems="center" space={2} paddingY={5}>
+      <VStack alignItems="center" space={2} paddingTop={5}>
         <Text fontSize={FONT_SIZE["xl"]} bold textAlign="center">{connectedAccount.name}</Text>
         <CopyableText displayText={truncateAddress(connectedAccount.address)} value={connectedAccount.address} />
         {logo}
@@ -127,7 +127,7 @@ function MainBalance({ }: Props) {
           </Pressable>
         </HStack>
 
-        <Divider bgColor="muted.100" my="2" />
+        <Divider bgColor="muted.100" mt="2" />
 
         {showTransferForm && <TransferForm isVisible={showTransferForm} toggleVisibility={toggleTransferForm} />}
         <ReceiveModal isVisible={showReceiveModal} onClose={() => setShowReceiveModal(false)} />
