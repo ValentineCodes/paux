@@ -331,7 +331,7 @@ export default function Header({ }: Props) {
             <SwitchAccountModal isOpen={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
             <AccountSelection isOpen={showAccountSelection} onClose={() => setShowAccountSelection(false)} onSelect={handleAccountsSelection} />
             <AccountDetailsModal isVisible={showAccountDetailsModal} onClose={() => setShowAccountDetailsModal(false)} />
-            <ConnectedSitesModal isOpen={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
+            <ConnectedSitesModal isVisible={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
         </HStack>
     )
 }
