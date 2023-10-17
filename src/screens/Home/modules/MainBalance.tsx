@@ -15,6 +15,7 @@ import CopyableText from '../../../components/CopyableText'
 import { truncateAddress } from '../../../utils/helperFunctions'
 import { FONT_SIZE } from '../../../utils/styles'
 import { COLORS } from '../../../utils/constants'
+import ReceiveModal from '../../../components/modals/ReceiveModal'
 
 type Props = {}
 
@@ -26,6 +27,7 @@ function MainBalance({ }: Props) {
   const [dollarValue, setDollarValue] = useState<string | null>(null)
   const [refresh, setRefresh] = useState(false)
   const [showTransferForm, setShowTransferForm] = useState(false)
+  const [showReceiveModal, setShowReceiveModal] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const dispatch = useDispatch()
@@ -117,7 +119,7 @@ function MainBalance({ }: Props) {
             <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Send</Text>
           </Pressable>
 
-          <Pressable alignItems="center">
+          <Pressable alignItems="center" onPress={() => setShowReceiveModal(true)}>
             <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
               <Icon as={<Ionicons name="download" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
             </View>
@@ -128,6 +130,7 @@ function MainBalance({ }: Props) {
         <Divider bgColor="muted.100" my="2" />
 
         {showTransferForm && <TransferForm isVisible={showTransferForm} toggleVisibility={toggleTransferForm} />}
+        <ReceiveModal isVisible={showReceiveModal} onClose={() => setShowReceiveModal(false)} />
       </VStack>
     </ScrollView>
   )
