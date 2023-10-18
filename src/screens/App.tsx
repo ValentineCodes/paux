@@ -21,6 +21,7 @@ import Home from './Home'
 import { useSelector } from 'react-redux';
 import { MenuProvider } from 'react-native-popup-menu';
 import BootSplash from "react-native-bootsplash";
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
 
 type AppStackParamsList = {
   Onboarding: undefined;
@@ -41,7 +42,12 @@ function App(): JSX.Element {
 
   useEffect(() => {
     (async () => {
-      await BootSplash.hide({ fade: true });
+      try {
+        changeNavigationBarColor('#ffffff')
+        await BootSplash.hide({ fade: true });
+      } catch (error) {
+        return
+      }
     })()
   }, [])
 

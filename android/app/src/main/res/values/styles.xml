@@ -12,6 +12,7 @@
     <item name="postBootSplashTheme">@style/AppTheme</item>
     <item name="android:statusBarColor">@color/bootsplash_background</item>
     <item name="android:windowLightStatusBar">true</item>
+    <item name="android:navigationBarColor">@color/bootsplash_background</item>
   </style>
 
 </resources>
