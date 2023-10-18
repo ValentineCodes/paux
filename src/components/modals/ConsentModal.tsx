@@ -23,7 +23,7 @@ type Props = {
 export default function ConsentModal({ isVisible, icon, title, subTitle, okText, cancelText, isOkLoading, isCancelLoading, onAccept, onClose }: Props) {
     return (
         <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={onClose} onBackdropPress={onClose}>
-            <VStack bgColor="white" borderRadius="40" px="7" py="5" alignItems="center" space="4">
+            <VStack bgColor="white" borderRadius="30" px="7" py="5" alignItems="center" space="4">
                 {icon || <Icon as={<Ionicons name="warning-outline" />} size={Dimensions.get("window").height * 0.17} color={COLORS.primary} />}
                 <Text color={COLORS.primary} bold fontSize={1.5 * FONT_SIZE['xl']} textAlign="center">{title}</Text>
                 <Text fontSize={FONT_SIZE['xl']} textAlign="center">{subTitle}</Text>

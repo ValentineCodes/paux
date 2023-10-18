@@ -39,7 +39,7 @@ export default function ConnectedSitesModal({ isVisible, onClose }: Props) {
     }
     return (
         <Modal isVisible={isVisible} animationIn="slideInRight" animationOut="slideOutLeft" onBackButtonPress={onClose} onBackdropPress={onClose}>
-            <VStack bgColor="white" borderRadius="20" p="5" space={2} maxH="50%">
+            <VStack bgColor="white" borderRadius="30" p="5" space={2} maxH="50%">
                 <HStack alignItems="center" justifyContent="space-between">
                     <Text fontSize={FONT_SIZE['xl']} bold>Connected sites</Text>
                     <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} onPress={onClose} />

@@ -45,7 +45,7 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
     }
     return (
         <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={handleOnClose} onBackdropPress={handleOnClose}>
-            <VStack bgColor="white" borderRadius="20" p="5" alignItems="center" space="4" w="full">
+            <VStack bgColor="white" borderRadius="30" p="5" alignItems="center" space="4" w="full">
                 <Blockie address={connectedAccount.address} size={2.5 * FONT_SIZE['xl']} />
                 {
                     isEditingAccountName ? <EditAccountNameForm close={() => setIsEditingAccountName(false)} /> : (
@@ -70,7 +70,7 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
             <PrivateKeyModal isVisible={showPrivateKeyModal} onClose={() => setShowPrivateKeyModal(false)} />
 
             <Modal isVisible={showRemoveAccountConsentModal} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={() => setShowRemoveAccountConsentModal(false)} onBackdropPress={() => setShowRemoveAccountConsentModal(false)}>
-                <VStack bgColor="white" borderRadius="40" px="7" py="5" alignItems="center" space="4">
+                <VStack bgColor="white" borderRadius="30" px="7" py="5" alignItems="center" space="4">
                     <Icon as={<Ionicons name="warning-outline" />} size={Dimensions.get("window").height * 0.17} color="red.400" />
                     <Text color="red.400" bold fontSize={1.5 * FONT_SIZE['xl']} textAlign="center">Remove account</Text>
                     <Text fontSize={FONT_SIZE['xl']} textAlign="center">This action cannot be reversed. Are you sure you want to go through with this?</Text>

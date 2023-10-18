@@ -80,7 +80,7 @@ export default function AccountsModal({ isVisible, setVisibility, onClose, onSel
 
     return (
         <Modal isVisible={isVisible} animationIn="slideInRight" animationOut="slideOutLeft" onBackButtonPress={onClose} onBackdropPress={onClose}>
-            <VStack bgColor="white" borderRadius="20" p="5" space={2}>
+            <VStack bgColor="white" borderRadius="30" p="5" space={2}>
                 <HStack alignItems="center" justifyContent="space-between">
                     <Text fontSize={FONT_SIZE['xl']} bold>Accounts</Text>
                     <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} onPress={onClose} />

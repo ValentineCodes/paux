@@ -38,7 +38,7 @@ export default function ReceiveModal({ isVisible, onClose }: Props) {
 
     return (
         <Modal isVisible={isVisible} animationIn="slideInUp" animationOut="slideOutDown" onBackButtonPress={onClose} onBackdropPress={onClose}>
-            <VStack bgColor="white" borderRadius="20" p="5" space={4} alignItems="center">
+            <VStack bgColor="white" borderRadius="30" p="5" space={4} alignItems="center">
                 <HStack alignItems="center" justifyContent="space-between" w="full">
                     <Text fontSize={FONT_SIZE['xl']} bold>Receive {connectedNetwork.currencySymbol}</Text>
                     <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} onPress={onClose} />
