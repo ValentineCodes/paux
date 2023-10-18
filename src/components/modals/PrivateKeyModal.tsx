@@ -1,4 +1,4 @@
-import { HStack, VStack, Icon, Text, Input, Pressable } from 'native-base'
+import { HStack, VStack, Icon, Text, Input, Pressable, Button as RNButton } from 'native-base'
 import React, { useState } from 'react'
 import Modal from 'react-native-modal';
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
@@ -78,9 +78,9 @@ export default function PrivateKeyModal({ isVisible, onClose }: Props) {
     return (
         <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={handleOnClose} onBackdropPress={handleOnClose}>
             <VStack bgColor="white" borderRadius="20" p="5" alignItems="center" space="4" w="full">
-                <HStack alignItems="center" space="2" w="full">
-                    <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+                <HStack alignItems="center" justifyContent="space-between" space="2" w="full">
                     <Text fontSize={1.1 * FONT_SIZE['xl']} bold>Show private key</Text>
+                    <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} color="black" onPress={handleOnClose} />
                 </HStack>
 
                 <VStack alignItems="center" space="1">
@@ -125,7 +125,7 @@ export default function PrivateKeyModal({ isVisible, onClose }: Props) {
                 {privateKey ? (
                     <Button text="Done" onPress={handleOnClose} />
                 ) : (<HStack w="full" alignItems="center" justifyContent="space-between">
-                    <Button type="outline" text="Cancel" onPress={handleOnClose} style={{ width: "50%", borderRadius: 0 }} />
+                    <RNButton py="4" bgColor="red.100" w="50%" onPress={handleOnClose}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
                     <Button text="Reveal" onPress={showPrivateKey} style={{ width: "50%", borderRadius: 0 }} />
                 </HStack>)}
             </VStack>

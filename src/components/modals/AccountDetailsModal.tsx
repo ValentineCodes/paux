@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { Dimensions } from "react-native"
-import { Icon, Text, VStack, HStack, Button as RNButton, View } from 'native-base';
+import { Icon, Text, VStack, HStack, Button as RNButton } from 'native-base';
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import QRCode from 'react-native-qrcode-svg';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Account, removeAccount } from '../../store/reducers/Accounts';
 import EditAccountNameForm from '../forms/EditAccountNameForm';
-import { useNavigation } from '@react-navigation/native';
 import CopyableText from '../CopyableText';
 import Modal from "react-native-modal"
 import Blockie from '../Blockie';
@@ -22,8 +21,6 @@ type Props = {
 }
 
 export default function AccountDetailsModal({ isVisible, onClose }: Props) {
-
-    const navigation = useNavigation()
 
     const dispatch = useDispatch()
 
