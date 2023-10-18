@@ -328,7 +328,7 @@ export default function Header({ }: Props) {
                 />
             )}
 
-            <SwitchAccountModal isOpen={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
+            <SwitchAccountModal isVisible={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
             <AccountSelectionModal isVisible={showAccountSelectionModal} onClose={() => setShowAccountSelectionModal(false)} onSelect={handleAccountsSelection} />
             <AccountDetailsModal isVisible={showAccountDetailsModal} onClose={() => setShowAccountDetailsModal(false)} />
             <ConnectedSitesModal isVisible={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
