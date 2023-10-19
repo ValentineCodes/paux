@@ -88,7 +88,7 @@ export default function AccountsModal({ isVisible, setVisibility, onClose, onSel
 
                 <Divider bgColor="muted.300" mt="2" />
 
-                <ScrollView h={Dimensions.get("window").height / 4.8}>
+                <ScrollView maxH={Dimensions.get("window").height / 4.8}>
                     {accounts.map((account, index) => (
                         <Pressable key={account.address} onPress={() => handleAccountSelection(account.address)}>
                             <HStack alignItems="center" justifyContent="space-between" paddingY={3} borderBottomWidth={index === accounts.length - 1 ? 0 : 1} borderBottomColor="muted.300">
