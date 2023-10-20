@@ -22,7 +22,7 @@ export default function ConnectModal({ isVisible, isPairing, onClose, pair }: Pr
     return (
         <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={onClose} onBackdropPress={onClose}>
             <VStack bgColor="white" borderRadius="30" px="7" py="5" alignItems="center" space="4">
-                <Image source={require("../../assets/icons/walletconnect.png")} alt="Success!" style={{ width: Dimensions.get("window").height * 0.2, height: Dimensions.get("window").height * 0.1 }} />
+                <Image source={require("../../assets/icons/walletconnect.png")} alt="WalletConnect" style={{ width: Dimensions.get("window").height * 0.2, height: Dimensions.get("window").height * 0.1 }} />
                 <Text color={COLORS.primary} bold fontSize={1.2 * FONT_SIZE['xl']}>Connect to dApp</Text>
 
                 <VStack space={2} w="full">

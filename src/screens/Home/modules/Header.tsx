@@ -3,13 +3,14 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Network, switchNetwork } from '../../../store/reducers/Networks'
 import { Account, switchAccount } from '../../../store/reducers/Accounts'
-import { Pressable, Linking, StyleSheet } from 'react-native'
+import { Pressable, Linking, StyleSheet, TouchableOpacity } from 'react-native'
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import MaterialCommunityIcons from "react-native-vector-icons/dist/MaterialCommunityIcons"
 import Share from 'react-native-share';
 import { SignClientTypes, SessionTypes } from '@walletconnect/types';
 import Blockie from '../../../components/Blockie'
+import { Dimensions } from 'react-native'
 
 import {
     Menu,
@@ -259,9 +260,9 @@ export default function Header({ }: Props) {
             </Select>
 
             <HStack alignItems="center" space={6}>
-                <Pressable onPress={() => setShowConnectModal(true)}>
-                    <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color="black" />
-                </Pressable>
+                <TouchableOpacity activeOpacity={0.4} onPress={() => setShowConnectModal(true)}>
+                    <Image source={require("../../../assets/icons/walletconnect.png")} alt="WalletConnect" style={{ width: Dimensions.get("window").height * 0.045, height: Dimensions.get("window").height * 0.035 }} />
+                </TouchableOpacity>
 
                 <Menu>
                     <MenuTrigger><Blockie address={connectedAccount.address} size={1.7 * FONT_SIZE["xl"]} /></MenuTrigger>

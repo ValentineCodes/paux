@@ -11,7 +11,7 @@ import TransactionDetails from './TransactionDetails';
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import { COLORS } from '../utils/constants';
 import { FONT_SIZE } from '../utils/styles';
-import { truncateAddress } from '../utils/helperFunctions';
+import { truncateAddress, parseFloat } from '../utils/helperFunctions';
 
 type Props = {
     tx: any;
@@ -37,43 +37,35 @@ export default function Transaction({ tx }: Props) {
     }
 
     const renderActionIcon = () => {
+        let icon = "sync";
+
         if (renderAction() === 'Transfer') {
-            return (
-                <View bgColor={COLORS.primaryLight} p="3" borderRadius="full">
-                    <Icon as={<Ionicons name="paper-plane" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
-                </View>
-            )
+            icon = "paper-plane"
         }
         else if (renderAction() === "Receive") {
-            return (
-                <View bgColor={COLORS.primaryLight} p="3" borderRadius="full">
-                    <Icon as={<Ionicons name="download" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
-                </View>
-            )
-        } else {
-            return (
-                <View bgColor={COLORS.primaryLight} p="3" borderRadius="full">
-                    <Icon as={<Ionicons name="sync" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
-                </View>
-            )
+            icon = "download"
         }
+
+        return (
+            <View bgColor={COLORS.primaryLight} p="3" borderRadius="full">
+                <Icon as={<Ionicons name={icon} />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
+            </View>
+        )
     }
 
     const renderAddress = () => {
+        let address = `Address: ${truncateAddress(tx.to || tx.contractAddress)}`
+
         if (renderAction() === 'Transfer') {
-            return (
-                <Text fontSize={FONT_SIZE['md']}>To: {truncateAddress(tx.to || tx.contractAddress)}</Text>
-            )
+            address = `To: ${truncateAddress(tx.to || tx.contractAddress)}`
         }
         else if (renderAction() === "Receive") {
-            return (
-                <Text fontSize={FONT_SIZE['md']}>From: {truncateAddress(tx.from)}</Text>
-            )
-        } else {
-            return (
-                <Text fontSize={FONT_SIZE['md']}>Address: {truncateAddress(tx.to || tx.contractAddress)}</Text>
-            )
+            address = `From: ${truncateAddress(tx.from)}`
         }
+
+        return (
+            <Text fontSize={FONT_SIZE['md']}>{address}</Text>
+        )
     }
 
     return (
