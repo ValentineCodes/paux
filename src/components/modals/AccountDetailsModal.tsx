@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Dimensions } from "react-native"
+import { Dimensions, StyleSheet } from "react-native"
 import { Icon, Text, VStack, HStack, Button as RNButton } from 'native-base';
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import QRCode from 'react-native-qrcode-svg';
@@ -11,6 +11,7 @@ import CopyableText from '../CopyableText';
 import Modal from "react-native-modal"
 import Blockie from '../Blockie';
 import { FONT_SIZE } from '../../utils/styles';
+import { COLORS } from '../../utils/constants';
 import Button from '../Button';
 import PrivateKeyModal from './PrivateKeyModal';
 
@@ -57,10 +58,10 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
                         </VStack>
                     )
                 }
+
                 <QRCode value={connectedAccount.address} size={12 * FONT_SIZE['xl']} />
 
-
-                <CopyableText value={connectedAccount.address} containerStyle={{ paddingHorizontal: 15 }} textStyle={{ fontSize: FONT_SIZE['xl'] }} />
+                <CopyableText value={connectedAccount.address} containerStyle={styles.addressContainer} textStyle={styles.addressText} />
 
                 <Button type="outline" text="Show private key" onPress={() => setShowPrivateKeyModal(true)} />
 
@@ -84,3 +85,17 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
         </Modal>
     )
 }
+
+const styles = StyleSheet.create({
+    addressContainer: {
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        backgroundColor: "#F5F5F5",
+        borderRadius: 25
+    },
+    addressText: {
+        fontWeight: '500',
+        fontSize: FONT_SIZE['xl'],
+        width: "92%"
+    }
+})

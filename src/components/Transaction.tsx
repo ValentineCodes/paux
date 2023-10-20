@@ -7,7 +7,7 @@ import { Network } from '../store/reducers/Networks';
 import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { BigNumber, ethers } from "ethers";
-import TransactionDetails from './TransactionDetails';
+import TransactionDetails from './modals/TransactionDetails';
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import { COLORS } from '../utils/constants';
 import { FONT_SIZE } from '../utils/styles';

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Text, VStack, Icon, HStack, Divider } from 'native-base'
 import { useSelector } from 'react-redux';
-import { Account } from '../store/reducers/Accounts';
-import { Network } from '../store/reducers/Networks';
+import { Account } from '../../store/reducers/Accounts';
+import { Network } from '../../store/reducers/Networks';
 
 import "react-native-get-random-values"
 import "@ethersproject/shims"
@@ -11,9 +11,9 @@ import { Linking, Pressable } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
 import Modal from "react-native-modal"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
-import { FONT_SIZE } from '../utils/styles';
-import { parseFloat, truncateAddress } from '../utils/helperFunctions';
-import { COLORS } from '../utils/constants';
+import { FONT_SIZE } from '../../utils/styles';
+import { parseFloat, truncateAddress } from '../../utils/helperFunctions';
+import { COLORS } from '../../utils/constants';
 
 type Props = {
     isVisible: boolean;
@@ -70,12 +70,14 @@ export default function TransactionDetails({ isVisible, onClose, tx }: Props) {
     }
 
     const calcGasFee = () => {
-        return parseFloat(Number(ethers.utils.formatEther(BigNumber.from(tx.gasUsed).mul(BigNumber.from(tx.gasPrice)))).toString(), 5)
+        const estimatedGasFee = BigNumber.from(tx.gasUsed).mul(BigNumber.from(tx.gasPrice))
+        return parseFloat(Number(ethers.utils.formatEther(estimatedGasFee)).toString(), 5)
     }
 
     const calcTotalAmount = () => {
-        const gasCost = BigNumber.from(tx.gasUsed).mul(BigNumber.from(tx.gasPrice))
-        return parseFloat(Number(ethers.utils.formatEther(gasCost.add(tx.value))).toString(), 5)
+        const estimatedGasFee = BigNumber.from(tx.gasUsed).mul(BigNumber.from(tx.gasPrice))
+
+        return parseFloat(Number(ethers.utils.formatEther(estimatedGasFee.add(tx.value))).toString(), 5)
     }
 
     const viewOnBlockExplorer = async () => {
