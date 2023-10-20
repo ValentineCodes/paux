@@ -18,6 +18,7 @@ import Transactions from './reducers/Transactions';
 import Balance from './reducers/Balance';
 import ConnectedSites from './reducers/ConnectedSites';
 import ActiveSessions from './reducers/ActiveSessions';
+import Recipients from './reducers/Recipients';
 
 const persistConfig = {
   key: 'root',
@@ -33,7 +34,8 @@ const reducers = combineReducers({
   transactions: Transactions,
   balance: Balance,
   connectedSites: ConnectedSites,
-  activeSessions: ActiveSessions
+  activeSessions: ActiveSessions,
+  recipients: Recipients
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -18,6 +18,7 @@ import SecureWallet from './Authentication/SecureWallet'
 import CreatePassword from './Authentication/CreatePassword';
 import Login from './Authentication/Login'
 import Home from './Home'
+import Transfer from './Transfer'
 import { useSelector } from 'react-redux';
 import { MenuProvider } from 'react-native-popup-menu';
 import BootSplash from "react-native-bootsplash";
@@ -33,6 +34,7 @@ type AppStackParamsList = {
   CreatePassword: undefined;
   Login: undefined;
   Home: undefined;
+  Transfer: undefined;
 }
 
 const AppStack = createNativeStackNavigator<AppStackParamsList>();
@@ -78,6 +80,7 @@ function App(): JSX.Element {
                 }
                 <AppStack.Screen name="Login" component={Login} />
                 <AppStack.Screen name="Home" component={Home} />
+                <AppStack.Screen name="Transfer" component={Transfer} />
               </AppStack.Navigator>
             </NavigationContainer>
           </SafeAreaView>

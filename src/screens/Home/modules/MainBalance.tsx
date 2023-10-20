@@ -16,6 +16,7 @@ import { truncateAddress } from '../../../utils/helperFunctions'
 import { FONT_SIZE } from '../../../utils/styles'
 import { COLORS } from '../../../utils/constants'
 import ReceiveModal from '../../../components/modals/ReceiveModal'
+import { useNavigation } from '@react-navigation/native'
 
 type Props = {}
 
@@ -31,6 +32,8 @@ function MainBalance({ }: Props) {
   const [isLoading, setIsLoading] = useState(false)
 
   const dispatch = useDispatch()
+
+  const navigation = useNavigation()
 
   const getBalance = async () => {
     if (isLoading) return
@@ -112,7 +115,7 @@ function MainBalance({ }: Props) {
         <Divider bgColor="muted.100" my="2" />
 
         <HStack alignItems="center" space="10">
-          <Pressable alignItems="center" onPress={() => setShowTransferForm(!showTransferForm)}>
+          <Pressable alignItems="center" onPress={() => navigation.navigate("Transfer")}>
             <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
               <Icon as={<Ionicons name="paper-plane" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
             </View>

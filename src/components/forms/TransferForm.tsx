@@ -141,9 +141,15 @@ export default function TransferForm({ isVisible, toggleVisibility }: Props) {
                     <Input w={{
                         base: "100%",
                         md: "25%"
-                    }} placeholder='amount' value={amount} onChangeText={value => setAmount(value)} InputRightElement={<Pressable onPress={switchCurrency} disabled={!Boolean(exchangeRate)}>
-                        {isAmountInCrypto ? <Icon as={<FontAwesome5 name="coins" />} size={5} mr="2" color="muted.400" /> : <Icon as={<FontAwesome5 name="dollar-sign" />} size={5} mr="2" color="muted.400" />}
-                    </Pressable>} />
+                    }} placeholder='amount' value={amount} onChangeText={value => setAmount(value)}
+                        InputRightElement={
+                            <Pressable onPress={switchCurrency} disabled={!Boolean(exchangeRate)}>
+                                {isAmountInCrypto ?
+                                    <Icon as={<FontAwesome5 name="coins" />} size={5} mr="2" color="muted.400" />
+                                    :
+                                    <Icon as={<FontAwesome5 name="dollar-sign" />} size={5} mr="2" color="muted.400" />
+                                }
+                            </Pressable>} />
 
                     <Button onPress={transfer} loading={isTransferring}>Send</Button>
                 </Modal.Body>
