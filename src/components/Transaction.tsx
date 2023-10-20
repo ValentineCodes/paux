@@ -89,7 +89,7 @@ export default function Transaction({ tx }: Props) {
 
                 </HStack>
 
-                <Text fontSize={FONT_SIZE['lg']} bold>{Number(ethers.utils.formatEther(BigNumber.from(tx.value))) ? Number(ethers.utils.formatEther(BigNumber.from(tx.value))).toFixed(2) : 0} {connectedNetwork.currencySymbol}</Text>
+                <Text fontSize={FONT_SIZE['lg']} bold>{Number(ethers.utils.formatEther(BigNumber.from(tx.value))) ? parseFloat(Number(ethers.utils.formatEther(BigNumber.from(tx.value))).toString(), 4) : 0} {connectedNetwork.currencySymbol}</Text>
             </HStack>
 
             <TransactionDetails isVisible={showTxDetails} onClose={() => setShowTxDetails(false)} tx={tx} />

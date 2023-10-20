@@ -12,7 +12,7 @@ import { useToast } from 'react-native-toast-notifications';
 import Modal from "react-native-modal"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import { FONT_SIZE } from '../utils/styles';
-import { truncateAddress } from '../utils/helperFunctions';
+import { parseFloat, truncateAddress } from '../utils/helperFunctions';
 import { COLORS } from '../utils/constants';
 
 type Props = {
@@ -70,12 +70,12 @@ export default function TransactionDetails({ isVisible, onClose, tx }: Props) {
     }
 
     const calcGasFee = () => {
-        return Number(ethers.utils.formatEther(BigNumber.from(tx.gasUsed).mul(BigNumber.from(tx.gasPrice)))).toFixed(5)
+        return parseFloat(Number(ethers.utils.formatEther(BigNumber.from(tx.gasUsed).mul(BigNumber.from(tx.gasPrice)))).toString(), 5)
     }
 
     const calcTotalAmount = () => {
         const gasCost = BigNumber.from(tx.gasUsed).mul(BigNumber.from(tx.gasPrice))
-        return Number(ethers.utils.formatEther(gasCost.add(tx.value))).toFixed(5)
+        return parseFloat(Number(ethers.utils.formatEther(gasCost.add(tx.value))).toString(), 5)
     }
 
     const viewOnBlockExplorer = async () => {
@@ -129,7 +129,7 @@ export default function TransactionDetails({ isVisible, onClose, tx }: Props) {
                 <VStack borderWidth={0.5} mt="5" borderRadius={10} p="5" space={2}>
                     <HStack alignItems="center" justifyContent="space-between">
                         <Text fontSize={FONT_SIZE['md']}>Amount</Text>
-                        <Text fontSize={FONT_SIZE['md']}>{ethers.utils.formatEther(BigNumber.from(tx.value))} {connectedNetwork.currencySymbol}</Text>
+                        <Text fontSize={FONT_SIZE['md']}>{parseFloat(ethers.utils.formatEther(BigNumber.from(tx.value)), 5)} {connectedNetwork.currencySymbol}</Text>
                     </HStack>
 
                     <HStack alignItems="center" justifyContent="space-between">

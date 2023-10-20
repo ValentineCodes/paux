@@ -12,7 +12,7 @@ import TransferForm from '../../../components/forms/TransferForm'
 import { setBalance } from '../../../store/reducers/Balance'
 import { getProviderWithName, Providers } from '../../../utils/providers'
 import CopyableText from '../../../components/CopyableText'
-import { truncateAddress } from '../../../utils/helperFunctions'
+import { parseFloat, truncateAddress } from '../../../utils/helperFunctions'
 import { FONT_SIZE } from '../../../utils/styles'
 import { COLORS } from '../../../utils/constants'
 import ReceiveModal from '../../../components/modals/ReceiveModal'
@@ -43,12 +43,12 @@ function MainBalance({ }: Props) {
     try {
       const provider = new ethers.providers.JsonRpcProvider(connectedNetwork.provider)
       const balance = await provider.getBalance(connectedAccount.address)
-      const _balance = Number(ethers.utils.formatEther(balance)) ? Number(ethers.utils.formatEther(balance)).toFixed(4) : 0
+      const _balance = Number(ethers.utils.formatEther(balance)) ? parseFloat(Number(ethers.utils.formatEther(balance)).toString(), 4) : 0
 
       try {
         const price = await redstone.getPrice(connectedNetwork.currencySymbol);
         const dollarValue = Number(_balance) * price.value
-        setDollarValue(dollarValue ? dollarValue.toFixed(2) : "0")
+        setDollarValue(dollarValue ? parseFloat(dollarValue.toString(), 2).toString() : "0")
       } catch (error) {
         setDollarValue(null)
         return
