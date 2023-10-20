@@ -28,10 +28,16 @@ export default function ConfirmSeedPhrase({ }: Props) {
     const [isLoading, setIsLoading] = useState(true)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
 
+    const isWordSelected = (word: string): boolean => {
+        let _seedPhrase = seedPhrase.slice()
+
+        return _seedPhrase.includes(word)
+    }
+
     const handleWordSelection = (word: string) => {
         let _seedPhrase = seedPhrase.slice()
 
-        if (_seedPhrase.includes(word)) {
+        if (isWordSelected(word)) {
             _seedPhrase = _seedPhrase.filter(el => el !== word)
         } else if (seedPhrase.length >= 12) {
             toast.show("Invalid seed phrase input", {
@@ -114,13 +120,13 @@ export default function ConfirmSeedPhrase({ }: Props) {
                 <ActivityIndicator size="large" color={COLORS.primary} />
             </View> : <ScrollView contentContainerStyle={styles.seedPhraseWrapper} style={styles.seedPhraseContainer}>
                 {shuffledSeedPhrase.map((word) => (
-                    <Text key={word} style={[styles.word, { backgroundColor: seedPhrase.includes(word) ? COLORS.primary : "#F5F5F5", color: seedPhrase.includes(word) ? "white" : "black" }]} onPress={() => handleWordSelection(word)}>{word}</Text>
+                    <Text key={Math.random().toString()} style={[styles.word, { backgroundColor: isWordSelected(word) ? COLORS.primary : "#F5F5F5", color: isWordSelected(word) ? "white" : "black" }]} onPress={() => handleWordSelection(word)}>{word}</Text>
                 ))}
             </ScrollView>}
 
 
             <HStack my="10" w="full" justifyContent="space-between" alignItems="center">
-                {shuffledSeedPhrase.map((word, index) => <Divider key={word} w={`${100 / 15}%`} bgColor={index <= seedPhrase.length - 1 ? COLORS.primary : "muted.200"} />)}
+                {shuffledSeedPhrase.map((word, index) => <Divider key={word} w={`${100 / 15}%`} bgColor={index <= seedPhrase.filter(word => word && shuffledSeedPhrase.includes(word)).length - 1 ? COLORS.primary : "muted.200"} />)}
             </HStack>
 
             <HStack style={styles.seedPhraseInputContainer}>
