@@ -44,7 +44,7 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
         handleOnClose()
     }
     return (
-        <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={handleOnClose} onBackdropPress={handleOnClose}>
+        <Modal isVisible={isVisible} animationIn="slideInRight" animationOut="slideOutLeft" onBackButtonPress={handleOnClose} onBackdropPress={handleOnClose}>
             <VStack bgColor="white" borderRadius="30" p="5" alignItems="center" space="4" w="full">
                 <Blockie address={connectedAccount.address} size={2.5 * FONT_SIZE['xl']} />
                 {

@@ -68,7 +68,7 @@ export default function ImportAccountModal({ isVisible, onClose, onImport }: Pro
     }
 
     return (
-        <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={onClose} onBackdropPress={onClose}>
+        <Modal isVisible={isVisible} animationIn="slideInLeft" animationOut="slideOutRight" onBackButtonPress={onClose} onBackdropPress={onClose}>
             <VStack bgColor="white" borderRadius="30" px="7" py="5" alignItems="center" space="4">
                 <Icon as={<Ionicons name="cloud-download" />} color={COLORS.primary} size={4 * FONT_SIZE['xl']} />
                 <Text color={COLORS.primary} bold fontSize={1.2 * FONT_SIZE['xl']}>Import Account</Text>
@@ -83,7 +83,7 @@ export default function ImportAccountModal({ isVisible, onClose, onImport }: Pro
                         focusOutlineColor={COLORS.primary}
                         InputRightElement={
                             <Pressable onPress={() => setShowScanner(true)} mr="2">
-                                <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+                                <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color={COLORS.primary} />
                             </Pressable>
                         }
                         secureTextEntry

@@ -44,12 +44,16 @@ export default function GenerateSeedPhrase({ }: Props) {
         }
 
         Clipboard.setString(wallet.mnemonic)
-        toast.show("Seed phrase copied to clipboard")
+        toast.show("Copied to clipboard", {
+            type: 'success'
+        })
     }
 
     const saveWallet = async () => {
         if (!wallet || !showSeedPhrase) {
-            toast.show("Reveal your seed phrase before proceeding to the next step")
+            toast.show("Reveal your seed phrase before proceeding to the next step", {
+                type: 'warning'
+            })
             return
         }
         try {

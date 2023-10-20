@@ -9,7 +9,7 @@ import { Network } from '../../store/reducers/Networks'
 import FontAwesome5 from "react-native-vector-icons/dist/FontAwesome5"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import MaterialCommunityIcons from 'react-native-vector-icons/dist/MaterialCommunityIcons';
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, TouchableOpacity, BackHandler } from 'react-native'
 import Button from '../../components/Button'
 import Blockie from '../../components/Blockie'
 
@@ -88,7 +88,7 @@ export default function Transfer({ }: Props) {
             const dollarValue = Number(amount) / dollarRate
             return `${dollarValue ? parseFloat(dollarValue.toString(), 8) : "0"} ${connectedNetwork.currencySymbol}`
         }
-    }, [dollarRate, amount])
+    }, [dollarRate, amount, isAmountInCrypto])
 
     const confirm = () => {
         if (!ethers.utils.isAddress(toAddress)) {
@@ -160,7 +160,14 @@ export default function Transfer({ }: Props) {
         }
     }
 
-    const switchCurrency = () => {
+    const convertCurrency = () => {
+        // allow users to start from preferred currency
+        if (!amount && dollarRate) {
+            setIsAmountInCrypto(!isAmountInCrypto)
+            return
+        }
+
+        // validate input
         if (!amount || !dollarRate) return
         if (isNaN(Number(amount)) || Number(amount) <= 0) {
             toast.show("Invalid amount", {
@@ -170,11 +177,20 @@ export default function Transfer({ }: Props) {
         }
 
         setIsAmountInCrypto(!isAmountInCrypto)
+
         if (isAmountInCrypto) {
             setAmount((Number(amount) * dollarRate).toString())
         } else {
             setAmount((Number(amount) / dollarRate).toString())
         }
+    }
+
+    const getToAddressName = () => {
+        const toAccount = accounts.find(account => account.address.toLowerCase() === toAddress.toLowerCase())
+
+        if (!toAccount) return
+        return `(${toAccount.name})`
+
     }
 
     const logo = useMemo(() => {
@@ -190,6 +206,18 @@ export default function Transfer({ }: Props) {
 
         return <Image key={`${_logo}`} source={_logo} alt={connectedNetwork.name} style={styles.networkLogo} />
     }, [connectedNetwork])
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        navigation.goBack()
+
+        return true;
+    });
+
+    useEffect(() => {
+        return () => {
+            backHandler.remove();
+        };
+    }, [])
 
     useEffect(() => {
         const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
@@ -230,13 +258,15 @@ export default function Transfer({ }: Props) {
             <VStack space="2">
                 <HStack alignItems="center" space="2">
                     <Text fontSize={FONT_SIZE['lg']} fontWeight="medium">To:</Text>
-                    <TouchableOpacity activeOpacity={0.4} onPress={() => {
+                    <TouchableOpacity activeOpacity={0.4} style={{ width: '100%' }} onPress={() => {
                         if (accounts.length > 1) {
                             setShowToAccountsModal(true)
                         } else {
                             setToAddress(connectedAccount.address)
                         }
-                    }}><Text color={COLORS.primary} fontWeight="medium" fontSize={FONT_SIZE['lg']}>My account?</Text></TouchableOpacity>
+                    }}>
+                        <Text color={COLORS.primary} fontWeight="medium" fontSize={FONT_SIZE['lg']} flex="1">My account<Text color="black">{getToAddressName()}</Text></Text>
+                    </TouchableOpacity>
                 </HStack>
 
                 <Input
@@ -273,7 +303,7 @@ export default function Transfer({ }: Props) {
                     variant="filled"
                     fontSize="lg"
                     focusOutlineColor={COLORS.primary}
-                    placeholder={`0 ${connectedNetwork.currencySymbol}`}
+                    placeholder={`0 ${isAmountInCrypto ? connectedNetwork.currencySymbol : "USD"}`}
                     onChangeText={handleAmountChange}
                     _input={{
                         selectionColor: COLORS.primary,
@@ -282,7 +312,7 @@ export default function Transfer({ }: Props) {
                     onSubmitEditing={confirm}
                     keyboardType='number-pad'
                     InputLeftElement={
-                        <TouchableOpacity activeOpacity={0.4} onPress={switchCurrency} disabled={!Boolean(dollarRate)} style={{ marginLeft: 10 }}>
+                        <TouchableOpacity activeOpacity={0.4} onPress={convertCurrency} disabled={!Boolean(dollarRate)} style={{ marginLeft: 10 }}>
                             {isAmountInCrypto ?
                                 logo
                                 :

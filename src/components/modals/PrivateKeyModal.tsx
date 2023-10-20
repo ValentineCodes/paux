@@ -13,6 +13,7 @@ import SInfo from "react-native-sensitive-info";
 import Button from '../Button';
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from 'react-native-toast-notifications';
+import { StyleSheet } from 'react-native';
 
 type Props = {
     isVisible: boolean;
@@ -65,7 +66,7 @@ export default function PrivateKeyModal({ isVisible, onClose }: Props) {
     const copyPrivateKey = () => {
         Clipboard.setString(privateKey)
         toast.show("Copied to clipboard", {
-
+            type: 'success'
         })
     }
 
@@ -76,7 +77,7 @@ export default function PrivateKeyModal({ isVisible, onClose }: Props) {
     }
 
     return (
-        <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={handleOnClose} onBackdropPress={handleOnClose}>
+        <Modal isVisible={isVisible} animationIn="slideInLeft" animationOut="slideOutRight" onBackButtonPress={handleOnClose} onBackdropPress={handleOnClose}>
             <VStack bgColor="white" borderRadius="30" p="5" alignItems="center" space="4" w="full">
                 <HStack alignItems="center" justifyContent="space-between" space="2" w="full">
                     <Text fontSize={1.1 * FONT_SIZE['xl']} bold>Show private key</Text>
@@ -86,7 +87,7 @@ export default function PrivateKeyModal({ isVisible, onClose }: Props) {
                 <VStack alignItems="center" space="1">
                     <Blockie address={connectedAccount.address} size={2.5 * FONT_SIZE['xl']} />
                     <Text fontSize={FONT_SIZE['xl']} fontWeight="medium">{connectedAccount.name}</Text>
-                    <CopyableText value={connectedAccount.address} displayText={truncateAddress(connectedAccount.address)} containerStyle={{ paddingHorizontal: 15, paddingVertical: 5, backgroundColor: '#efefef', borderRadius: 15 }} textStyle={{ fontSize: FONT_SIZE['md'] }} />
+                    <CopyableText value={connectedAccount.address} displayText={truncateAddress(connectedAccount.address)} containerStyle={styles.addressContainer} textStyle={styles.addressText} iconStyle={{ color: COLORS.primary }} />
                 </VStack>
 
                 {privateKey ? (
@@ -132,3 +133,17 @@ export default function PrivateKeyModal({ isVisible, onClose }: Props) {
         </Modal>
     )
 }
+
+const styles = StyleSheet.create({
+    addressContainer: {
+        paddingHorizontal: 15,
+        paddingVertical: 5,
+        backgroundColor: COLORS.primaryLight,
+        borderRadius: 15
+    },
+    addressText: {
+        fontWeight: '700',
+        fontSize: FONT_SIZE['md'],
+        color: COLORS.primary
+    }
+})

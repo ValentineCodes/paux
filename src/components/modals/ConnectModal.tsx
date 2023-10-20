@@ -34,7 +34,7 @@ export default function ConnectModal({ isVisible, isPairing, onClose, pair }: Pr
                         focusOutlineColor={COLORS.primary}
                         InputRightElement={
                             <Pressable onPress={() => setShowScanner(true)} mr="2">
-                                <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+                                <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color={COLORS.primary} />
                             </Pressable>
                         }
                         secureTextEntry

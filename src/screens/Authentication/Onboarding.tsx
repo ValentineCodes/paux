@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, Dimensions } from 'react-native'
+import React, { useEffect } from 'react'
+import { StyleSheet, Dimensions, BackHandler } from 'react-native'
 import { ScrollView, Image, Text, VStack } from 'native-base'
 
 import Button from '../../components/Button'
@@ -11,6 +11,19 @@ type Props = {}
 
 export default function Onboarding({ }: Props) {
     const navigation = useNavigation()
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+        BackHandler.exitApp();
+
+        return true;
+    });
+
+    useEffect(() => {
+        return () => {
+            backHandler.remove();
+        };
+    }, [])
+
     return (
         <ScrollView contentContainerStyle={{
             flex: 1,

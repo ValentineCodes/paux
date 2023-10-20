@@ -53,6 +53,11 @@ export default function EditAccountNameForm({ close }: Props) {
                     fontSize="md"
                     w="60%"
                     focusOutlineColor={COLORS.primary}
+                    selectTextOnFocus
+                    _input={{
+                        selectionColor: COLORS.primary,
+                        cursorColor: COLORS.primary,
+                    }}
                 />
 
                 <Icon as={<Ionicons name="checkmark-done-outline" />} size={5} color={COLORS.primary} onPress={editName} />

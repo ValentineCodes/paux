@@ -1,17 +1,24 @@
 import { View } from 'native-base'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Header from './modules/Header'
-import { StyleSheet } from 'react-native'
+import { BackHandler, StyleSheet } from 'react-native'
 import MainBalance from './modules/MainBalance'
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Transactions from './modules/Transactions'
-import { web3wallet } from '../../utils/Web3WalletClient'
-
-const Tab = createMaterialTopTabNavigator();
 
 type Props = {}
 
 function Home({ }: Props) {
+  const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+    BackHandler.exitApp();
+
+    return true;
+  });
+
+  useEffect(() => {
+    return () => {
+      backHandler.remove();
+    };
+  }, [])
   return (
     <View style={styles.container}>
       <Header />

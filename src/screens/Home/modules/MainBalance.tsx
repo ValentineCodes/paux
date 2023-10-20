@@ -1,4 +1,4 @@
-import { Image, Text, VStack, Button, Divider, Pressable, Icon, View, HStack } from 'native-base'
+import { Image, Text, VStack, Divider, Pressable, Icon, View, HStack } from 'native-base'
 import React, { useState, useEffect, useMemo } from 'react'
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
 import { useSelector, useDispatch } from 'react-redux'
@@ -8,7 +8,6 @@ import Ionicons from "react-native-vector-icons/dist/Ionicons"
 
 import { Account } from '../../../store/reducers/Accounts'
 import { Network } from '../../../store/reducers/Networks'
-import TransferForm from '../../../components/forms/TransferForm'
 import { setBalance } from '../../../store/reducers/Balance'
 import { getProviderWithName, Providers } from '../../../utils/providers'
 import CopyableText from '../../../components/CopyableText'
@@ -105,7 +104,7 @@ function MainBalance({ }: Props) {
     <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} />}>
       <VStack alignItems="center" space={2} paddingTop={5}>
         <Text fontSize={FONT_SIZE["xl"]} bold textAlign="center">{connectedAccount.name}</Text>
-        <CopyableText displayText={truncateAddress(connectedAccount.address)} value={connectedAccount.address} />
+        <CopyableText displayText={truncateAddress(connectedAccount.address)} value={connectedAccount.address} containerStyle={styles.addressContainer} textStyle={styles.addressText} iconStyle={{ color: COLORS.primary }} />
         {logo}
         <VStack alignItems="center">
           <Text fontSize={2 * FONT_SIZE["xl"]} bold textAlign="center">{balance !== '' && `${balance} ${connectedNetwork.currencySymbol}`}</Text>
@@ -132,7 +131,6 @@ function MainBalance({ }: Props) {
 
         <Divider bgColor="muted.100" mt="2" />
 
-        {showTransferForm && <TransferForm isVisible={showTransferForm} toggleVisibility={toggleTransferForm} />}
         <ReceiveModal isVisible={showReceiveModal} onClose={() => setShowReceiveModal(false)} />
       </VStack>
     </ScrollView>
@@ -140,15 +138,20 @@ function MainBalance({ }: Props) {
 }
 
 const styles = StyleSheet.create({
-  percentDiff: {
-    borderWidth: 1,
-    borderRadius: 25,
-    paddingVertical: 5,
-    paddingHorizontal: 5
-  },
   networkLogo: {
     width: 4 * FONT_SIZE["xl"],
     height: 4 * FONT_SIZE["xl"],
+  },
+  addressContainer: {
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    backgroundColor: COLORS.primaryLight,
+    borderRadius: 15
+  },
+  addressText: {
+    fontWeight: '700',
+    fontSize: FONT_SIZE['md'],
+    color: COLORS.primary
   }
 })
 

@@ -6,8 +6,6 @@ import {
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ToastProvider } from 'native-base';
 
 import Onboarding from './Authentication/Onboarding'
 import WalletSetup from './Authentication/WalletSetup';
@@ -20,9 +18,9 @@ import Login from './Authentication/Login'
 import Home from './Home'
 import Transfer from './Transfer'
 import { useSelector } from 'react-redux';
-import { MenuProvider } from 'react-native-popup-menu';
 import BootSplash from "react-native-bootsplash";
 import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import Providers from './Providers';
 
 type AppStackParamsList = {
   Onboarding: undefined;
@@ -54,39 +52,35 @@ function App(): JSX.Element {
   }, [])
 
   return (
-    <ToastProvider>
-      <MenuProvider>
-        <SafeAreaProvider>
-          <SafeAreaView style={styles.container}>
-            <StatusBar barStyle="dark-content" backgroundColor="white" />
-            <NavigationContainer>
-              <AppStack.Navigator
-                screenOptions={{
-                  headerShown: false,
-                  animation: 'slide_from_right',
-                }}>
-                {
-                  !auth.isLoggedIn && (
-                    <>
-                      <AppStack.Screen name="Onboarding" component={Onboarding} />
-                      <AppStack.Screen name="WalletSetup" component={WalletSetup} />
-                      <AppStack.Screen name="ImportWallet" component={ImportWallet} />
-                      <AppStack.Screen name="SecureWallet" component={SecureWallet} />
-                      <AppStack.Screen name="GenerateSeedPhrase" component={GenerateSeedPhrase} />
-                      <AppStack.Screen name="ConfirmSeedPhrase" component={ConfirmSeedPhrase} />
-                      <AppStack.Screen name="CreatePassword" component={CreatePassword} />
-                    </>
-                  )
-                }
-                <AppStack.Screen name="Login" component={Login} />
-                <AppStack.Screen name="Home" component={Home} />
-                <AppStack.Screen name="Transfer" component={Transfer} />
-              </AppStack.Navigator>
-            </NavigationContainer>
-          </SafeAreaView>
-        </SafeAreaProvider>
-      </MenuProvider>
-    </ToastProvider>
+    <Providers>
+      <SafeAreaView style={styles.container}>
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
+        <NavigationContainer>
+          <AppStack.Navigator
+            screenOptions={{
+              headerShown: false,
+              animation: 'slide_from_right',
+            }}>
+            {
+              !auth.isLoggedIn && (
+                <>
+                  <AppStack.Screen name="Onboarding" component={Onboarding} />
+                  <AppStack.Screen name="WalletSetup" component={WalletSetup} />
+                  <AppStack.Screen name="ImportWallet" component={ImportWallet} />
+                  <AppStack.Screen name="SecureWallet" component={SecureWallet} />
+                  <AppStack.Screen name="GenerateSeedPhrase" component={GenerateSeedPhrase} />
+                  <AppStack.Screen name="ConfirmSeedPhrase" component={ConfirmSeedPhrase} />
+                  <AppStack.Screen name="CreatePassword" component={CreatePassword} />
+                </>
+              )
+            }
+            <AppStack.Screen name="Login" component={Login} />
+            <AppStack.Screen name="Home" component={Home} />
+            <AppStack.Screen name="Transfer" component={Transfer} />
+          </AppStack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </Providers>
   );
 }
 
