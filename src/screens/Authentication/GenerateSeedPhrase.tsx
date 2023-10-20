@@ -89,52 +89,54 @@ export default function GenerateSeedPhrase({ }: Props) {
     }, [])
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <ProgressIndicatorHeader progress={2} />
 
             <Divider bgColor="muted.100" mt="8" mb="4" />
 
-            <Text textAlign="center" color={COLORS.primary} fontSize={1.7 * FONT_SIZE["xl"]} lineHeight="40" bold>Write Down Your Seed Phrase</Text>
-            <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="2">This is your seed phrase. Write it down on a piece of paper and keep it in a safe place. You'll be asked to re-enter this phrase (in order) on the next step.</Text>
+            <ScrollView flex="1">
+                <Text textAlign="center" color={COLORS.primary} fontSize={1.7 * FONT_SIZE["xl"]} lineHeight="40" bold>Write Down Your Seed Phrase</Text>
+                <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="2">This is your seed phrase. Write it down on a piece of paper and keep it in a safe place. You'll be asked to re-enter this phrase (in order) on the next step.</Text>
 
-            <Divider bgColor="muted.100" my="4" />
+                <Divider bgColor="muted.100" my="4" />
 
-            {isLoading ? <View style={styles.loader}>
-                <ActivityIndicator size="large" color={COLORS.primary} />
-            </View> : <View style={styles.seedPhraseContainer}>
-                <View style={styles.seedPhraseWrapper}>
-                    {wallet?.mnemonic.split(" ").map((word, index) => (
-                        <Text key={word} style={styles.word}>{index + 1}. {word}</Text>
-                    ))}
-                </View>
-
-
-                {
-                    !showSeedPhrase && (
-                        <>
-                            <BlurView
-                                style={styles.blurView}
-                                blurType="light"
-                                blurAmount={6}
-                                reducedTransparencyFallbackColor="white"
-                            />
-                            <VStack style={styles.seedPhraseMask} space={2}>
-                                <Text fontSize={FONT_SIZE['xl']} bold textAlign="center">Tap to reveal your seed phrase</Text>
-                                <Text fontSize={FONT_SIZE['md']} textAlign="center">Make sure no one is watching your screen</Text>
-                                <RNButton py="3" borderRadius={25} bgColor="#2AB858" w="24" mt="2" leftIcon={<Icon as={<MaterialIcons name="visibility" color="white" />} size="md" />} onPress={() => setShowSeedPhrase(true)}><Text color="white" bold fontSize={FONT_SIZE['lg']}>View</Text></RNButton>
-                            </VStack>
-                        </>
-                    )
-                }
-
-            </View>}
+                {isLoading ? <View style={styles.loader}>
+                    <ActivityIndicator size="large" color={COLORS.primary} />
+                </View> : <View style={styles.seedPhraseContainer}>
+                    <View style={styles.seedPhraseWrapper}>
+                        {wallet?.mnemonic.split(" ").map((word, index) => (
+                            <Text key={word} style={styles.word}>{index + 1}. {word}</Text>
+                        ))}
+                    </View>
 
 
-            <Divider bgColor="muted.100" my="4" />
+                    {
+                        !showSeedPhrase && (
+                            <>
+                                <BlurView
+                                    style={styles.blurView}
+                                    blurType="light"
+                                    blurAmount={6}
+                                    reducedTransparencyFallbackColor="white"
+                                />
+                                <VStack style={styles.seedPhraseMask} space={2}>
+                                    <Text fontSize={FONT_SIZE['xl']} bold textAlign="center">Tap to reveal your seed phrase</Text>
+                                    <Text fontSize={FONT_SIZE['md']} textAlign="center">Make sure no one is watching your screen</Text>
+                                    <RNButton py="3" borderRadius={25} bgColor="#2AB858" w="24" mt="2" leftIcon={<Icon as={<MaterialIcons name="visibility" color="white" />} size="md" />} onPress={() => setShowSeedPhrase(true)}><Text color="white" bold fontSize={FONT_SIZE['lg']}>View</Text></RNButton>
+                                </VStack>
+                            </>
+                        )
+                    }
 
-            <Button type="outline" text="Copy To Clipboard" disabled={isLoading} onPress={copySeedPhrase} />
-            <Button text="Next" disabled={isLoading} onPress={saveWallet} style={{ marginBottom: 50, marginTop: 20 }} />
-        </ScrollView>
+                </View>}
+
+
+                <Divider bgColor="muted.100" my="4" />
+
+                <Button type="outline" text="Copy To Clipboard" disabled={isLoading} onPress={copySeedPhrase} />
+                <Button text="Next" disabled={isLoading} onPress={saveWallet} style={{ marginBottom: 50, marginTop: 20 }} />
+            </ScrollView>
+        </View>
     )
 }
 

@@ -1,6 +1,5 @@
-import { VStack, Text, HStack, Icon, Divider, Switch, Pressable } from 'native-base'
+import { VStack, Text, HStack, Icon, Divider, Switch, Pressable, View, ScrollView } from 'native-base'
 import React, { useCallback, useState } from 'react'
-import { ScrollView } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
@@ -120,7 +119,7 @@ function ImportWallet({ }: Props) {
     }
   }
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <HStack alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" space={2}>
           <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" onPress={() => navigation.goBack()} />
@@ -132,28 +131,30 @@ function ImportWallet({ }: Props) {
         </Pressable>
       </HStack>
 
-      <VStack space={6} mt="6" mb="50">
-        <SeedPhraseInput value={seedPhrase} onChange={setSeedPhrase} errorText={renderSeedPhraseError()} />
-        <PasswordInput label="New Password" value={password} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
-        <PasswordInput label="Confirm New Password" value={confirmPassword} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
+      <ScrollView flex="1">
+        <VStack space={6} mt="6" mb="50">
+          <SeedPhraseInput value={seedPhrase} onChange={setSeedPhrase} errorText={renderSeedPhraseError()} />
+          <PasswordInput label="New Password" value={password} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
+          <PasswordInput label="Confirm New Password" value={confirmPassword} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
 
-        <Divider bgColor="muted.100" />
+          <Divider bgColor="muted.100" />
 
-        <HStack alignItems="center" justifyContent="space-between">
-          <Text fontSize={FONT_SIZE['lg']}>Sign in with Biometrics</Text>
-          <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
-        </HStack>
+          <HStack alignItems="center" justifyContent="space-between">
+            <Text fontSize={FONT_SIZE['lg']}>Sign in with Biometrics</Text>
+            <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
+          </HStack>
 
-        <Divider bgColor="muted.100" />
+          <Divider bgColor="muted.100" />
 
-        <Button text="Import" loading={isImporting} onPress={importWallet} />
-      </VStack>
+          <Button text="Import" loading={isImporting} onPress={importWallet} />
+        </VStack>
 
-      <QRCodeScanner isOpen={isScanningSeedPhrase} onClose={() => setIsScanningSeedPhrase(false)} onReadCode={value => {
-        setSeedPhrase(value)
-        setIsScanningSeedPhrase(false)
-      }} />
-    </ScrollView>
+        <QRCodeScanner isOpen={isScanningSeedPhrase} onClose={() => setIsScanningSeedPhrase(false)} onReadCode={value => {
+          setSeedPhrase(value)
+          setIsScanningSeedPhrase(false)
+        }} />
+      </ScrollView>
+    </View>
   )
 }
 

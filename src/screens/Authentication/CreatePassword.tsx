@@ -1,4 +1,4 @@
-import { HStack, Switch, Text, VStack, Icon, ScrollView, Divider, View } from 'native-base'
+import { HStack, Switch, Text, VStack, ScrollView, Divider, View } from 'native-base'
 import React, { useState } from 'react'
 
 import styles from "../../styles/authentication/createPassword"
@@ -70,30 +70,32 @@ function CreatePassword({ }: Props) {
         }
     }
     return (
-        <ScrollView style={styles.container}>
+        <View style={styles.container}>
             <ProgressIndicatorHeader progress={1} />
 
             <Divider bgColor="muted.100" my="8" />
 
-            <Text textAlign="center" color={COLORS.primary} fontSize={1.7 * FONT_SIZE["xl"]} bold>Create Password</Text>
-            <Text textAlign="center" fontSize={FONT_SIZE['lg']} my="2">This password will unlock your Pocket wallet only on this device</Text>
+            <ScrollView flex="1">
+                <Text textAlign="center" color={COLORS.primary} fontSize={1.7 * FONT_SIZE["xl"]} bold>Create Password</Text>
+                <Text textAlign="center" fontSize={FONT_SIZE['lg']} my="2">This password will unlock your Pocket wallet only on this device</Text>
 
-            <VStack space={6} mb="50" mt="4">
-                <PasswordInput label="New Password" value={password} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
-                <PasswordInput label="Confirm New Password" value={confirmPassword} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
+                <VStack space={6} mb="50" mt="4">
+                    <PasswordInput label="New Password" value={password} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
+                    <PasswordInput label="Confirm New Password" value={confirmPassword} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
 
-                <Divider bgColor="muted.100" />
+                    <Divider bgColor="muted.100" />
 
-                <HStack alignItems="center" justifyContent="space-between">
-                    <Text fontSize={FONT_SIZE['xl']}>Sign in with Biometrics</Text>
-                    <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
-                </HStack>
+                    <HStack alignItems="center" justifyContent="space-between">
+                        <Text fontSize={FONT_SIZE['xl']}>Sign in with Biometrics</Text>
+                        <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
+                    </HStack>
 
-                <Divider bgColor="muted.100" />
+                    <Divider bgColor="muted.100" />
 
-                <Button text="Import" loading={isCreating} onPress={createPassword} />
-            </VStack>
-        </ScrollView>
+                    <Button text="Import" loading={isCreating} onPress={createPassword} />
+                </VStack>
+            </ScrollView>
+        </View>
     )
 }
 
