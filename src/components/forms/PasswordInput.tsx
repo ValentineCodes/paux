@@ -1,23 +1,33 @@
 import { Text, VStack, Input, Icon, Pressable, HStack } from 'native-base'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 import { COLORS } from '../../utils/constants';
 import { FONT_SIZE } from '../../utils/styles';
+import { TouchableOpacity } from 'react-native';
 
 type Props = {
   label: string;
   value?: string;
+  suggestion: string;
+  defaultValue?: string;
   infoText?: string | boolean | null;
   errorText?: string | boolean | null;
   onChange: (value: string) => void;
 }
 
-function PasswordInput({ label, value, infoText, errorText, onChange }: Props) {
+function PasswordInput({ label, value, suggestion, defaultValue, infoText, errorText, onChange }: Props) {
   const [show, setShow] = useState(false)
+
+  const useSuggestion = () => {
+    setShow(true)
+    onChange(suggestion)
+  }
+
   return (
     <VStack space={2}>
       <Text fontSize={FONT_SIZE["xl"]} bold>{label}</Text>
       <Input
+        defaultValue={defaultValue}
         value={value}
         borderRadius="lg"
         variant="filled"
@@ -27,17 +37,23 @@ function PasswordInput({ label, value, infoText, errorText, onChange }: Props) {
           <Icon as={<MaterialIcons name="lock" />} size={5} ml="4" color="muted.400" />
         }
         InputRightElement={
-          <HStack space={1}>
-            {value && <Pressable onPress={() => onChange("")}>
-              <Icon as={<MaterialIcons name="close" />} size={5} mr="2" color="muted.400" />
-            </Pressable>}
-            <Pressable onPress={() => setShow(!show)} mr="2">
-              <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
-            </Pressable>
-          </HStack>
+          value ? (
+            <HStack space={1}>
+              {value && <Pressable onPress={() => onChange("")}>
+                <Icon as={<MaterialIcons name="close" />} size={5} mr="2" color="muted.400" />
+              </Pressable>}
+              <Pressable onPress={() => setShow(!show)} mr="2">
+                <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
+              </Pressable>
+            </HStack>
+          ) : (
+            <TouchableOpacity activeOpacity={0.4} onPress={useSuggestion}>
+              <Text fontSize={FONT_SIZE['lg']} color={COLORS.primary} mr="2">Use Suggestion</Text>
+            </TouchableOpacity>
+          )
         }
         secureTextEntry={!show}
-        placeholder="Password"
+        placeholder={`Suggestion: ${suggestion}`}
         onChangeText={onChange}
       />
       {infoText ? <Text fontSize="sm" color="muted.400">{infoText}</Text> : null}

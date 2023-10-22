@@ -1,5 +1,5 @@
 import { VStack, Text, HStack, Icon, Divider, Switch, Pressable, View, ScrollView } from 'native-base'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
@@ -21,6 +21,7 @@ import { initAccount } from '../../store/reducers/Accounts'
 import { loginUser } from '../../store/reducers/Auth'
 import { createWeb3Wallet } from '../../utils/Web3WalletClient'
 import { FONT_SIZE } from '../../utils/styles'
+import { generate } from "random-words";
 
 type Props = {}
 
@@ -30,6 +31,7 @@ function ImportWallet({ }: Props) {
   const toast = useToast()
 
   const [seedPhrase, setSeedPhrase] = useState("")
+  const [suggestion, setSuggestion] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isBiometricsEnabled, setIsBiometricsEnabled] = useState(false)
@@ -118,6 +120,11 @@ function ImportWallet({ }: Props) {
       setIsImporting(false)
     }
   }
+
+  useEffect(() => {
+    setSuggestion(generate({ exactly: 2, join: "" }))
+  }, [])
+
   return (
     <View style={styles.container}>
       <HStack alignItems="center" justifyContent="space-between">
@@ -134,8 +141,8 @@ function ImportWallet({ }: Props) {
       <ScrollView flex="1">
         <VStack space={6} mt="6" mb="50">
           <SeedPhraseInput value={seedPhrase} onChange={setSeedPhrase} errorText={renderSeedPhraseError()} />
-          <PasswordInput label="New Password" value={password} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
-          <PasswordInput label="Confirm New Password" value={confirmPassword} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
+          <PasswordInput label="New Password" value={password} suggestion={suggestion} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
+          <PasswordInput label="Confirm New Password" value={confirmPassword} suggestion={suggestion} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
 
           <Divider bgColor="muted.100" />
 

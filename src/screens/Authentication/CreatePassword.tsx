@@ -1,10 +1,9 @@
 import { HStack, Switch, Text, VStack, ScrollView, Divider, View } from 'native-base'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import styles from "../../styles/authentication/createPassword"
 import { useNavigation } from '@react-navigation/native'
 import PasswordInput from '../../components/forms/PasswordInput'
-import { useDispatch } from 'react-redux'
 import { useToast } from 'react-native-toast-notifications'
 import SInfo from "react-native-sensitive-info";
 
@@ -12,14 +11,15 @@ import { COLORS } from '../../utils/constants'
 import Button from '../../components/Button'
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
 import { FONT_SIZE } from '../../utils/styles'
+import { generate } from "random-words";
 
 type Props = {}
 
 function CreatePassword({ }: Props) {
     const navigation = useNavigation()
-    const dispatch = useDispatch()
     const toast = useToast()
 
+    const [suggestion, setSuggestion] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isBiometricsEnabled, setIsBiometricsEnabled] = useState(false)
@@ -69,6 +69,11 @@ function CreatePassword({ }: Props) {
             setIsCreating(false)
         }
     }
+
+    useEffect(() => {
+        setSuggestion(generate({ exactly: 2, join: "" }))
+    }, [])
+
     return (
         <View style={styles.container}>
             <ProgressIndicatorHeader progress={1} />
@@ -80,8 +85,8 @@ function CreatePassword({ }: Props) {
                 <Text textAlign="center" fontSize={FONT_SIZE['lg']} my="2">This password will unlock your Pocket wallet only on this device</Text>
 
                 <VStack space={6} mb="50" mt="4">
-                    <PasswordInput label="New Password" value={password} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
-                    <PasswordInput label="Confirm New Password" value={confirmPassword} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
+                    <PasswordInput label="New Password" value={password} suggestion={suggestion} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
+                    <PasswordInput label="Confirm New Password" value={confirmPassword} suggestion={suggestion} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
 
                     <Divider bgColor="muted.100" />
 
