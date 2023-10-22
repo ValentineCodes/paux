@@ -160,7 +160,7 @@ export default function Transfer({ }: Props) {
     const setMaxAmount = () => {
         if (balance && gasCost && balance.gt(gasCost)) {
             const max = ethers.utils.formatEther(balance.sub(gasCost))
-            setAmount(max)
+            handleAmountChange(max)
             setIsAmountInCrypto(true)
         }
     }
