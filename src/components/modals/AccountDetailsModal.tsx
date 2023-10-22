@@ -14,6 +14,7 @@ import { FONT_SIZE } from '../../utils/styles';
 import { COLORS } from '../../utils/constants';
 import Button from '../Button';
 import PrivateKeyModal from './PrivateKeyModal';
+import { TouchableOpacity } from 'react-native';
 
 
 type Props = {
@@ -50,12 +51,14 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
                 <Blockie address={connectedAccount.address} size={2.5 * FONT_SIZE['xl']} />
                 {
                     isEditingAccountName ? <EditAccountNameForm close={() => setIsEditingAccountName(false)} /> : (
-                        <VStack alignItems="center" space="2">
-                            <HStack alignItems="center" space="2">
-                                <Text fontSize={FONT_SIZE['xl']} bold>{connectedAccount.name}</Text>
-                                <Icon as={<Ionicons name="create-outline" />} size={1.5 * FONT_SIZE['xl']} color="muted.400" onPress={() => setIsEditingAccountName(true)} />
-                            </HStack>
-                        </VStack>
+                        <TouchableOpacity activeOpacity={0.4} onPress={() => setIsEditingAccountName(true)}>
+                            <VStack alignItems="center" space="2">
+                                <HStack alignItems="center" space="2">
+                                    <Text fontSize={FONT_SIZE['xl']} bold>{connectedAccount.name}</Text>
+                                    <Icon as={<Ionicons name="create-outline" />} size={1.5 * FONT_SIZE['xl']} color="muted.400" />
+                                </HStack>
+                            </VStack>
+                        </TouchableOpacity>
                     )
                 }
 
