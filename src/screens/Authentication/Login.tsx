@@ -13,6 +13,9 @@ import Button from '../../components/Button'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, logoutUser } from '../../store/reducers/Auth'
 import ConsentModal from '../../components/modals/ConsentModal'
+import { clearSessions } from '../../store/reducers/ActiveSessions'
+import { clearConnectedSites } from '../../store/reducers/ConnectedSites'
+import { clearRecipients } from '../../store/reducers/Recipients'
 
 type Props = {}
 
@@ -113,11 +116,33 @@ export default function Login({ }: Props) {
         }
     }
 
-    const resetWallet = () => {
+    const resetWallet = async () => {
+        // remove mnemonic
+        await SInfo.deleteItem("mnemonic", {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        });
+        // remove accounts
+        await SInfo.deleteItem("accounts", {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        })
+        // remove password
+        await SInfo.deleteItem("security", {
+            sharedPreferencesName: "pocket.android.storage",
+            keychainService: "pocket.ios.storage",
+        });
+        // clear active sessions
+        dispatch(clearSessions())
+        // clear connected sites
+        dispatch(clearConnectedSites())
+        // clear recipients
+        dispatch(clearRecipients())
+        // logout user
         dispatch(logoutUser())
 
         setTimeout(() => {
-            navigation.navigate("WalletSetup")
+            navigation.navigate("Onboarding")
         }, 100)
 
     }

@@ -19,7 +19,6 @@ function PasswordInput({ label, value, suggestion, defaultValue, infoText, error
   const [show, setShow] = useState(false)
 
   const useSuggestion = () => {
-    setShow(true)
     onChange(suggestion)
   }
 

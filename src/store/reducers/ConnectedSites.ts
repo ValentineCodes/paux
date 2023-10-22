@@ -24,10 +24,11 @@ export const connectedSiteSlice = createSlice({
         },
         removeConnectedSite: (state, action) => {
             return state.filter(site => site.name !== action.payload)
-        }
+        },
+        clearConnectedSites: () => []
     }
 })
 
-export const {addConnectedSite, removeConnectedSite} = connectedSiteSlice.actions
+export const {addConnectedSite, removeConnectedSite, clearConnectedSites} = connectedSiteSlice.actions
 
 export default connectedSiteSlice.reducer

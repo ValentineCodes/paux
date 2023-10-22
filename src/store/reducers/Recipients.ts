@@ -16,12 +16,10 @@ export const recipientSlice = createSlice({
             const removedRecipient = action.payload.toUpperCase()
             return state.filter(recipient => recipient.toUpperCase() !== removedRecipient)
         },
-        clearRecipients: (state, action) => {
-            return []
-        }
+        clearRecipients: () => []
     }
 })
 
-export const {addRecipient, removeRecipient} = recipientSlice.actions
+export const {addRecipient, removeRecipient, clearRecipients} = recipientSlice.actions
 
 export default recipientSlice.reducer

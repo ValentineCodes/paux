@@ -39,10 +39,11 @@ export const activeSessionSlice = createSlice({
                 }
                 return activeSession
             })
-        }
+        },
+        clearSessions: () => []
     }
 })
 
-export const {addSession, removeSession, switchSessionAccount} = activeSessionSlice.actions
+export const {addSession, removeSession, switchSessionAccount, clearSessions} = activeSessionSlice.actions
 
 export default activeSessionSlice.reducer
