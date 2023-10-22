@@ -24,6 +24,7 @@ import Success from './Success'
 import Fail from './Fail'
 import { Linking } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
+import { addRecipient } from '../../../store/reducers/Recipients';
 
 interface TxData {
     from: Account;
@@ -44,7 +45,6 @@ export default function ConfirmationModal({ isVisible, onClose, txData, estimate
     const toast = useToast()
 
     const connectedNetwork: Network = useSelector((state: any) => state.networks.find((network: Network) => network.isConnected))
-    const connectedAccount: Account = useSelector((state: any) => state.accounts.find((account: Account) => account.isConnected))
 
     const [isTransferring, setIsTransferring] = useState(false)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -65,7 +65,7 @@ export default function ConfirmationModal({ isVisible, onClose, txData, estimate
             keychainService: "pocket.ios.storage",
         })
 
-        const activeAccount: Wallet = Array.from(JSON.parse(accounts)).find(account => account.address == connectedAccount.address)
+        const activeAccount: Wallet = Array.from(JSON.parse(accounts)).find(account => account.address.toLowerCase() == txData.from.address.toLowerCase())
 
         const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
         const wallet = new ethers.Wallet(activeAccount.privateKey).connect(provider)
@@ -83,6 +83,8 @@ export default function ConfirmationModal({ isVisible, onClose, txData, estimate
 
             setTxReceipt(txReceipt)
             setShowSuccessModal(true)
+
+            dispatch(addRecipient(txData.to))
         } catch (error) {
             setShowFailModal(true)
             return

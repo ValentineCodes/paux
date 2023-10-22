@@ -5,16 +5,16 @@ export const recipientSlice = createSlice({
     initialState: [] as string[],
     reducers: {
         addRecipient: (state, action) => {
-            const newRecipient = action.payload.toUpperCase()
-            if(!state.map(recipient => recipient.toUpperCase()).includes(newRecipient)) {
+            const newRecipient = action.payload.toLowerCase()
+            if(!state.map(recipient => recipient.toLowerCase()).includes(newRecipient)) {
                 return [...state, newRecipient]
             } else {
                 return state
             }
         },
         removeRecipient: (state, action) => {
-            const removedRecipient = action.payload.toUpperCase()
-            return state.filter(recipient => recipient.toUpperCase() !== removedRecipient)
+            const removedRecipient = action.payload.toLowerCase()
+            return state.filter(recipient => recipient.toLowerCase() !== removedRecipient)
         },
         clearRecipients: () => []
     }

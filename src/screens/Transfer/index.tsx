@@ -3,7 +3,7 @@ import { HStack, VStack, Icon, Text, Input, Divider, View, FlatList, Image } fro
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { FONT_SIZE } from '../../utils/styles'
 import { COLORS } from '../../utils/constants'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Account } from '../../store/reducers/Accounts'
 import { Network } from '../../store/reducers/Networks'
 import FontAwesome5 from "react-native-vector-icons/dist/FontAwesome5"
@@ -23,11 +23,15 @@ import ConfirmationModal from './modules/ConfirmationModal'
 import { useToast } from "react-native-toast-notifications"
 import { Providers, getProviderWithName } from '../../utils/providers'
 import { parseFloat } from '../../utils/helperFunctions'
+import ConsentModal from '../../components/modals/ConsentModal'
+import { clearRecipients } from '../../store/reducers/Recipients'
 
 type Props = {}
 
 export default function Transfer({ }: Props) {
     const navigation = useNavigation()
+
+    const dispatch = useDispatch()
 
     const toast = useToast()
 
@@ -47,6 +51,7 @@ export default function Transfer({ }: Props) {
     const [showToAccountsModal, setShowToAccountsModal] = useState(false)
     const [showScanner, setShowScanner] = useState(false)
     const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+    const [showClearRecipientsConsentModal, setShowClearRecipientsConsentModal] = useState(false)
     const [amountError, setAmountError] = useState("")
     const [isAmountInCrypto, setIsAmountInCrypto] = useState(true)
 
@@ -331,9 +336,9 @@ export default function Transfer({ }: Props) {
                 {
                     recipients.length > 0 && (
                         <>
-                            <HStack alignItems="center" justifyContent="space-between">
+                            <HStack alignItems="center" justifyContent="space-between" mb="4">
                                 <Text bold fontSize={FONT_SIZE['xl']}>Recents</Text>
-                                <TouchableOpacity>
+                                <TouchableOpacity activeOpacity={0.4} onPress={() => setShowClearRecipientsConsentModal(true)}>
                                     <Text color={COLORS.primary} fontSize={FONT_SIZE['lg']} fontWeight="medium">Clear</Text>
                                 </TouchableOpacity>
                             </HStack>
@@ -342,7 +347,7 @@ export default function Transfer({ }: Props) {
                                 keyExtractor={item => item}
                                 data={recipients}
                                 renderItem={({ item }) => (
-                                    <TouchableOpacity onPress={() => setToAddress(item)}>
+                                    <TouchableOpacity activeOpacity={0.4} onPress={() => setToAddress(item)}>
                                         <HStack alignItems="center" space="4" mb="4">
                                             <Blockie address={item} size={1.7 * FONT_SIZE['xl']} />
                                             <Text fontSize={FONT_SIZE['xl']} fontWeight="medium">{truncateAddress(item)}</Text>
@@ -361,6 +366,19 @@ export default function Transfer({ }: Props) {
             }} />
 
             <Button text="Next" onPress={confirm} />
+
+            <ConsentModal
+                isVisible={showClearRecipientsConsentModal}
+                title="Clear Recents!"
+                subTitle="This action cannot be reversed. Are you sure you want to go through with this?"
+                okText="Yes, I'm sure"
+                cancelText='Not really'
+                onClose={() => setShowClearRecipientsConsentModal(false)}
+                onAccept={() => {
+                    setShowClearRecipientsConsentModal(false)
+                    dispatch(clearRecipients())
+                }}
+            />
 
             <ConfirmationModal
                 isVisible={showConfirmationModal}
