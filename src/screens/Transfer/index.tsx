@@ -103,7 +103,7 @@ export default function Transfer({ }: Props) {
             return
         }
 
-        if (isNaN(Number(amount)) || Number(amount) <= 0) {
+        if (isNaN(Number(amount)) || Number(amount) < 0) {
             toast.show("Invalid amount", {
                 type: 'danger'
             })
@@ -128,7 +128,7 @@ export default function Transfer({ }: Props) {
     }
 
     const formatBalance = () => {
-        return Number(ethers.utils.formatEther(balance!)) ? parseFloat(Number(ethers.utils.formatEther(balance!)), 4) : 0
+        return Number(ethers.utils.formatEther(balance!)) ? parseFloat(Number(ethers.utils.formatEther(balance!)).toString(), 4) : 0
     }
 
     const handleAmountChange = (value: string) => {
@@ -174,7 +174,7 @@ export default function Transfer({ }: Props) {
 
         // validate input
         if (!amount || !dollarRate) return
-        if (isNaN(Number(amount)) || Number(amount) <= 0) {
+        if (isNaN(Number(amount)) || Number(amount) < 0) {
             toast.show("Invalid amount", {
                 type: "danger"
             })
