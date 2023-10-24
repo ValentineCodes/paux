@@ -32,7 +32,7 @@ export default function Onboarding({ }: Props) {
         }} style={styles.container}>
             <Image source={require("../../assets/images/pocket.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
             <VStack w="full" mt="10">
-                <Text textAlign="center" color={COLORS.primary} fontSize={2 * FONT_SIZE["xl"]} bold>Welcome to Pocket Wallet</Text>
+                <Text textAlign="center" color={COLORS.primary} fontSize={2 * FONT_SIZE["xl"]} bold>Welcome to Pocket</Text>
                 <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="4">A safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more</Text>
 
                 <Button text="Get Started" onPress={() => navigation.navigate("WalletSetup")} style={{ marginTop: 40, marginBottom: 50 }} />
