@@ -126,3 +126,6 @@ export function parseFloat(str: string, val: number) {
     str = str.slice(0, (str.indexOf(".")) + val + 1); 
     return Number(str);   
 }
+
+export const isENS = (name = "") =>
+  name.endsWith(".eth") || name.endsWith(".xyz");

@@ -22,7 +22,7 @@ import redstone from 'redstone-api';
 import ConfirmationModal from './modules/ConfirmationModal'
 import { useToast } from "react-native-toast-notifications"
 import { Providers, getProviderWithName } from '../../utils/providers'
-import { parseFloat } from '../../utils/helperFunctions'
+import { isENS, parseFloat } from '../../utils/helperFunctions'
 import ConsentModal from '../../components/modals/ConsentModal'
 import { clearRecipients } from '../../store/reducers/Recipients'
 
@@ -52,11 +52,13 @@ export default function Transfer({ }: Props) {
     const [showScanner, setShowScanner] = useState(false)
     const [showConfirmationModal, setShowConfirmationModal] = useState(false)
     const [showClearRecipientsConsentModal, setShowClearRecipientsConsentModal] = useState(false)
+    const [toAddressError, setToAddressError] = useState("")
     const [amountError, setAmountError] = useState("")
     const [isAmountInCrypto, setIsAmountInCrypto] = useState(true)
 
     const truncateAddress = (address: string) => {
         return `${address.slice(0, 13)}...${address.slice(address.length - 13, address.length)}`
+
     }
 
     const getBalance = async () => {
@@ -131,6 +133,31 @@ export default function Transfer({ }: Props) {
         return Number(ethers.utils.formatEther(balance!)) ? parseFloat(Number(ethers.utils.formatEther(balance!)).toString(), 4) : 0
     }
 
+    const handleToAddressChange = async (value: string) => {
+        setToAddress(value)
+
+        if (toAddressError) {
+            setToAddressError("")
+        }
+
+        if (isENS(value)) {
+            try {
+                const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
+
+                const address = await provider.resolveName(value)
+
+                if (ethers.utils.isAddress(address)) {
+                    setToAddress(address)
+                } else {
+                    setToAddressError("Invalid ENS")
+                }
+            } catch (error) {
+                setToAddressError("Could not resolve ENS")
+                return
+            }
+        }
+    }
+
     const handleAmountChange = (value: string) => {
         setAmount(value)
 
@@ -191,7 +218,7 @@ export default function Transfer({ }: Props) {
     }
 
     const getToAddressName = () => {
-        const toAccount = accounts.find(account => account.address.toLowerCase() === toAddress.toLowerCase())
+        const toAccount = accounts.find(account => account.address?.toLowerCase() === toAddress?.toLowerCase())
 
         if (!toAccount) return
         return `(${toAccount.name})`
@@ -287,13 +314,15 @@ export default function Transfer({ }: Props) {
                         </TouchableOpacity>
                     }
                     placeholder="Recipient Address"
-                    onChangeText={setToAddress}
+                    onChangeText={handleToAddressChange}
                     _input={{
                         selectionColor: COLORS.primary,
                         cursorColor: COLORS.primary,
                     }}
                     onSubmitEditing={confirm}
                 />
+
+                {toAddressError && <Text fontSize={FONT_SIZE['md']} color="red.400">{toAddressError}</Text>}
             </VStack>
 
             <VStack space="2">
