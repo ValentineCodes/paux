@@ -101,7 +101,7 @@ function MainBalance({ }: Props) {
   }, [connectedAccount, connectedNetwork])
 
   return (
-    <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} />}>
+    <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} colors={[COLORS.primary]} tintColor={COLORS.primary} />}>
       <VStack alignItems="center" space={2} paddingTop={5}>
         <Text fontSize={FONT_SIZE["xl"]} bold textAlign="center">{connectedAccount.name}</Text>
         <CopyableText displayText={truncateAddress(connectedAccount.address)} value={connectedAccount.address} containerStyle={styles.addressContainer} textStyle={styles.addressText} iconStyle={{ color: COLORS.primary }} />

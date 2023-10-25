@@ -5,7 +5,7 @@ import Transaction from '../../../components/Transaction'
 import { Account } from '../../../store/reducers/Accounts'
 import TransactionsAPI from "../../../apis/transactions"
 import { Network } from '../../../store/reducers/Networks'
-import { ActivityIndicator, StyleSheet } from 'react-native'
+import { ActivityIndicator, RefreshControl, StyleSheet } from 'react-native'
 import { useToast } from "react-native-toast-notifications"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import { COLORS } from '../../../utils/constants'
@@ -116,8 +116,13 @@ export default function Transactions({ }: Props) {
             renderItem={({ item }) => <Transaction tx={item} />}
             ItemSeparatorComponent={<Divider bgColor="muted.100" my="2" />}
             ListFooterComponent={isLoadingMore ? <View py="4"><ActivityIndicator size="small" color={COLORS.primary} style={styles.loadingIndicator} /></View> : null}
-            onRefresh={handleRefresh}
-            refreshing={isRefreshing}
+            refreshControl={
+              <RefreshControl
+                onRefresh={handleRefresh}
+                refreshing={isRefreshing}
+                colors={[COLORS.primary]}
+                tintColor={COLORS.primary}
+              />}
             onEndReached={loadMoreTransactions}
             onEndReachedThreshold={0.2}
           />
