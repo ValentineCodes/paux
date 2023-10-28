@@ -51,10 +51,10 @@ export default function ConnectModal({ isVisible, isPairing, onClose, pair }: Pr
                 <Button text="Connect" onPress={() => pair(wcuri)} loading={isPairing} />
             </VStack>
 
-            <QRCodeScanner isOpen={showScanner} onClose={() => setShowScanner(false)} onReadCode={wcuri => {
+            {showScanner && <QRCodeScanner isOpen={showScanner} onClose={() => setShowScanner(false)} onReadCode={wcuri => {
                 pair(wcuri)
                 setShowScanner(false)
-            }} />
+            }} />}
         </Modal>
     )
 }

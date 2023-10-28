@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Modal, Icon } from "native-base"
 import { Camera } from 'react-native-camera-kit'
 import { StyleSheet } from "react-native"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
+import { Camera as VCamera } from 'react-native-vision-camera';
+import { useToast } from 'react-native-toast-notifications'
 
 type Props = {
     isOpen: boolean;
@@ -11,7 +13,53 @@ type Props = {
 }
 
 export default function QRCodeScanner({ isOpen, onClose, onReadCode }: Props) {
-    return isOpen && (
+    const [isCameraPermitted, setIsCameraPermitted] = useState(false);
+
+    const toast = useToast()
+
+    const requestCameraPermission = async () => {
+        // check permission
+        const cameraPermission = await VCamera.getCameraPermissionStatus();
+
+        if (cameraPermission === 'restricted') {
+            toast.show("Cannot use camera", {
+                type: "danger"
+            })
+            onClose()
+        } else if (
+            cameraPermission === 'not-determined' ||
+            cameraPermission === 'denied'
+        ) {
+            try {
+                const newCameraPermission = await VCamera.requestCameraPermission();
+
+                if (newCameraPermission === 'granted') {
+                    setIsCameraPermitted(true)
+                } else {
+                    toast.show("Camera permission denied. Go to your device settings to Enable Camera", {
+                        type: "warning"
+                    })
+                    onClose()
+                }
+            } catch (error) {
+                toast.show('Go to your device settings to Enable Camera', {
+                    type: 'normal',
+                    duration: 5000,
+                });
+                onClose()
+            }
+        } else {
+            setIsCameraPermitted(true);
+        }
+    }
+
+    useEffect(() => {
+        (async () => {
+            await requestCameraPermission();
+        })();
+    }, [])
+
+    return isOpen && isCameraPermitted && (
         <Modal isOpen onClose={onClose}>
             <Camera
                 scanBarcode={true}
@@ -35,7 +83,7 @@ const styles = StyleSheet.create({
     },
     closeIcon: {
         position: 'absolute',
-        top: 30,
+        top: 50,
         right: 15
     }
 })

@@ -389,10 +389,10 @@ export default function Transfer({ }: Props) {
                 }
             </View>
 
-            <QRCodeScanner isOpen={showScanner} onClose={() => setShowScanner(false)} onReadCode={address => {
+            {showScanner && <QRCodeScanner isOpen={showScanner} onClose={() => setShowScanner(false)} onReadCode={address => {
                 setToAddress(address)
                 setShowScanner(false)
-            }} />
+            }} />}
 
             <Button text="Next" onPress={confirm} />
 

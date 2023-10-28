@@ -35,7 +35,7 @@ function ImportWallet({ }: Props) {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isBiometricsEnabled, setIsBiometricsEnabled] = useState(false)
-  const [isScanningSeedPhrase, setIsScanningSeedPhrase] = useState(false)
+  const [showScanner, setShowScanner] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
 
   const renderSeedPhraseError = useCallback(() => {
@@ -133,7 +133,7 @@ function ImportWallet({ }: Props) {
           <Text fontSize={1.2 * FONT_SIZE["xl"]} bold>Import From Seed</Text>
         </HStack>
 
-        <Pressable onPress={() => setIsScanningSeedPhrase(true)}>
+        <Pressable onPress={() => setShowScanner(true)}>
           <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color="black" />
         </Pressable>
       </HStack>
@@ -156,10 +156,10 @@ function ImportWallet({ }: Props) {
           <Button text="Import" loading={isImporting} onPress={importWallet} />
         </VStack>
 
-        <QRCodeScanner isOpen={isScanningSeedPhrase} onClose={() => setIsScanningSeedPhrase(false)} onReadCode={value => {
+        {showScanner && <QRCodeScanner isOpen={showScanner} onClose={() => setShowScanner(false)} onReadCode={value => {
           setSeedPhrase(value)
-          setIsScanningSeedPhrase(false)
-        }} />
+          setShowScanner(false)
+        }} />}
       </ScrollView>
     </View>
   )
