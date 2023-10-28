@@ -6,7 +6,7 @@ class TransactionsAPI {
 
         const {data: transactions} = await axios.get(endpoint)
 
-        return transactions
+        return transactions.result
     }
 }
 

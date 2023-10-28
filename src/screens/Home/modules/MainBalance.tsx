@@ -1,78 +1,32 @@
 import { Image, Text, VStack, Divider, Pressable, Icon, View, HStack } from 'native-base'
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { StyleSheet, ScrollView, RefreshControl } from 'react-native'
-import { useSelector, useDispatch } from 'react-redux'
-import { ethers } from 'ethers'
-import redstone from 'redstone-api';
+import { useSelector } from 'react-redux'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
+import { useNavigation } from '@react-navigation/native'
 
 import { Account } from '../../../store/reducers/Accounts'
 import { Network } from '../../../store/reducers/Networks'
-import { setBalance } from '../../../store/reducers/Balance'
-import { getProviderWithName, Providers } from '../../../utils/providers'
 import CopyableText from '../../../components/CopyableText'
-import { parseFloat, truncateAddress } from '../../../utils/helperFunctions'
+import { truncateAddress } from '../../../utils/helperFunctions'
 import { FONT_SIZE } from '../../../utils/styles'
 import { COLORS } from '../../../utils/constants'
 import ReceiveModal from '../../../components/modals/ReceiveModal'
-import { useNavigation } from '@react-navigation/native'
 
-type Props = {}
+type Props = {
+  balance: string;
+  dollarValue: string | null;
+  isRefreshing: boolean;
+  refresh: () => void;
+}
 
-function MainBalance({ }: Props) {
+function MainBalance({ balance, dollarValue, isRefreshing, refresh }: Props) {
   const connectedNetwork: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
   const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
-  const balance = useSelector(state => state.balance)
 
-  const [dollarValue, setDollarValue] = useState<string | null>(null)
-  const [refresh, setRefresh] = useState(false)
-  const [showTransferForm, setShowTransferForm] = useState(false)
   const [showReceiveModal, setShowReceiveModal] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-
-  const dispatch = useDispatch()
 
   const navigation = useNavigation()
-
-  const getBalance = async () => {
-    if (isLoading) return
-
-    setIsLoading(true)
-
-    try {
-      const provider = new ethers.providers.JsonRpcProvider(connectedNetwork.provider)
-      const balance = await provider.getBalance(connectedAccount.address)
-      const _balance = Number(ethers.utils.formatEther(balance)) ? parseFloat(Number(ethers.utils.formatEther(balance)).toString(), 4) : 0
-
-      try {
-        const price = await redstone.getPrice(connectedNetwork.currencySymbol);
-        const dollarValue = Number(_balance) * price.value
-        setDollarValue(dollarValue ? parseFloat(dollarValue.toString(), 2).toString() : "0")
-      } catch (error) {
-        setDollarValue(null)
-        return
-      } finally {
-        dispatch(setBalance(_balance.toString()))
-      }
-
-    } catch (error) {
-      return
-    } finally {
-      setIsLoading(false)
-    }
-
-  }
-
-  const refreshBalance = async () => {
-    setRefresh(true)
-    await getBalance()
-    setRefresh(false)
-
-  }
-
-  const toggleTransferForm = () => {
-    setShowTransferForm(!showTransferForm)
-  }
 
   const logo = useMemo(() => {
     let _logo = require("../../../images/eth-icon.png");
@@ -88,20 +42,8 @@ function MainBalance({ }: Props) {
     return <Image key={`${_logo}`} source={_logo} alt={connectedNetwork.name} style={styles.networkLogo} />
   }, [connectedNetwork])
 
-  useEffect(() => {
-    const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
-
-    provider.off('block')
-
-    provider.on('block', blockNumber => getBalance())
-
-    return () => {
-      provider.off("block")
-    }
-  }, [connectedAccount, connectedNetwork])
-
   return (
-    <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={refresh} onRefresh={refreshBalance} colors={[COLORS.primary]} tintColor={COLORS.primary} />}>
+    <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={refresh} colors={[COLORS.primary]} tintColor={COLORS.primary} />}>
       <VStack alignItems="center" space={2} paddingTop={5}>
         <Text fontSize={FONT_SIZE["xl"]} bold textAlign="center">{connectedAccount.name}</Text>
         <CopyableText displayText={truncateAddress(connectedAccount.address)} value={connectedAccount.address} containerStyle={styles.addressContainer} textStyle={styles.addressText} iconStyle={{ color: COLORS.primary }} />
