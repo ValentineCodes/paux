@@ -71,20 +71,22 @@ export default function AccountDetailsModal({ isVisible, onClose }: Props) {
                 {accounts.length > 1 && <RNButton py="4" borderRadius={25} bgColor="red.100" w="full" onPress={() => setShowRemoveAccountConsentModal(true)}><Text color="red.400" bold fontSize="md">Remove account</Text></RNButton>}
             </VStack>
 
-            <PrivateKeyModal isVisible={showPrivateKeyModal} onClose={() => setShowPrivateKeyModal(false)} />
+            {showPrivateKeyModal && <PrivateKeyModal isVisible={showPrivateKeyModal} onClose={() => setShowPrivateKeyModal(false)} />}
 
-            <Modal isVisible={showRemoveAccountConsentModal} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={() => setShowRemoveAccountConsentModal(false)} onBackdropPress={() => setShowRemoveAccountConsentModal(false)}>
-                <VStack bgColor="white" borderRadius="30" px="7" py="5" alignItems="center" space="4">
-                    <Icon as={<Ionicons name="warning-outline" />} size={Dimensions.get("window").height * 0.17} color="red.400" />
-                    <Text color="red.400" bold fontSize={1.5 * FONT_SIZE['xl']} textAlign="center">Remove account</Text>
-                    <Text fontSize={FONT_SIZE['xl']} textAlign="center">This action cannot be reversed. Are you sure you want to go through with this?</Text>
+            {showRemoveAccountConsentModal && (
+                <Modal isVisible={showRemoveAccountConsentModal} animationIn="zoomIn" animationOut="zoomOut" onBackButtonPress={() => setShowRemoveAccountConsentModal(false)} onBackdropPress={() => setShowRemoveAccountConsentModal(false)}>
+                    <VStack bgColor="white" borderRadius="30" px="7" py="5" alignItems="center" space="4">
+                        <Icon as={<Ionicons name="warning-outline" />} size={Dimensions.get("window").height * 0.17} color="red.400" />
+                        <Text color="red.400" bold fontSize={1.5 * FONT_SIZE['xl']} textAlign="center">Remove account</Text>
+                        <Text fontSize={FONT_SIZE['xl']} textAlign="center">This action cannot be reversed. Are you sure you want to go through with this?</Text>
 
-                    <HStack w="full" mt="5" alignItems="center" justifyContent="space-between">
-                        <RNButton py="4" bgColor="red.100" w="50%" onPress={() => setShowRemoveAccountConsentModal(false)}><Text color="red.400" bold fontSize="md">Not really</Text></RNButton>
-                        <RNButton py="4" bgColor="red.400" w="50%" onPress={handleAccountRemoval}><Text color="white" bold fontSize="md">Yes, I'm sure</Text></RNButton>
-                    </HStack>
-                </VStack>
-            </Modal>
+                        <HStack w="full" mt="5" alignItems="center" justifyContent="space-between">
+                            <RNButton py="4" bgColor="red.100" w="50%" onPress={() => setShowRemoveAccountConsentModal(false)}><Text color="red.400" bold fontSize="md">Not really</Text></RNButton>
+                            <RNButton py="4" bgColor="red.400" w="50%" onPress={handleAccountRemoval}><Text color="white" bold fontSize="md">Yes, I'm sure</Text></RNButton>
+                        </HStack>
+                    </VStack>
+                </Modal>
+            )}
         </Modal>
     )
 }

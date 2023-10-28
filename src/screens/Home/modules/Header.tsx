@@ -36,6 +36,7 @@ import { SendTransactionModal } from '../../../components/modals/SendTransaction
 import { FONT_SIZE } from '../../../utils/styles'
 import { COLORS } from '../../../utils/constants'
 import AccountsModal from '../../../components/modals/AccountsModal'
+import SeedPhraseModal from '../../../components/modals/SeedPhraseModal'
 
 type Props = {}
 
@@ -44,6 +45,7 @@ export default function Header({ }: Props) {
     const [isAccountModalVisible, setIsAccountModalVisible] = useState(false)
     const [showPrivateKeyForm, setShowPrivateKeyForm] = useState(false)
     const [showAccountDetailsModal, setShowAccountDetailsModal] = useState(false)
+    const [showSeedPhraseModal, setShowSeedPhraseModal] = useState(false)
     const [showConnectedSites, setShowConnectedSites] = useState(false)
     const [showAccountSelectionModal, setShowAccountSelectionModal] = useState(false)
     const [showSwitchAccountModal, setShowSwitchAccountModal] = useState(false)
@@ -275,6 +277,10 @@ export default function Header({ }: Props) {
                             <Icon as={<Ionicons name="grid-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
                             <Text fontSize={FONT_SIZE['lg']}>Account details</Text>
                         </MenuOption>
+                        <MenuOption onSelect={() => setShowSeedPhraseModal(true)} style={styles.menuOption}>
+                            <Icon as={<Ionicons name="key-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
+                            <Text fontSize={FONT_SIZE['lg']}>Show seed phrase</Text>
+                        </MenuOption>
                         <MenuOption onSelect={() => setShowConnectedSites(true)} style={styles.menuOption}>
                             <Icon as={<Ionicons name="radio-outline" />} size={1.2 * FONT_SIZE['xl']} color="black" mr="2" />
                             <Text fontSize={FONT_SIZE['lg']}>Connected sites</Text>
@@ -329,9 +335,10 @@ export default function Header({ }: Props) {
                 />
             )}
 
+            {showSeedPhraseModal && <SeedPhraseModal isVisible={showSeedPhraseModal} onClose={() => setShowSeedPhraseModal(false)} />}
             {showSwitchAccountModal && <SwitchAccountModal isVisible={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />}
             {showAccountSelectionModal && <AccountSelectionModal isVisible={showAccountSelectionModal} onClose={() => setShowAccountSelectionModal(false)} onSelect={handleAccountsSelection} />}
-            <AccountDetailsModal isVisible={showAccountDetailsModal} onClose={() => setShowAccountDetailsModal(false)} />
+            {showAccountDetailsModal && <AccountDetailsModal isVisible={showAccountDetailsModal} onClose={() => setShowAccountDetailsModal(false)} />}
             {showConnectedSites && <ConnectedSitesModal isVisible={showConnectedSites} onClose={() => setShowConnectedSites(false)} />}
         </HStack>
     )
