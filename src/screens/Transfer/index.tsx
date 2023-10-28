@@ -328,7 +328,7 @@ export default function Transfer({ }: Props) {
             <VStack space="2">
                 <HStack alignItems="center" space="2">
                     <Text fontSize={FONT_SIZE['lg']} fontWeight="medium">Amount:</Text>
-                    {balance && gasCost && <TouchableOpacity activeOpacity={0.4} onPress={setMaxAmount}><Text color={COLORS.primary} fontWeight="medium" fontSize={FONT_SIZE['lg']}>Max</Text></TouchableOpacity>}
+                    {balance && gasCost && balance.gte(gasCost) && <TouchableOpacity activeOpacity={0.4} onPress={setMaxAmount}><Text color={COLORS.primary} fontWeight="medium" fontSize={FONT_SIZE['lg']}>Max</Text></TouchableOpacity>}
                 </HStack>
 
                 <Input
