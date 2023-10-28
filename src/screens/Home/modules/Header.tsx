@@ -291,8 +291,8 @@ export default function Header({ }: Props) {
                 </Menu>
             </HStack>
 
-            <ConnectModal isVisible={showConnectModal} isPairing={isPairing} onClose={() => setShowConnectModal(false)} pair={pair} />
-            <ApprovalModal proposal={proposal} isVisible={showApprovalModal} isApproving={isApprovingSession} onClose={() => setShowApprovalModal(false)} handleAccept={handleAcceptProposal} handleReject={handleRejectProposal} />
+            {showConnectModal && <ConnectModal isVisible={showConnectModal} isPairing={isPairing} onClose={() => setShowConnectModal(false)} pair={pair} />}
+            {showApprovalModal && <ApprovalModal proposal={proposal} isVisible={showApprovalModal} isApproving={isApprovingSession} onClose={() => setShowApprovalModal(false)} handleAccept={handleAcceptProposal} handleReject={handleRejectProposal} />}
 
             <AccountsModal isVisible={isAccountModalVisible} setVisibility={setIsAccountModalVisible} onClose={() => setIsAccountModalVisible(false)} onSelect={(account) => {
                 const canSwitchSessionAccount = activeSessions.some(session => session.account !== account)
@@ -329,10 +329,10 @@ export default function Header({ }: Props) {
                 />
             )}
 
-            <SwitchAccountModal isVisible={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />
-            <AccountSelectionModal isVisible={showAccountSelectionModal} onClose={() => setShowAccountSelectionModal(false)} onSelect={handleAccountsSelection} />
+            {showSwitchAccountModal && <SwitchAccountModal isVisible={showSwitchAccountModal} onClose={() => setShowSwitchAccountModal(false)} />}
+            {showAccountSelectionModal && <AccountSelectionModal isVisible={showAccountSelectionModal} onClose={() => setShowAccountSelectionModal(false)} onSelect={handleAccountsSelection} />}
             <AccountDetailsModal isVisible={showAccountDetailsModal} onClose={() => setShowAccountDetailsModal(false)} />
-            <ConnectedSitesModal isVisible={showConnectedSites} onClose={() => setShowConnectedSites(false)} />
+            {showConnectedSites && <ConnectedSitesModal isVisible={showConnectedSites} onClose={() => setShowConnectedSites(false)} />}
         </HStack>
     )
 }
