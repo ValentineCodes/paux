@@ -77,7 +77,7 @@ function Home({ }: Props) {
 
   const getTransactions = async () => {
     if (!connectedNetwork.txApiDomain || !connectedNetwork.txApiKey) return
-    if (loadingTxStatus !== 'loading' && balance === "") {
+    if (loadingTxStatus == 'error') {
       setLoadingTxStatus('loading');
     }
 
