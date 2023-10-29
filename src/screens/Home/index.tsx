@@ -75,6 +75,10 @@ function Home({ }: Props) {
     return newTransactions
   }
 
+  const orderTx = (transactions: any[]): any[] => {
+    return transactions.sort((txA, txB) => txB.timeStamp - txA.timeStamp)
+  }
+
   const getTransactions = async () => {
     if (!connectedNetwork.txApiDomain || !connectedNetwork.txApiKey) return
     if (loadingTxStatus == 'error') {
@@ -86,7 +90,7 @@ function Home({ }: Props) {
 
       const newTransactions = removeDuplicateTx(transactions)
 
-      setTransactions(transactions => [...newTransactions, ...transactions])
+      setTransactions(transactions => orderTx([...newTransactions, ...transactions]))
 
       setLoadingTxStatus('success')
 
@@ -109,7 +113,7 @@ function Home({ }: Props) {
       const newTransactions = removeDuplicateTx(transactions)
 
       if (newTransactions.length > 0) {
-        setTransactions(transactions => [...transactions, ...newTransactions])
+        setTransactions(transactions => orderTx([...transactions, ...newTransactions]))
         setCurrentTxPage(currentPage => currentPage + 1)
       }
     } catch (error) {
@@ -127,7 +131,8 @@ function Home({ }: Props) {
 
     try {
       const transactions = await TransactionsAPI.getTransactions(connectedNetwork.txApiDomain, connectedNetwork.txApiKey, connectedAccount.address, 1)
-      setTransactions(transactions)
+
+      setTransactions(orderTx(transactions))
       setCurrentTxPage(2)
     } catch (error) {
       toast.show("Failed to get transactions", {
@@ -143,6 +148,11 @@ function Home({ }: Props) {
 
     return true;
   });
+
+  useEffect(() => {
+    setLoadingTxStatus("loading")
+    setTransactions([])
+  }, [connectedAccount, connectedNetwork])
 
   useEffect(() => {
     const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
