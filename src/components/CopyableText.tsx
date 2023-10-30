@@ -3,8 +3,7 @@ import React from 'react'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from 'react-native-toast-notifications';
-import { StyleSheet, ViewStyle, TextStyle } from 'react-native';
-import { COLORS } from '../utils/constants';
+import { ViewStyle, TextStyle } from 'react-native';
 
 type Props = {
     value: string;

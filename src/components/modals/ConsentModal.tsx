@@ -1,4 +1,4 @@
-import { Image, VStack, Text, HStack, Icon } from 'native-base';
+import { VStack, Text, HStack, Icon } from 'native-base';
 import React from 'react'
 import Modal from "react-native-modal"
 import { COLORS } from '../../utils/constants';

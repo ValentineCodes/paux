@@ -3,7 +3,6 @@ import { HStack, VStack, Input, Icon, Text } from "native-base"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import { useSelector, useDispatch } from 'react-redux'
 import { Account, changeName } from '../../store/reducers/Accounts'
-import { useToast } from 'react-native-toast-notifications'
 import { COLORS } from '../../utils/constants'
 
 type Props = {

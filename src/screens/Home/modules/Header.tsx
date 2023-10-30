@@ -3,10 +3,9 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Network, switchNetwork } from '../../../store/reducers/Networks'
 import { Account, switchAccount } from '../../../store/reducers/Accounts'
-import { Pressable, Linking, StyleSheet, TouchableOpacity } from 'react-native'
+import { Linking, StyleSheet, TouchableOpacity } from 'react-native'
 import { useToast } from 'react-native-toast-notifications'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
-import MaterialCommunityIcons from "react-native-vector-icons/dist/MaterialCommunityIcons"
 import Share from 'react-native-share';
 import { SignClientTypes, SessionTypes } from '@walletconnect/types';
 import Blockie from '../../../components/Blockie'

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Text, HStack, VStack, Icon, Divider, Pressable, FlatList } from 'native-base';
 import { useSelector } from 'react-redux';
 import { Account } from '../../store/reducers/Accounts';

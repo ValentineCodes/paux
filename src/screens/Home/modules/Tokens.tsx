@@ -1,4 +1,4 @@
-import { HStack, Input, Text, View, Box } from 'native-base'
+import { HStack, Input, Text, Box } from 'native-base'
 import { FlatList, Pressable } from 'react-native'
 import React from 'react'
 import Icon from "react-native-vector-icons/Ionicons"
@@ -19,22 +19,22 @@ const TOKENS = [
 
 type Props = {}
 
-function Tokens({}: Props) {
-  return (
-    <Box>
-        <HStack alignItems="center" justifyContent="space-between" py={2}>
-            <Input size="xl" placeholder="Search tokens"w="85%" />
-            <Icon name="add" size={30} style={{color: "white", backgroundColor: "blue", padding: 5}} />
-        </HStack>
+function Tokens({ }: Props) {
+    return (
+        <Box>
+            <HStack alignItems="center" justifyContent="space-between" py={2}>
+                <Input size="xl" placeholder="Search tokens" w="85%" />
+                <Icon name="add" size={30} style={{ color: "white", backgroundColor: "blue", padding: 5 }} />
+            </HStack>
 
-        <FlatList ItemSeparatorComponent={() => <Box borderBottomWidth={1} borderBottomColor="#ccc" />} keyExtractor={token => token.address} data={TOKENS} renderItem={({item}) => (
-            <Pressable style={{paddingVertical: 5}}>
-                <Text fontSize="lg" bold>{item.name}</Text>
-                <Text>{item.balance}</Text>
-            </Pressable>
-        )}  />
-    </Box>
-  )
+            <FlatList ItemSeparatorComponent={() => <Box borderBottomWidth={1} borderBottomColor="#ccc" />} keyExtractor={token => token.address} data={TOKENS} renderItem={({ item }) => (
+                <Pressable style={{ paddingVertical: 5 }}>
+                    <Text fontSize="lg" bold>{item.name}</Text>
+                    <Text>{item.balance}</Text>
+                </Pressable>
+            )} />
+        </Box>
+    )
 }
 
 export default Tokens

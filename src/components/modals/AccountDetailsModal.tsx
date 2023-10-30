@@ -11,7 +11,6 @@ import CopyableText from '../CopyableText';
 import Modal from "react-native-modal"
 import Blockie from '../Blockie';
 import { FONT_SIZE } from '../../utils/styles';
-import { COLORS } from '../../utils/constants';
 import Button from '../Button';
 import PrivateKeyModal from './PrivateKeyModal';
 import { TouchableOpacity } from 'react-native';
