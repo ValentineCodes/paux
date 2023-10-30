@@ -24,6 +24,7 @@ import { FONT_SIZE } from '../../utils/styles'
 import { generate } from "random-words";
 import AccountsCountModal from '../../components/modals/AccountsCountModal'
 import { createWalletWithSeedPhrase } from '../../utils/EIP155Wallet'
+import ReactNativeBiometrics from 'react-native-biometrics'
 
 type Props = {}
 
@@ -40,6 +41,7 @@ function ImportWallet({ }: Props) {
   const [showScanner, setShowScanner] = useState(false)
   const [showAccountsCountModal, setShowAccountsCountModal] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
+  const [isBiometricsAvailable, setIsBiometricsAvailable] = useState(false)
 
   const renderSeedPhraseError = useCallback(() => {
     if (seedPhrase.trim().split(" ").length < 12) return
@@ -131,7 +133,19 @@ function ImportWallet({ }: Props) {
   }
 
   useEffect(() => {
-    setSuggestion(generate({ exactly: 2, join: "" }))
+    (async () => {
+      // set suggested password
+      setSuggestion(generate({ exactly: 2, join: "" }))
+
+      // check biometrics availability
+      const rnBiometrics = new ReactNativeBiometrics()
+
+      const { available } = await rnBiometrics.isSensorAvailable()
+
+      if (available) {
+        setIsBiometricsAvailable(available)
+      }
+    })()
   }, [])
 
   return (
@@ -153,12 +167,16 @@ function ImportWallet({ }: Props) {
           <PasswordInput label="New Password" value={password} suggestion={suggestion} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
           <PasswordInput label="Confirm New Password" value={confirmPassword} suggestion={suggestion} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
 
-          <Divider bgColor="muted.100" />
+          {isBiometricsAvailable && (
+            <>
+              <Divider bgColor="muted.100" />
 
-          <HStack alignItems="center" justifyContent="space-between">
-            <Text fontSize={FONT_SIZE['lg']}>Sign in with Biometrics</Text>
-            <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
-          </HStack>
+              <HStack alignItems="center" justifyContent="space-between">
+                <Text fontSize={FONT_SIZE['lg']}>Sign in with Biometrics</Text>
+                <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
+              </HStack>
+            </>
+          )}
 
           <Divider bgColor="muted.100" />
 

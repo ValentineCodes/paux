@@ -1,4 +1,4 @@
-import { HStack, Switch, Text, VStack, ScrollView, Divider, View } from 'native-base'
+import { HStack, Switch, Text, VStack, ScrollView, Divider, View, useSafeArea } from 'native-base'
 import React, { useEffect, useState } from 'react'
 
 import styles from "../../styles/authentication/createPassword"
@@ -12,6 +12,7 @@ import Button from '../../components/Button'
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
 import { FONT_SIZE } from '../../utils/styles'
 import { generate } from "random-words";
+import ReactNativeBiometrics from 'react-native-biometrics'
 
 type Props = {}
 
@@ -24,6 +25,7 @@ function CreatePassword({ }: Props) {
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isBiometricsEnabled, setIsBiometricsEnabled] = useState(false)
     const [isCreating, setIsCreating] = useState(false)
+    const [isBiometricsAvailable, setIsBiometricsAvailable] = useState(false)
 
     const createPassword = async () => {
         if (!password) {
@@ -71,7 +73,19 @@ function CreatePassword({ }: Props) {
     }
 
     useEffect(() => {
-        setSuggestion(generate({ exactly: 2, join: "" }))
+        (async () => {
+            // set suggested password
+            setSuggestion(generate({ exactly: 2, join: "" }))
+
+            // check biometrics availability
+            const rnBiometrics = new ReactNativeBiometrics()
+
+            const { available } = await rnBiometrics.isSensorAvailable()
+
+            if (available) {
+                setIsBiometricsAvailable(available)
+            }
+        })()
     }, [])
 
     return (
@@ -88,12 +102,16 @@ function CreatePassword({ }: Props) {
                     <PasswordInput label="New Password" value={password} suggestion={suggestion} infoText={password.length < 8 && 'Must be at least 8 characters'} onChange={setPassword} />
                     <PasswordInput label="Confirm New Password" value={confirmPassword} suggestion={suggestion} infoText={password && confirmPassword && password !== confirmPassword && 'Password must match'} onChange={setConfirmPassword} />
 
-                    <Divider bgColor="muted.100" />
+                    {isBiometricsAvailable && (
+                        <>
+                            <Divider bgColor="muted.100" />
 
-                    <HStack alignItems="center" justifyContent="space-between">
-                        <Text fontSize={FONT_SIZE['xl']}>Sign in with Biometrics</Text>
-                        <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
-                    </HStack>
+                            <HStack alignItems="center" justifyContent="space-between">
+                                <Text fontSize={FONT_SIZE['xl']}>Sign in with Biometrics</Text>
+                                <Switch size="md" trackColor={{ true: COLORS.primary, false: "#E5E5E5" }} isChecked={isBiometricsEnabled} onToggle={setIsBiometricsEnabled} />
+                            </HStack>
+                        </>
+                    )}
 
                     <Divider bgColor="muted.100" />
 
