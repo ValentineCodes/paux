@@ -10,13 +10,11 @@ import Button from "../../components/Button"
 import Blockie from '../Blockie'
 import SInfo from "react-native-sensitive-info"
 
-import "react-native-get-random-values"
-import "@ethersproject/shims"
-import { ethers } from "ethers";
 import { Dimensions } from 'react-native';
 
 import { COLORS } from '../../utils/constants';
 import ImportAccountModal from './ImportAccountModal';
+import { createWallet } from '../../utils/EIP155Wallet';
 
 
 type Props = {
@@ -44,20 +42,13 @@ export default function AccountsModal({ isVisible, setVisibility, onClose, onSel
     }
 
     const createAccount = async () => {
-        const mnemonic = await SInfo.getItem("mnemonic", {
-            sharedPreferencesName: "pocket.android.storage",
-            keychainService: "pocket.ios.storage",
-        })
-        const node = ethers.utils.HDNode.fromMnemonic(mnemonic)
-
-        let wallet
+        let newAccount;
 
         for (let i = 0; i < Infinity; i++) {
-            const path = "m/44'/60'/0'/0/" + i
-            const _wallet = node.derivePath(path)
+            const wallet = await createWallet(i)
 
-            if (accounts.find(account => account.address == _wallet.address) == undefined) {
-                wallet = _wallet
+            if (accounts.find(account => account.address == wallet.address) == undefined) {
+                newAccount = wallet
                 break
             }
         }

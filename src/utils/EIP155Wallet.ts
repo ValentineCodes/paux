@@ -1,5 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import EIP155Lib from '../lib/EIP155';
+import SInfo from "react-native-sensitive-info"
+import "react-native-get-random-values"
+import "@ethersproject/shims"
+import { ethers } from "ethers";
 
 export let wallet1: EIP155Lib;
 export let wallet2: EIP155Lib;
@@ -57,4 +61,26 @@ export async function createOrRestoreEIP155Wallet() {
     eip155Wallets,
     eip155Addresses,
   };
+}
+
+export async function createWallet(accountIndex: number) {
+    const mnemonic = await SInfo.getItem("mnemonic", {
+        sharedPreferencesName: "pocket.android.storage",
+        keychainService: "pocket.ios.storage",
+    })
+    const node = ethers.utils.HDNode.fromMnemonic(mnemonic)
+
+    const path = "m/44'/60'/0'/0/" + accountIndex
+    const wallet = node.derivePath(path)
+
+    return wallet
+}
+
+export async function createWalletWithSeedPhrase(seedPhrase: string, accountIndex: number) {
+  const node = ethers.utils.HDNode.fromMnemonic(seedPhrase)
+
+  const path = "m/44'/60'/0'/0/" + accountIndex
+  const wallet = node.derivePath(path)
+
+  return wallet
 }

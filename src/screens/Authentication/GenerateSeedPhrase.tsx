@@ -13,9 +13,7 @@ import "@ethersproject/shims"
 import { ethers } from "ethers";
 import Button from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
-import { useDispatch } from 'react-redux'
 import SInfo from "react-native-sensitive-info";
-import { initAccount } from '../../store/reducers/Accounts'
 import { useToast } from 'react-native-toast-notifications'
 
 interface Wallet {
@@ -30,8 +28,6 @@ export default function GenerateSeedPhrase({ }: Props) {
     const navigation = useNavigation()
 
     const toast = useToast()
-
-    const dispatch = useDispatch()
 
     const [wallet, setWallet] = useState<Wallet>()
     const [showSeedPhrase, setShowSeedPhrase] = useState(false)
@@ -61,13 +57,6 @@ export default function GenerateSeedPhrase({ }: Props) {
                 sharedPreferencesName: "pocket.android.storage",
                 keychainService: "pocket.ios.storage",
             });
-            const account = { privateKey: wallet.privateKey, address: wallet.address }
-            await SInfo.setItem("accounts", JSON.stringify([account]), {
-                sharedPreferencesName: "pocket.android.storage",
-                keychainService: "pocket.ios.storage",
-            })
-
-            dispatch(initAccount({ address: account.address, isImported: false }))
 
             navigation.navigate("ConfirmSeedPhrase")
         } catch (error) {
@@ -80,8 +69,6 @@ export default function GenerateSeedPhrase({ }: Props) {
             const newWallet = ethers.Wallet.createRandom();
             const wallet = {
                 mnemonic: newWallet.mnemonic.phrase,
-                privateKey: newWallet.privateKey,
-                address: newWallet.address
             }
             setWallet(wallet)
             setIsLoading(false)

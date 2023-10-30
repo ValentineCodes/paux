@@ -17,11 +17,13 @@ import PasswordInput from '../../components/forms/PasswordInput'
 import Button from '../../components/Button'
 import { COLORS } from '../../utils/constants'
 import QRCodeScanner from '../../components/modals/QRCodeScanner'
-import { initAccount } from '../../store/reducers/Accounts'
+import { initAccounts } from '../../store/reducers/Accounts'
 import { loginUser } from '../../store/reducers/Auth'
 import { createWeb3Wallet } from '../../utils/Web3WalletClient'
 import { FONT_SIZE } from '../../utils/styles'
 import { generate } from "random-words";
+import AccountsCountModal from '../../components/modals/AccountsCountModal'
+import { createWalletWithSeedPhrase } from '../../utils/EIP155Wallet'
 
 type Props = {}
 
@@ -36,6 +38,7 @@ function ImportWallet({ }: Props) {
   const [confirmPassword, setConfirmPassword] = useState("")
   const [isBiometricsEnabled, setIsBiometricsEnabled] = useState(false)
   const [showScanner, setShowScanner] = useState(false)
+  const [showAccountsCountModal, setShowAccountsCountModal] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
 
   const renderSeedPhraseError = useCallback(() => {
@@ -48,7 +51,7 @@ function ImportWallet({ }: Props) {
     }
   }, [seedPhrase])
 
-  const importWallet = async () => {
+  const validateInput = () => {
     // input validation
     if (!ethers.utils.isValidMnemonic(seedPhrase)) {
       toast.show("Invalid Seed Phrase", {
@@ -77,11 +80,17 @@ function ImportWallet({ }: Props) {
       return
     }
 
-    const walletData = ethers.Wallet.fromMnemonic(seedPhrase)
-    const wallet = {
-      address: walletData.address,
-      privateKey: walletData.privateKey
+    setShowAccountsCountModal(true)
+  }
+
+  const importWallet = async (accountsCount: number) => {
+    let wallets = []
+
+    for (let i = 0; i < accountsCount; i++) {
+      const newWallet = await createWalletWithSeedPhrase(seedPhrase, i)
+      wallets.push(newWallet)
     }
+
     const security = {
       password,
       isBiometricsEnabled
@@ -95,7 +104,7 @@ function ImportWallet({ }: Props) {
         sharedPreferencesName: "pocket.android.storage",
         keychainService: "pocket.ios.storage",
       });
-      await SInfo.setItem("accounts", JSON.stringify([wallet]), {
+      await SInfo.setItem("accounts", JSON.stringify(wallets), {
         sharedPreferencesName: "pocket.android.storage",
         keychainService: "pocket.ios.storage",
       })
@@ -108,7 +117,7 @@ function ImportWallet({ }: Props) {
 
       await createWeb3Wallet()
 
-      dispatch(initAccount({ address: wallet.address, isImported: false }))
+      dispatch(initAccounts(wallets.map(wallet => ({ ...wallet, isImported: false }))))
       dispatch(loginUser())
 
       navigation.navigate("Home")
@@ -153,8 +162,13 @@ function ImportWallet({ }: Props) {
 
           <Divider bgColor="muted.100" />
 
-          <Button text="Import" loading={isImporting} onPress={importWallet} />
+          <Button text="Import" loading={isImporting} onPress={validateInput} />
         </VStack>
+
+        {showAccountsCountModal && <AccountsCountModal isVisible={showAccountsCountModal} onClose={() => setShowAccountsCountModal(false)} onFinish={(accountsCount: number) => {
+          importWallet(accountsCount)
+          setShowAccountsCountModal(false)
+        }} />}
 
         {showScanner && <QRCodeScanner isOpen={showScanner} onClose={() => setShowScanner(false)} onReadCode={value => {
           setSeedPhrase(value)

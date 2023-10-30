@@ -13,6 +13,9 @@ import { loginUser } from '../../store/reducers/Auth'
 import SInfo from "react-native-sensitive-info";
 import { useToast } from 'react-native-toast-notifications'
 import { shuffleArray } from '../../utils/helperFunctions'
+import AccountsCountModal from '../../components/modals/AccountsCountModal'
+import { createWalletWithSeedPhrase } from '../../utils/EIP155Wallet'
+import { initAccounts } from '../../store/reducers/Accounts'
 
 type Props = {}
 
@@ -27,6 +30,7 @@ export default function ConfirmSeedPhrase({ }: Props) {
     const [shuffledSeedPhrase, setShuffledSeedPhrase] = useState<string[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
+    const [showAccountsCountModal, setShowAccountsCountModal] = useState(false)
 
     const isWordSelected = (word: string): boolean => {
         let _seedPhrase = seedPhrase.slice()
@@ -58,7 +62,7 @@ export default function ConfirmSeedPhrase({ }: Props) {
         setSeedPhrase(_seedPhrase)
     }
 
-    const confirm = async () => {
+    const validateInput = () => {
         if (seedPhrase.length !== 12) {
             toast.show("Please complete seed phrase", {
                 type: "warning"
@@ -66,13 +70,32 @@ export default function ConfirmSeedPhrase({ }: Props) {
             return
         }
 
+        setShowAccountsCountModal(true)
+    }
+
+    const confirm = async (accountsCount: number) => {
         try {
             const _seedPhrase = await SInfo.getItem("mnemonic", {
                 sharedPreferencesName: "pocket.android.storage",
                 keychainService: "pocket.ios.storage",
             });
             const selectedSeedPhrase = seedPhrase.join(" ")
+
             if (_seedPhrase === selectedSeedPhrase) {
+                let wallets = []
+
+                for (let i = 0; i < accountsCount; i++) {
+                    const newWallet = await createWalletWithSeedPhrase(_seedPhrase, i)
+                    wallets.push(newWallet)
+                }
+
+                await SInfo.setItem("accounts", JSON.stringify(wallets), {
+                    sharedPreferencesName: "pocket.android.storage",
+                    keychainService: "pocket.ios.storage",
+                })
+
+                dispatch(initAccounts(wallets.map(wallet => ({ ...wallet, isImported: false }))))
+
                 setShowSuccessModal(true)
             } else {
                 toast.show("Incorrect seed phrase order", {
@@ -80,8 +103,9 @@ export default function ConfirmSeedPhrase({ }: Props) {
                 })
             }
         } catch (error) {
-            console.log("Failed to get mnemonic")
-            console.error(error)
+            toast.show("Failed to get mnemonic", {
+                type: 'danger'
+            })
         }
     }
 
@@ -144,13 +168,18 @@ export default function ConfirmSeedPhrase({ }: Props) {
                             cursorColor: '#303030',
                         }}
                         focusOutlineColor={COLORS.primary}
-                        onSubmitEditing={confirm}
+                        onSubmitEditing={validateInput}
                     />)}
                 </HStack>
 
                 <Divider bgColor="muted.100" mt="4" mb="3" />
 
-                <Button text="Confirm" style={{ backgroundColor: seedPhrase.length === 12 ? COLORS.primary : "#2A974D", marginBottom: 50 }} disabled={seedPhrase.length !== 12} onPress={confirm} />
+                <Button text="Confirm" style={{ backgroundColor: seedPhrase.length === 12 ? COLORS.primary : "#2A974D", marginBottom: 50 }} disabled={seedPhrase.length !== 12} onPress={validateInput} />
+
+                {showAccountsCountModal && <AccountsCountModal isVisible={showAccountsCountModal} onClose={() => setShowAccountsCountModal(false)} onFinish={(accountsCount: number) => {
+                    confirm(accountsCount)
+                    setShowAccountsCountModal(false)
+                }} />}
 
                 {/* Success modal */}
                 <Modal isVisible={showSuccessModal} animationIn="zoomIn" animationOut="zoomOut" onBackdropPress={() => setShowSuccessModal(false)} onBackButtonPress={() => setShowSuccessModal(false)}>

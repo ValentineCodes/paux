@@ -11,13 +11,17 @@ export const accountsSlice = createSlice({
   name: 'ACCOUNTS',
   initialState: [] as Account[] | [],
   reducers: {
-    initAccount: (state, action) => {
-      return [{
-        name: "Account 1",
-        address: action.payload.address,
-        isConnected: true,
-        isImported: action.payload.isImported
-      }]
+    initAccounts: (state, action) => {
+      const wallets = action.payload
+      const accounts = wallets.map((wallet: any, index: number) => ({
+        name: `Account ${index + 1}`,
+        address: wallet.address,
+        isConnected: index === 0,
+        isImported: wallet.isImported
+      }))
+
+      return accounts
+
     },
     addAccount: (state, action) => {
       const accounts = state.map(account => ({...account, isConnected: false}))
@@ -62,7 +66,7 @@ export const accountsSlice = createSlice({
   },
 });
 
-export const {initAccount, addAccount, switchAccount, removeAccount, changeName} =
+export const {initAccounts, addAccount, switchAccount, removeAccount, changeName} =
   accountsSlice.actions;
 
 export default accountsSlice.reducer;
