@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { HStack, VStack, Icon, Text, Input, Divider, View, FlatList, Image } from 'native-base'
+import { HStack, VStack, Icon, Text, Input, Divider, View, FlatList, Image, Pressable } from 'native-base'
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
 import { FONT_SIZE } from '../../utils/styles'
 import { COLORS } from '../../utils/constants'
@@ -273,18 +273,24 @@ export default function Transfer({ }: Props) {
             <VStack space="2">
                 <Text fontSize={FONT_SIZE['lg']} fontWeight="medium">From:</Text>
 
-                <TouchableOpacity activeOpacity={0.4} style={styles.fromAccountContainer} disabled={accounts.length === 1} onPress={() => setShowFromAccountsModal(true)}>
-                    <HStack alignItems="center" space="2">
-                        <Blockie address={from.address} size={1.8 * FONT_SIZE['xl']} />
+                <Pressable disabled={accounts.length === 1} onPress={() => setShowFromAccountsModal(true)}>
+                    {({ isPressed }) => (
+                        <>
+                            <View style={styles.fromAccountContainer} bgColor={isPressed ? 'rgba(39, 184, 88, 0.2)' : '#f5f5f5'}>
+                                <HStack alignItems="center" space="2">
+                                    <Blockie address={from.address} size={1.8 * FONT_SIZE['xl']} />
 
-                        <VStack w="75%">
-                            <Text fontSize={FONT_SIZE['xl']} fontWeight="medium">{from.name}</Text>
-                            <Text fontSize={FONT_SIZE['md']}>Balance: {balance !== null && `${formatBalance()} ${connectedNetwork.currencySymbol}`}</Text>
-                        </VStack>
-                    </HStack>
+                                    <VStack w="75%">
+                                        <Text fontSize={FONT_SIZE['xl']} fontWeight="medium">{from.name}</Text>
+                                        <Text fontSize={FONT_SIZE['md']}>Balance: {balance !== null && `${formatBalance()} ${connectedNetwork.currencySymbol}`}</Text>
+                                    </VStack>
+                                </HStack>
 
-                    {accounts.length > 1 && <Icon as={<Ionicons name="chevron-down" />} size={1.1 * FONT_SIZE['xl']} color="black" mr="2" />}
-                </TouchableOpacity>
+                                {accounts.length > 1 && <Icon as={<Ionicons name="chevron-down" />} size={1.1 * FONT_SIZE['xl']} color="black" mr="2" />}
+                            </View>
+                        </>
+                    )}
+                </Pressable>
             </VStack>
 
             <VStack space="2">
@@ -452,7 +458,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: '#F5F5F5',
         borderRadius: 10,
         paddingHorizontal: 10,
         paddingVertical: 5

@@ -153,7 +153,7 @@ export default function ConfirmationModal({ isVisible, onClose, txData, estimate
                 </VStack>
 
                 <HStack w="full" alignItems="center" justifyContent="space-between">
-                    <RNButton py="4" bgColor="red.100" w="50%" onPress={onClose}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
+                    <RNButton py="4" bgColor="red.100" w="50%" onPress={onClose} _pressed={{ background: 'red.200' }}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
                     <Button text="Confirm" loading={isTransferring} onPress={transfer} style={{ width: "50%", borderRadius: 0 }} />
                 </HStack>
             </VStack>

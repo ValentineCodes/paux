@@ -83,14 +83,14 @@ export default function SwitchAccountModal({ isVisible, onClose }: Props) {
 
                 <Divider bgColor="muted.300" my="2" />
 
-                {sessions.length > 1 && <Pressable><Text color="blue.400" fontWeight="semibold" fontSize={FONT_SIZE['lg']} textAlign="right" onPress={switchAll}>Switch all</Text></Pressable>}
+                {sessions.length > 1 && <Pressable _pressed={{ opacity: 0.4 }}><Text color="blue.400" fontWeight="semibold" fontSize={FONT_SIZE['lg']} textAlign="right" onPress={switchAll}>Switch all</Text></Pressable>}
                 <FlatList
                     data={sessions}
                     keyExtractor={item => item.site}
                     renderItem={({ item }) => (
                         <HStack space={4} py="2" alignItems="center" justifyContent="space-between">
                             <Text fontSize={FONT_SIZE['lg']} fontWeight="medium" w="70%">{item.site}</Text>
-                            <Pressable onPress={() => switchAccount(item)}><Text color="blue.500" fontWeight="semibold" fontSize={FONT_SIZE['lg']}>Switch</Text></Pressable>
+                            <Pressable onPress={() => switchAccount(item)} _pressed={{ opacity: 0.4 }}><Text color="blue.500" fontWeight="semibold" fontSize={FONT_SIZE['lg']}>Switch</Text></Pressable>
                         </HStack>
                     )}
                     ItemSeparatorComponent={<Divider bgColor="muted.100" my="2" />}

@@ -58,14 +58,14 @@ export default function AccountsModal({ isVisible, setVisibility, onClose, onSel
             keychainService: "pocket.ios.storage",
         })
 
-        await SInfo.setItem("accounts", JSON.stringify([...JSON.parse(createdAccounts), { privateKey: wallet.privateKey, address: wallet.address }]), {
+        await SInfo.setItem("accounts", JSON.stringify([...JSON.parse(createdAccounts), { privateKey: newAccount.privateKey, address: newAccount.address }]), {
             sharedPreferencesName: "pocket.android.storage",
             keychainService: "pocket.ios.storage",
         })
 
-        dispatch(addAccount({ address: wallet.address, isImported: false }))
+        dispatch(addAccount({ address: newAccount.address, isImported: false }))
 
-        dispatch(switchAccount(wallet.address))
+        dispatch(switchAccount(newAccount.address))
         setVisibility(false)
     }
 

@@ -1,6 +1,6 @@
 import { Divider, ScrollView, Text, VStack, View, HStack, Input, Image } from 'native-base'
 import React, { useState, useEffect } from 'react'
-import { ActivityIndicator, Dimensions, StyleSheet } from 'react-native'
+import { ActivityIndicator, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import ProgressIndicatorHeader from '../../components/headers/ProgressIndicatorHeader'
 import { COLORS } from '../../utils/constants'
 import { FONT_SIZE } from '../../utils/styles'
@@ -145,7 +145,9 @@ export default function ConfirmSeedPhrase({ }: Props) {
                     <ActivityIndicator size="large" color={COLORS.primary} />
                 </View> : <ScrollView contentContainerStyle={styles.seedPhraseWrapper} style={styles.seedPhraseContainer}>
                     {shuffledSeedPhrase.map((word) => (
-                        <Text key={Math.random().toString()} style={[styles.word, { backgroundColor: isWordSelected(word) ? COLORS.primary : "#F5F5F5", color: isWordSelected(word) ? "white" : "black" }]} onPress={() => handleWordSelection(word)}>{word}</Text>
+                        <TouchableOpacity activeOpacity={0.4} onPress={() => handleWordSelection(word)} style={{ width: '45%' }}>
+                            <Text key={Math.random().toString()} style={[styles.word, { backgroundColor: isWordSelected(word) ? COLORS.primary : "#F5F5F5", color: isWordSelected(word) ? "white" : "black" }]}>{word}</Text>
+                        </TouchableOpacity>
                     ))}
                 </ScrollView>}
 
@@ -222,7 +224,6 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     word: {
-        width: '45%',
         padding: 10,
         textAlign: "center",
         fontWeight: 'bold',

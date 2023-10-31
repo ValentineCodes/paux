@@ -57,17 +57,25 @@ function MainBalance({ balance, dollarValue, isRefreshing, refresh }: Props) {
 
         <HStack alignItems="center" space="10">
           <Pressable alignItems="center" onPress={() => navigation.navigate("Transfer")}>
-            <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
-              <Icon as={<Ionicons name="paper-plane" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
-            </View>
-            <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Send</Text>
+            {({ isPressed }) => (
+              <>
+                <View bgColor={isPressed ? 'rgba(39, 184, 88, 0.2)' : COLORS.primaryLight} p="4" borderRadius="full">
+                  <Icon as={<Ionicons name="paper-plane" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
+                </View>
+                <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Send</Text>
+              </>
+            )}
           </Pressable>
 
           <Pressable alignItems="center" onPress={() => setShowReceiveModal(true)}>
-            <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
-              <Icon as={<Ionicons name="download" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
-            </View>
-            <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Receive</Text>
+            {({ isPressed }) => (
+              <>
+                <View bgColor={isPressed ? 'rgba(39, 184, 88, 0.2)' : COLORS.primaryLight} p="4" borderRadius="full">
+                  <Icon as={<Ionicons name="download" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
+                </View>
+                <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Receive</Text>
+              </>
+            )}
           </Pressable>
         </HStack>
 

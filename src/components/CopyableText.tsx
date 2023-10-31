@@ -1,9 +1,9 @@
-import { HStack, Text, Icon, Pressable } from 'native-base'
+import { HStack, Text, Icon } from 'native-base'
 import React from 'react'
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
 import Clipboard from '@react-native-clipboard/clipboard';
 import { useToast } from 'react-native-toast-notifications';
-import { ViewStyle, TextStyle } from 'react-native';
+import { ViewStyle, TextStyle, TouchableOpacity } from 'react-native';
 
 type Props = {
     value: string;
@@ -23,11 +23,11 @@ export default function CopyableText({ value, containerStyle, textStyle, iconSty
         })
     }
     return (
-        <Pressable onPress={copy}>
+        <TouchableOpacity activeOpacity={0.4} onPress={copy}>
             <HStack alignItems="center" space={1} style={containerStyle}>
                 <Text textAlign="center" fontWeight="medium" style={textStyle}>{displayText || value}</Text>
                 <Icon as={<Ionicons name="copy" />} size={5} style={iconStyle} />
             </HStack>
-        </Pressable>
+        </TouchableOpacity>
     )
 }

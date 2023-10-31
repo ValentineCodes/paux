@@ -253,10 +253,21 @@ export default function Header({ }: Props) {
         <HStack alignItems="center" justifyContent="space-between" py="4" borderBottomColor="#ccc">
             <Image source={require("../../../assets/images/pocket.png")} alt="Pocket" style={styles.logo} />
 
-            <Select selectedValue={connectedNetwork.chainId.toString()} flex="1" borderRadius={25} mx="10" accessibilityLabel="Choose Network" placeholder="Choose Network" _selectedItem={{
-                bg: COLORS.primary,
-                endIcon: <CheckIcon size={5} color="white" />
-            }} dropdownIcon={<Icon as={<Ionicons name="chevron-down" />} size={1.3 * FONT_SIZE['xl']} color="black" mr="2" />} fontSize={FONT_SIZE['md']} onValueChange={handleNetworkSelecttion}>
+            <Select
+                selectedValue={connectedNetwork.chainId.toString()}
+                flex="1"
+                borderRadius={25}
+                mx="10"
+                accessibilityLabel="Choose Network"
+                placeholder="Choose Network"
+                _selectedItem={{
+                    bg: COLORS.primary,
+                    endIcon: <CheckIcon size={5} color="white" />
+                }}
+                dropdownIcon={<Icon as={<Ionicons name="chevron-down" />} size={1.3 * FONT_SIZE['xl']} color="black" mr="2" />}
+                fontSize={FONT_SIZE['md']}
+                onValueChange={handleNetworkSelecttion}
+            >
                 {networks.map((network: Network) => <Select.Item key={network.chainId} label={network.name} value={network.chainId.toString()} />)}
             </Select>
 

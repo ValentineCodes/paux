@@ -73,7 +73,7 @@ export default function AccountsCountModal({ isVisible, onClose, onFinish }: Pro
                 </VStack>
 
                 <HStack w="full" alignItems="center" justifyContent="space-between">
-                    <RNButton py="4" bgColor="red.100" w="50%" onPress={onClose}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
+                    <RNButton py="4" bgColor="red.100" w="50%" onPress={onClose} _pressed={{ backgroundColor: 'red.200' }}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
                     <Button text="Continue" onPress={handleOnFinish} style={{ width: "50%", borderRadius: 0 }} />
                 </HStack>
             </VStack>

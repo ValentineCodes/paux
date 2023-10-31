@@ -1,4 +1,4 @@
-import { VStack, Text, HStack, Icon, Divider, Switch, Pressable, View, ScrollView } from 'native-base'
+import { VStack, Text, HStack, Icon, Divider, Switch, View, ScrollView } from 'native-base'
 import React, { useCallback, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useToast } from 'react-native-toast-notifications'
@@ -25,6 +25,7 @@ import { generate } from "random-words";
 import AccountsCountModal from '../../components/modals/AccountsCountModal'
 import { createWalletWithSeedPhrase } from '../../utils/EIP155Wallet'
 import ReactNativeBiometrics from 'react-native-biometrics'
+import { TouchableOpacity } from 'react-native'
 
 type Props = {}
 
@@ -156,9 +157,9 @@ function ImportWallet({ }: Props) {
           <Text fontSize={1.2 * FONT_SIZE["xl"]} bold>Import From Seed</Text>
         </HStack>
 
-        <Pressable onPress={() => setShowScanner(true)}>
+        <TouchableOpacity activeOpacity={0.4} onPress={() => setShowScanner(true)}>
           <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color="black" />
-        </Pressable>
+        </TouchableOpacity>
       </HStack>
 
       <ScrollView flex="1">
@@ -193,7 +194,7 @@ function ImportWallet({ }: Props) {
           setShowScanner(false)
         }} />}
       </ScrollView>
-    </View>
+    </View >
   )
 }
 

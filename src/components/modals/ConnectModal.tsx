@@ -33,7 +33,7 @@ export default function ConnectModal({ isVisible, isPairing, onClose, pair }: Pr
                         fontSize="md"
                         focusOutlineColor={COLORS.primary}
                         InputRightElement={
-                            <Pressable onPress={() => setShowScanner(true)} mr="2">
+                            <Pressable onPress={() => setShowScanner(true)} mr="2" _pressed={{ opacity: 0.4 }}>
                                 <Icon as={<MaterialCommunityIcons name="qrcode-scan" />} size={1.3 * FONT_SIZE['xl']} color={COLORS.primary} />
                             </Pressable>
                         }

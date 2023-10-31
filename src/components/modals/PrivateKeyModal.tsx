@@ -93,7 +93,7 @@ export default function PrivateKeyModal({ isVisible, onClose }: Props) {
                 {privateKey ? (
                     <HStack alignItems="center" w="full" borderWidth="1" borderColor={COLORS.primary} borderRadius={10} p="4">
                         <Text fontSize={FONT_SIZE['lg']} w="90%" mr="2">{privateKey}</Text>
-                        <Pressable onPress={copyPrivateKey}><Icon as={<Ionicons name="copy" />} size={5} color={COLORS.primary} /></Pressable>
+                        <Pressable onPress={copyPrivateKey} _pressed={{ opacity: 0.4 }}><Icon as={<Ionicons name="copy" />} size={5} color={COLORS.primary} /></Pressable>
                     </HStack>
                 ) : (
                     <VStack w="full" space={2}>
@@ -126,7 +126,7 @@ export default function PrivateKeyModal({ isVisible, onClose }: Props) {
                 {privateKey ? (
                     <Button text="Done" onPress={handleOnClose} />
                 ) : (<HStack w="full" alignItems="center" justifyContent="space-between">
-                    <RNButton py="4" bgColor="red.100" w="50%" onPress={handleOnClose}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
+                    <RNButton py="4" bgColor="red.100" w="50%" onPress={handleOnClose} _pressed={{ backgroundColor: 'red.200' }}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
                     <Button text="Reveal" onPress={showPrivateKey} style={{ width: "50%", borderRadius: 0 }} />
                 </HStack>)}
             </VStack>

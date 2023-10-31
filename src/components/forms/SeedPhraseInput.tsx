@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import MaterialIcons from "react-native-vector-icons/dist/MaterialIcons"
 import { COLORS } from '../../utils/constants';
 import { FONT_SIZE } from '../../utils/styles';
+import { TouchableOpacity } from 'react-native';
 
 type Props = {
     value?: string;
@@ -29,12 +30,14 @@ export default function SeedPhraseInput({ value, infoText, errorText, onChange, 
                 value={value}
                 InputRightElement={
                     <HStack space={1} position="absolute" right="2" top="5">
-                        {value && <Pressable onPress={() => onChange("")} >
-                            <Icon as={<MaterialIcons name="close" />} size={5} mr="2" color="muted.400" />
-                        </Pressable>}
-                        <Pressable onPress={() => setShow(!show)} >
+                        {value && (
+                            <TouchableOpacity activeOpacity={0.4} onPress={() => onChange("")} >
+                                <Icon as={<MaterialIcons name="close" />} size={5} mr="2" color="muted.400" />
+                            </TouchableOpacity>
+                        )}
+                        <TouchableOpacity activeOpacity={0.4} onPress={() => setShow(!show)} >
                             <Icon as={<MaterialIcons name={show ? "visibility" : "visibility-off"} />} size={5} mr="2" color="muted.400" />
-                        </Pressable>
+                        </TouchableOpacity>
                     </HStack>
 
                 }

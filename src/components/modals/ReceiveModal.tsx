@@ -58,17 +58,25 @@ export default function ReceiveModal({ isVisible, onClose }: Props) {
 
                 <HStack alignItems="center" space="10" mt="5">
                     <Pressable alignItems="center" onPress={copyAddress}>
-                        <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
-                            <Icon as={<Ionicons name="reader" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
-                        </View>
-                        <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Copy</Text>
+                        {({ isPressed }) => (
+                            <>
+                                <View bgColor={isPressed ? 'rgba(39, 184, 88, 0.2)' : COLORS.primaryLight} p="4" borderRadius="full">
+                                    <Icon as={<Ionicons name="reader" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
+                                </View>
+                                <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Copy</Text>
+                            </>
+                        )}
                     </Pressable>
 
                     <Pressable alignItems="center" onPress={shareAddress}>
-                        <View bgColor={COLORS.primaryLight} p="4" borderRadius="full">
-                            <Icon as={<Ionicons name="paper-plane" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
-                        </View>
-                        <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Share</Text>
+                        {({ isPressed }) => (
+                            <>
+                                <View bgColor={isPressed ? 'rgba(39, 184, 88, 0.2)' : COLORS.primaryLight} p="4" borderRadius="full">
+                                    <Icon as={<Ionicons name="paper-plane" />} size={1.2 * FONT_SIZE['xl']} color={COLORS.primary} borderRadius="full" />
+                                </View>
+                                <Text fontSize={FONT_SIZE["lg"]} bold mt="2">Share</Text>
+                            </>
+                        )}
                     </Pressable>
                 </HStack>
             </VStack>

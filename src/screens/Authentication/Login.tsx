@@ -188,7 +188,7 @@ export default function Login({ }: Props) {
 
             <Text fontSize={FONT_SIZE['lg']} textAlign="center" my="4">Wallet won't unlock? You can ERASE your current wallet and setup a new one</Text>
 
-            <Pressable onPress={() => setShowResetWalletConsentModal(true)}><Text fontSize={FONT_SIZE['xl']} color={COLORS.primary}>Reset Wallet</Text></Pressable>
+            <Pressable onPress={() => setShowResetWalletConsentModal(true)} _pressed={{ opacity: 0.4 }}><Text fontSize={FONT_SIZE['xl']} color={COLORS.primary}>Reset Wallet</Text></Pressable>
 
             <ConsentModal
                 isVisible={showResetWalletConsentModal}

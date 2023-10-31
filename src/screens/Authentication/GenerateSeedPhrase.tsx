@@ -113,7 +113,17 @@ export default function GenerateSeedPhrase({ }: Props) {
                                 <VStack style={styles.seedPhraseMask} space={2}>
                                     <Text fontSize={FONT_SIZE['xl']} bold textAlign="center">Tap to reveal your seed phrase</Text>
                                     <Text fontSize={FONT_SIZE['md']} textAlign="center">Make sure no one is watching your screen</Text>
-                                    <RNButton py="3" borderRadius={25} bgColor="#2AB858" w="24" mt="2" leftIcon={<Icon as={<MaterialIcons name="visibility" color="white" />} size="md" />} onPress={() => setShowSeedPhrase(true)}><Text color="white" bold fontSize={FONT_SIZE['lg']}>View</Text></RNButton>
+                                    <RNButton
+                                        py="3"
+                                        borderRadius={25}
+                                        bgColor="#2AB858"
+                                        w="24"
+                                        mt="2"
+                                        leftIcon={<Icon as={<MaterialIcons name="visibility" color="white" />} size="md" />}
+                                        onPress={() => setShowSeedPhrase(true)}
+                                        _pressed={{ opacity: 0.8 }}>
+                                        <Text color="white" bold fontSize={FONT_SIZE['lg']}>View</Text>
+                                    </RNButton>
                                 </VStack>
                             </>
                         )

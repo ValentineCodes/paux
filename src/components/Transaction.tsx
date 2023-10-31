@@ -69,7 +69,7 @@ export default function Transaction({ tx }: Props) {
     }
 
     return (
-        <Pressable onPress={() => setShowTxDetails(true)}>
+        <Pressable onPress={() => setShowTxDetails(true)} _pressed={{ backgroundColor: 'rgba(39, 184, 88, 0.2)' }}>
             <HStack justifyContent="space-between" alignItems="center" py="2">
                 <HStack alignItems="center" space={4}>
                     {renderActionIcon()}

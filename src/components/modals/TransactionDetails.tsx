@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, VStack, Icon, HStack, Divider } from 'native-base'
+import { Text, VStack, Icon, HStack, Divider, Pressable } from 'native-base'
 import { useSelector } from 'react-redux';
 import { Account } from '../../store/reducers/Accounts';
 import { Network } from '../../store/reducers/Networks';
@@ -7,7 +7,7 @@ import { Network } from '../../store/reducers/Networks';
 import "react-native-get-random-values"
 import "@ethersproject/shims"
 import { BigNumber, ethers } from "ethers";
-import { Linking, Pressable } from 'react-native';
+import { Linking } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
 import Modal from "react-native-modal"
 import Ionicons from "react-native-vector-icons/dist/Ionicons"
@@ -147,7 +147,7 @@ export default function TransactionDetails({ isVisible, onClose, tx }: Props) {
                     </HStack>
                 </VStack>
 
-                {connectedNetwork.blockExplorer && <Pressable onPress={viewOnBlockExplorer}><Text textAlign="center" mt="2" fontSize={FONT_SIZE['lg']} fontWeight="semibold" color={COLORS.primary}>View on block explorer</Text></Pressable>}
+                {connectedNetwork.blockExplorer && <Pressable onPress={viewOnBlockExplorer} _pressed={{ opacity: 0.4 }}><Text textAlign="center" mt="2" fontSize={FONT_SIZE['lg']} fontWeight="semibold" color={COLORS.primary}>View on block explorer</Text></Pressable>}
             </VStack>
         </Modal>
     )

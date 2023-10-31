@@ -57,7 +57,7 @@ export default function ConnectedSitesModal({ isVisible, onClose }: Props) {
                         renderItem={({ item }) => (
                             <HStack space={4} py="2" alignItems="center" justifyContent="space-between">
                                 <Text fontSize={FONT_SIZE['lg']} fontWeight="medium" w="60%">{item.name}</Text>
-                                <Pressable onPress={() => disconnectSession(item)}><Text color="blue.500" fontWeight="semibold" fontSize={FONT_SIZE['lg']}>Disconnect</Text></Pressable>
+                                <Pressable onPress={() => disconnectSession(item)} _pressed={{ opacity: 0.4 }}><Text color="blue.500" fontWeight="semibold" fontSize={FONT_SIZE['lg']}>Disconnect</Text></Pressable>
                             </HStack>
                         )}
                         ItemSeparatorComponent={<Divider bgColor="muted.100" my="2" />}
