@@ -1,4 +1,4 @@
-package com.pocket;
+package com.pocket.scaffoldwallet;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

@@ -1,4 +1,4 @@
-package com.pocket;
+package com.pocket.scaffoldwallet;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
