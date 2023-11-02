@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import { ScrollView, Image, Text, Icon, VStack } from 'native-base'
+import { ScrollView, Image, Text, Icon, VStack, Pressable } from 'native-base'
 
 import Button from '../../components/Button'
 import { COLORS } from '../../utils/constants'
@@ -18,7 +18,9 @@ export default function WalletSetup({ }: Props) {
             justifyContent: "center",
             alignItems: "center"
         }} style={styles.container}>
-            <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" style={styles.navBtn} onPress={() => navigation.goBack()} />
+            <Pressable onPress={() => navigation.goBack()} _pressed={{ opacity: 0.4 }} style={styles.navBtn}>
+                <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+            </Pressable>
             <Image source={require("../../assets/icons/wallet_icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
 
             <VStack w="full" mt="10">

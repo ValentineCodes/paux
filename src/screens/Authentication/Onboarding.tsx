@@ -18,6 +18,11 @@ export default function Onboarding({ }: Props) {
         return true;
     });
 
+    const handleNav = () => {
+        navigation.navigate("WalletSetup")
+        backHandler.remove()
+    }
+
     useEffect(() => {
         return () => {
             backHandler.remove();
@@ -35,7 +40,7 @@ export default function Onboarding({ }: Props) {
                 <Text textAlign="center" color={COLORS.primary} fontSize={2 * FONT_SIZE["xl"]} bold>Welcome to Pocket</Text>
                 <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="4">A safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more</Text>
 
-                <Button text="Get Started" onPress={() => navigation.navigate("WalletSetup")} style={{ marginTop: 40, marginBottom: 50 }} />
+                <Button text="Get Started" onPress={handleNav} style={{ marginTop: 40, marginBottom: 50 }} />
             </VStack>
         </ScrollView >
     )

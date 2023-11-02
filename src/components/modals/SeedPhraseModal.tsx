@@ -74,7 +74,9 @@ export default function SeedPhraseModal({ isVisible, onClose }: Props) {
             <VStack bgColor="white" borderRadius="30" p="5" alignItems="center" space="4" w="full">
                 <HStack alignItems="center" justifyContent="space-between" space="2" w="full">
                     <Text fontSize={1.1 * FONT_SIZE['xl']} bold>Show seed phrase</Text>
-                    <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} color="black" onPress={handleOnClose} />
+                    <Pressable onPress={handleOnClose} _pressed={{ opacity: 0.4 }}>
+                        <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} color="black" />
+                    </Pressable>
                 </HStack>
 
                 {seedPhrase ? (

@@ -43,7 +43,9 @@ export default function ReceiveModal({ isVisible, onClose }: Props) {
             <VStack bgColor="white" borderRadius="30" p="5" space={4} alignItems="center">
                 <HStack alignItems="center" justifyContent="space-between" w="full">
                     <Text fontSize={FONT_SIZE['xl']} bold>Receive {connectedNetwork.currencySymbol}</Text>
-                    <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} onPress={onClose} />
+                    <Pressable onPress={onClose} _pressed={{ opacity: 0.4 }}>
+                        <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} />
+                    </Pressable>
                 </HStack>
 
                 <Divider bgColor="muted.100" />

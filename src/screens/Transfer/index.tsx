@@ -266,7 +266,9 @@ export default function Transfer({ }: Props) {
     return (
         <VStack flex="1" bgColor="white" p="15" space="6">
             <HStack alignItems="center" space={2}>
-                <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" onPress={() => navigation.goBack()} />
+                <Pressable onPress={() => navigation.goBack()} _pressed={{ opacity: 0.4 }}>
+                    <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+                </Pressable>
                 <Text fontSize={1.2 * FONT_SIZE["xl"]} bold>Send {connectedNetwork.currencySymbol}</Text>
             </HStack>
 

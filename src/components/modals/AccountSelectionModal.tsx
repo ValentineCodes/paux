@@ -37,7 +37,9 @@ export default function AccountSelectionModal({ isVisible, onClose, onSelect }: 
             <VStack bgColor="white" borderRadius="30" p="5" space={2}>
                 <HStack alignItems="center" justifyContent="space-between">
                     <Text fontSize={FONT_SIZE['xl']} bold>Select account to connect with</Text>
-                    <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} onPress={onClose} />
+                    <Pressable onPress={onClose} _pressed={{ opacity: 0.4 }}>
+                        <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} />
+                    </Pressable>
                 </HStack>
 
                 <Divider bgColor="muted.300" mt="2" />

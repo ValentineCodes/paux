@@ -42,7 +42,9 @@ export default function ConnectedSitesModal({ isVisible, onClose }: Props) {
             <VStack bgColor="white" borderRadius="30" p="5" space={2} maxH="50%">
                 <HStack alignItems="center" justifyContent="space-between">
                     <Text fontSize={FONT_SIZE['xl']} bold>Connected sites</Text>
-                    <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} onPress={onClose} />
+                    <Pressable onPress={onClose} _pressed={{ opacity: 0.4 }}>
+                        <Icon as={<Ionicons name="close-outline" />} size={1.5 * FONT_SIZE['xl']} />
+                    </Pressable>
                 </HStack>
                 <Text fontSize={1.1 * FONT_SIZE['md']}>{connectedAccount.name} is connected to these sites. They can view your account address.</Text>
 
@@ -57,7 +59,9 @@ export default function ConnectedSitesModal({ isVisible, onClose }: Props) {
                         renderItem={({ item }) => (
                             <HStack space={4} py="2" alignItems="center" justifyContent="space-between">
                                 <Text fontSize={FONT_SIZE['lg']} fontWeight="medium" w="60%">{item.name}</Text>
-                                <Pressable onPress={() => disconnectSession(item)} _pressed={{ opacity: 0.4 }}><Text color="blue.500" fontWeight="semibold" fontSize={FONT_SIZE['lg']}>Disconnect</Text></Pressable>
+                                <Pressable onPress={() => disconnectSession(item)} _pressed={{ opacity: 0.4 }}>
+                                    <Text color="blue.500" fontWeight="semibold" fontSize={FONT_SIZE['lg']}>Disconnect</Text>
+                                </Pressable>
                             </HStack>
                         )}
                         ItemSeparatorComponent={<Divider bgColor="muted.100" my="2" />}

@@ -1,4 +1,4 @@
-import { VStack, Text, HStack, Icon, Divider, Switch, View, ScrollView } from 'native-base'
+import { VStack, Text, HStack, Icon, Divider, Switch, View, ScrollView, Pressable } from 'native-base'
 import React, { useCallback, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useToast } from 'react-native-toast-notifications'
@@ -153,7 +153,9 @@ function ImportWallet({ }: Props) {
     <View style={styles.container}>
       <HStack alignItems="center" justifyContent="space-between">
         <HStack alignItems="center" space={2}>
-          <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" onPress={() => navigation.goBack()} />
+          <Pressable onPress={() => navigation.goBack()} _pressed={{ opacity: 0.4 }}>
+            <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" />
+          </Pressable>
           <Text fontSize={1.2 * FONT_SIZE["xl"]} bold>Import From Seed</Text>
         </HStack>
 
