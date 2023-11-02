@@ -52,31 +52,31 @@ export default function AccountsCountModal({ isVisible, onClose, onFinish }: Pro
             <VStack bgColor="white" borderRadius="30" p="5" alignItems="center" space="4" w="full">
                 <Text fontSize={1.1 * FONT_SIZE['xl']} fontWeight="medium" textAlign="center">How many accounts would you like to start with?</Text>
 
-                <VStack w="full" space={2}>
-                    <Input
-                        value={accountsCount}
-                        borderRadius="lg"
-                        variant="filled"
-                        fontSize="md"
-                        focusOutlineColor={COLORS.primary}
-                        onChangeText={handleInputChange}
-                        onSubmitEditing={handleOnFinish}
-                        keyboardType="number-pad"
-                        focusOutlineColor={COLORS.primary}
-                        selectTextOnFocus
-                        _input={{
-                            selectionColor: COLORS.primary,
-                            cursorColor: COLORS.primary,
-                        }}
-                    />
-                    {error && <Text fontSize="sm" color="red.400">{error}</Text>}
-                </VStack>
+                <Input
+                    value={accountsCount}
+                    borderWidth="0"
+                    fontSize="4xl"
+                    focusOutlineColor={COLORS.primary}
+                    onChangeText={handleInputChange}
+                    onSubmitEditing={handleOnFinish}
+                    keyboardType="number-pad"
+                    focusOutlineColor={COLORS.primary}
+                    color={COLORS.primary}
+                    bgColor="transaparent"
+                    selectTextOnFocus
+                    _input={{
+                        selectionColor: COLORS.primaryLight,
+                        cursorColor: COLORS.primary,
+                    }}
+                    textAlign="center"
+                />
+                {error && <Text fontSize="sm" color="red.400">{error}</Text>}
 
                 <HStack w="full" alignItems="center" justifyContent="space-between">
                     <RNButton py="4" bgColor="red.100" w="50%" onPress={onClose} _pressed={{ backgroundColor: 'red.200' }}><Text color="red.400" bold fontSize="md">Cancel</Text></RNButton>
                     <Button text="Continue" onPress={handleOnFinish} style={{ width: "50%", borderRadius: 0 }} />
                 </HStack>
             </VStack>
-        </Modal>
+        </Modal >
     )
 }

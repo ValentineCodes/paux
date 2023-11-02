@@ -62,7 +62,7 @@ export default function ConfirmSeedPhrase({ }: Props) {
         setSeedPhrase(_seedPhrase)
     }
 
-    const validateInput = () => {
+    const validateInput = async () => {
         if (seedPhrase.length !== 12) {
             toast.show("Please complete seed phrase", {
                 type: "warning"
@@ -70,10 +70,6 @@ export default function ConfirmSeedPhrase({ }: Props) {
             return
         }
 
-        setShowAccountsCountModal(true)
-    }
-
-    const confirm = async (accountsCount: number) => {
         try {
             const _seedPhrase = await SInfo.getItem("mnemonic", {
                 sharedPreferencesName: "pocket.android.storage",
@@ -81,29 +77,45 @@ export default function ConfirmSeedPhrase({ }: Props) {
             });
             const selectedSeedPhrase = seedPhrase.join(" ")
 
-            if (_seedPhrase === selectedSeedPhrase) {
-                let wallets = []
-
-                for (let i = 0; i < accountsCount; i++) {
-                    const newWallet = await createWalletWithSeedPhrase(_seedPhrase, i)
-                    wallets.push(newWallet)
-                }
-
-                await SInfo.setItem("accounts", JSON.stringify(wallets), {
-                    sharedPreferencesName: "pocket.android.storage",
-                    keychainService: "pocket.ios.storage",
-                })
-
-                dispatch(initAccounts(wallets.map(wallet => ({ ...wallet, isImported: false }))))
-
-                setShowSuccessModal(true)
-            } else {
+            if (_seedPhrase !== selectedSeedPhrase) {
                 toast.show("Incorrect seed phrase order", {
                     type: "danger"
                 })
+                return
             }
+
+            setShowAccountsCountModal(true)
         } catch (error) {
-            toast.show("Failed to get mnemonic", {
+            toast.show("Failed to get mnemonic. Please try again.", {
+                type: 'danger'
+            })
+        }
+    }
+
+    const confirm = async (accountsCount: number) => {
+        try {
+            const seedPhrase = await SInfo.getItem("mnemonic", {
+                sharedPreferencesName: "pocket.android.storage",
+                keychainService: "pocket.ios.storage",
+            });
+
+            let wallets = []
+
+            for (let i = 0; i < accountsCount; i++) {
+                const newWallet = await createWalletWithSeedPhrase(seedPhrase, i)
+                wallets.push(newWallet)
+            }
+
+            await SInfo.setItem("accounts", JSON.stringify(wallets), {
+                sharedPreferencesName: "pocket.android.storage",
+                keychainService: "pocket.ios.storage",
+            })
+
+            dispatch(initAccounts(wallets.map(wallet => ({ ...wallet, isImported: false }))))
+
+            setShowSuccessModal(true)
+        } catch (error) {
+            toast.show("Failed to get mnemonic. Please try again.", {
                 type: 'danger'
             })
         }
