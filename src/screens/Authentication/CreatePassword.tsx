@@ -1,8 +1,8 @@
 import { HStack, Switch, Text, VStack, ScrollView, Divider, View } from 'native-base'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 
 import styles from "../../styles/authentication/createPassword"
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import PasswordInput from '../../components/forms/PasswordInput'
 import { useToast } from 'react-native-toast-notifications'
 import SInfo from "react-native-sensitive-info";
@@ -62,6 +62,11 @@ function CreatePassword({ }: Props) {
                 keychainService: "pocket.ios.storage",
             });
 
+            // clean up
+            setPassword("")
+            setConfirmPassword("")
+            setIsBiometricsEnabled(false)
+
             navigation.navigate("SecureWallet")
         } catch (error) {
             toast.show("Failed to create password. Please try again", {
@@ -72,12 +77,16 @@ function CreatePassword({ }: Props) {
         }
     }
 
+    // set suggested password
+    useFocusEffect(
+        useCallback(() => {
+            setSuggestion(generate({ exactly: 2, join: "" }))
+        }, [])
+    )
+
+    // check biometrics availability
     useEffect(() => {
         (async () => {
-            // set suggested password
-            setSuggestion(generate({ exactly: 2, join: "" }))
-
-            // check biometrics availability
             const rnBiometrics = new ReactNativeBiometrics()
 
             const { available } = await rnBiometrics.isSensorAvailable()

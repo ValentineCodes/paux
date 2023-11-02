@@ -40,6 +40,10 @@ export default function Login({ }: Props) {
                 dispatch(loginUser())
             }
 
+            if (password) {
+                setPassword("")
+            }
+
             navigation.navigate("Home")
         } catch (error) {
             toast.show("Failed to initialize wallet", {

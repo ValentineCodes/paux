@@ -1,7 +1,7 @@
 import { View } from 'native-base'
 import React, { useEffect, useState } from 'react'
 import Header from './modules/Header'
-import { BackHandler, StyleSheet } from 'react-native'
+import { BackHandler, NativeEventSubscription, StyleSheet } from 'react-native'
 import MainBalance from './modules/MainBalance'
 import Transactions from './modules/Transactions'
 import { useSelector } from 'react-redux'
@@ -14,7 +14,9 @@ import TransactionsAPI from "../../apis/transactions"
 import { useToast } from 'react-native-toast-notifications'
 import { LoadingTxStatusProps } from './modules/Transactions'
 import { parseFloat } from '../../utils/helperFunctions'
+import { useFocusEffect } from '@react-navigation/native'
 
+let backHandler: NativeEventSubscription;
 
 type Props = {}
 
@@ -143,16 +145,18 @@ function Home({ }: Props) {
     }
   }
 
-  const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-    BackHandler.exitApp();
-
-    return true;
-  });
-
   useEffect(() => {
     setLoadingTxStatus("loading")
     setTransactions([])
   }, [connectedAccount, connectedNetwork])
+
+  useFocusEffect(() => {
+    backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      BackHandler.exitApp();
+
+      return true;
+    });
+  })
 
   useEffect(() => {
     const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
@@ -166,9 +170,10 @@ function Home({ }: Props) {
 
     return () => {
       provider.off("block")
-      backHandler.remove();
+      backHandler?.remove();
     };
   }, [connectedAccount, connectedNetwork, transactions])
+
   return (
     <View style={styles.container}>
       <Header />
@@ -177,6 +182,7 @@ function Home({ }: Props) {
         dollarValue={dollarValue}
         isRefreshing={isRefreshingBalance}
         refresh={refreshBalance}
+        backHandler={backHandler}
       />
       <Transactions
         transactions={transactions}

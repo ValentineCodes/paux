@@ -246,12 +246,6 @@ export default function Transfer({ }: Props) {
     });
 
     useEffect(() => {
-        return () => {
-            backHandler.remove();
-        };
-    }, [])
-
-    useEffect(() => {
         const provider = getProviderWithName(connectedNetwork.name.toLowerCase() as keyof Providers)
 
         provider.off('block')
@@ -260,6 +254,7 @@ export default function Transfer({ }: Props) {
 
         return () => {
             provider.off("block")
+            backHandler.remove();
         }
     }, [from])
 

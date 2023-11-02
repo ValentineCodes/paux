@@ -18,9 +18,10 @@ type Props = {
   dollarValue: string | null;
   isRefreshing: boolean;
   refresh: () => void;
+  backHandler: any;
 }
 
-function MainBalance({ balance, dollarValue, isRefreshing, refresh }: Props) {
+function MainBalance({ balance, dollarValue, isRefreshing, refresh, backHandler }: Props) {
   const connectedNetwork: Network = useSelector(state => state.networks.find((network: Network) => network.isConnected))
   const connectedAccount: Account = useSelector(state => state.accounts.find((account: Account) => account.isConnected))
 
@@ -42,6 +43,11 @@ function MainBalance({ balance, dollarValue, isRefreshing, refresh }: Props) {
     return <Image key={`${_logo}`} source={_logo} alt={connectedNetwork.name} style={styles.networkLogo} />
   }, [connectedNetwork])
 
+  const handleNav = () => {
+    navigation.navigate("Transfer")
+    backHandler?.remove()
+  }
+
   return (
     <ScrollView style={{ flexGrow: 0 }} refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={refresh} colors={[COLORS.primary]} tintColor={COLORS.primary} />}>
       <VStack alignItems="center" space={2} paddingTop={5}>
@@ -56,7 +62,7 @@ function MainBalance({ balance, dollarValue, isRefreshing, refresh }: Props) {
         <Divider bgColor="muted.100" my="2" />
 
         <HStack alignItems="center" space="10">
-          <Pressable alignItems="center" onPress={() => navigation.navigate("Transfer")}>
+          <Pressable alignItems="center" onPress={handleNav}>
             {({ isPressed }) => (
               <>
                 <View bgColor={isPressed ? 'rgba(39, 184, 88, 0.2)' : COLORS.primaryLight} p="4" borderRadius="full">

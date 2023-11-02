@@ -1,31 +1,35 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, Dimensions, BackHandler } from 'react-native'
+import { StyleSheet, Dimensions, BackHandler, NativeEventSubscription } from 'react-native'
 import { ScrollView, Image, Text, VStack } from 'native-base'
 
 import Button from '../../components/Button'
 import { COLORS } from '../../utils/constants'
 import { FONT_SIZE } from '../../utils/styles'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+
+let backHandler: NativeEventSubscription;
 
 type Props = {}
 
 export default function Onboarding({ }: Props) {
     const navigation = useNavigation()
 
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-        BackHandler.exitApp();
-
-        return true;
-    });
-
     const handleNav = () => {
         navigation.navigate("WalletSetup")
-        backHandler.remove()
+        backHandler?.remove()
     }
+
+    useFocusEffect(() => {
+        backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            BackHandler.exitApp();
+
+            return true;
+        });
+    })
 
     useEffect(() => {
         return () => {
-            backHandler.remove();
+            backHandler?.remove();
         };
     }, [])
 
