@@ -16,6 +16,7 @@ import { shuffleArray } from '../../utils/helperFunctions'
 import AccountsCountModal from '../../components/modals/AccountsCountModal'
 import { createWalletWithSeedPhrase } from '../../utils/EIP155Wallet'
 import { initAccounts } from '../../store/reducers/Accounts'
+import { createWeb3Wallet } from '../../utils/Web3WalletClient'
 
 type Props = {}
 
@@ -31,6 +32,7 @@ export default function ConfirmSeedPhrase({ }: Props) {
     const [isLoading, setIsLoading] = useState(true)
     const [showSuccessModal, setShowSuccessModal] = useState(false)
     const [showAccountsCountModal, setShowAccountsCountModal] = useState(false)
+    const [isConfirming, setIsConfirming] = useState(false)
 
     const isWordSelected = (word: string): boolean => {
         let _seedPhrase = seedPhrase.slice()
@@ -94,6 +96,7 @@ export default function ConfirmSeedPhrase({ }: Props) {
 
     const confirm = async (accountsCount: number) => {
         try {
+            setIsConfirming(true)
             const seedPhrase = await SInfo.getItem("mnemonic", {
                 sharedPreferencesName: "pocket.android.storage",
                 keychainService: "pocket.ios.storage",
@@ -111,13 +114,17 @@ export default function ConfirmSeedPhrase({ }: Props) {
                 keychainService: "pocket.ios.storage",
             })
 
+            await createWeb3Wallet()
+
             dispatch(initAccounts(wallets.map(wallet => ({ ...wallet, isImported: false }))))
 
             setShowSuccessModal(true)
         } catch (error) {
-            toast.show("Failed to get mnemonic. Please try again.", {
+            toast.show("Failed to create wallet. Please ensure you have a stable network connection and try again.", {
                 type: 'danger'
             })
+        } finally {
+            setIsConfirming(false)
         }
     }
 
@@ -188,7 +195,7 @@ export default function ConfirmSeedPhrase({ }: Props) {
 
                 <Divider bgColor="muted.100" mt="4" mb="3" />
 
-                <Button text="Confirm" style={{ backgroundColor: seedPhrase.length === 12 ? COLORS.primary : "#2A974D", marginBottom: 50 }} disabled={seedPhrase.length !== 12} onPress={validateInput} />
+                <Button text="Confirm" style={{ backgroundColor: seedPhrase.length === 12 ? COLORS.primary : "#2A974D", marginBottom: 50 }} disabled={seedPhrase.length !== 12} loading={isConfirming} onPress={validateInput} />
 
                 {showAccountsCountModal && <AccountsCountModal isVisible={showAccountsCountModal} onClose={() => setShowAccountsCountModal(false)} onFinish={(accountsCount: number) => {
                     confirm(accountsCount)
