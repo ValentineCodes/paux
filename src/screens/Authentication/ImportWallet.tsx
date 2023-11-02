@@ -136,7 +136,7 @@ function ImportWallet({ }: Props) {
   useEffect(() => {
     (async () => {
       // set suggested password
-      setSuggestion(generate({ exactly: 2, join: "" }))
+      setSuggestion(generate({ exactly: 2, join: "", minLength: 4, maxLength: 5 }))
 
       // check biometrics availability
       const rnBiometrics = new ReactNativeBiometrics()

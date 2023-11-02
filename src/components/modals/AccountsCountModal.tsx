@@ -52,6 +52,7 @@ export default function AccountsCountModal({ isVisible, onClose, onFinish }: Pro
             <VStack bgColor="white" borderRadius="30" p="5" alignItems="center" space="4" w="full">
                 <Text fontSize={1.1 * FONT_SIZE['xl']} fontWeight="medium" textAlign="center">How many accounts would you like to start with?</Text>
 
+                <Text fontSize={FONT_SIZE['lg']} color={COLORS.primary} textAlign="center">Max: 10</Text>
                 <Input
                     value={accountsCount}
                     borderWidth="0"

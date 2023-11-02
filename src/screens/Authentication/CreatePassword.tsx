@@ -80,7 +80,7 @@ function CreatePassword({ }: Props) {
     // set suggested password
     useFocusEffect(
         useCallback(() => {
-            setSuggestion(generate({ exactly: 2, join: "" }))
+            setSuggestion(generate({ exactly: 2, join: "", minLength: 4, maxLength: 5 }))
         }, [])
     )
 
