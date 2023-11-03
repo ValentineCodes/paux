@@ -105,20 +105,30 @@ export default function Transfer({ }: Props) {
             return
         }
 
-        if (isNaN(Number(amount)) || Number(amount) < 0) {
+        let _amount = amount;
+
+        if (!isAmountInCrypto) {
+            if (dollarRate) {
+                _amount = (Number(_amount) / dollarRate).toString()
+            } else if (amountError) {
+                setAmountError("")
+            }
+        }
+
+        if (isNaN(Number(_amount)) || Number(_amount) < 0) {
             toast.show("Invalid amount", {
                 type: 'danger'
             })
             return
         }
 
-        if (amount.trim() && balance && gasCost && !isNaN(Number(amount))) {
-            if (Number(amount) >= Number(ethers.utils.formatEther(balance))) {
+        if (_amount.trim() && balance && gasCost && !isNaN(Number(_amount))) {
+            if (Number(_amount) >= Number(ethers.utils.formatEther(balance))) {
                 toast.show("Insufficient amount", {
                     type: 'danger'
                 })
                 return
-            } else if (Number(ethers.utils.formatEther(balance.sub(gasCost))) < Number(amount)) {
+            } else if (Number(ethers.utils.formatEther(balance.sub(gasCost))) < Number(_amount)) {
                 toast.show("Insufficient amount for gas", {
                     type: 'danger'
                 })
