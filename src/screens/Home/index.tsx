@@ -92,7 +92,7 @@ function Home({ }: Props) {
 
       const newTransactions = removeDuplicateTx(transactions)
 
-      setTransactions(transactions => orderTx([...newTransactions, ...transactions]))
+      setTransactions(oldTransactions => orderTx([...newTransactions, ...oldTransactions]))
 
       setLoadingTxStatus('success')
 
@@ -115,7 +115,7 @@ function Home({ }: Props) {
       const newTransactions = removeDuplicateTx(transactions)
 
       if (newTransactions.length > 0) {
-        setTransactions(transactions => orderTx([...transactions, ...newTransactions]))
+        setTransactions(oldTransactions => orderTx([...oldTransactions, ...newTransactions]))
         setCurrentTxPage(currentPage => currentPage + 1)
       }
     } catch (error) {
@@ -147,7 +147,10 @@ function Home({ }: Props) {
 
   useEffect(() => {
     setLoadingTxStatus("loading")
-    setTransactions([])
+
+    if (transactions.length > 0) {
+      setTransactions([])
+    }
   }, [connectedAccount, connectedNetwork])
 
   useFocusEffect(() => {
