@@ -6,6 +6,8 @@
 
 [Pocket](https://play.google.com/store/apps/details?id=com.pocket.scaffoldwallet&pli=1) is a safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more on multiple chains such as Ethereum, Optimism, Arbitrum, Sepolia, e.t.c
 
+[Video guide](https://youtu.be/AoY_Um2t_wg?si=Nn-q-tu2oYKnS-RH)
+
 ## Setting Up React Native
 
 Visit the react native docs to [setup react native](https://reactnative.dev/docs/environment-setup) for Android and IOS.
