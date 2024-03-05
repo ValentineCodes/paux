@@ -2,6 +2,7 @@
  * @format
  */
 
+import 'react-native-url-polyfill/auto';
 import "fast-text-encoding"
 import 'react-native-reanimated'
 import { AppRegistry } from 'react-native';
