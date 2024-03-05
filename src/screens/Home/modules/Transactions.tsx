@@ -33,7 +33,7 @@ export default function Transactions({ transactions, loadingStatus, isLoadingMor
       ) : transactions.length > 0 ? (
         <>
           <FlatList
-            keyExtractor={(item) => item.hash}
+            keyExtractor={(item) => item.timeStamp}
             data={transactions}
             renderItem={({ item }) => <Transaction tx={item} />}
             ItemSeparatorComponent={<Divider bgColor="muted.100" my="2" />}
