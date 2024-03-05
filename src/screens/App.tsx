@@ -38,7 +38,7 @@ type AppStackParamsList = {
 const AppStack = createNativeStackNavigator<AppStackParamsList>();
 
 function App(): JSX.Element {
-  const auth = useSelector(state => state.auth)
+  const auth = useSelector((state: any) => state.auth)
 
   useEffect(() => {
     (async () => {

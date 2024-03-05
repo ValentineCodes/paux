@@ -15,6 +15,8 @@ export async function createWeb3Wallet() {
     relayUrl: "wss://relay.walletconnect.com",
   });
 
+  console.log("init web3 wallet...")
+
   web3wallet = await Web3Wallet.init({
     core,
     metadata: {
@@ -27,6 +29,8 @@ export async function createWeb3Wallet() {
       },
     },
   });
+
+  console.log("web3 wallet initialized")
 }
 
 export async function _pair(params: {uri: string}) {

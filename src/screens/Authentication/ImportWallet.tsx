@@ -112,14 +112,17 @@ function ImportWallet({ }: Props) {
         keychainService: "pocket.ios.storage",
       })
 
+      console.log("saving password...")
       // Save password
       await SInfo.setItem("security", JSON.stringify(security), {
         sharedPreferencesName: "pocket.android.storage",
         keychainService: "pocket.ios.storage",
       });
 
+      console.log("creating web3 wallet...")
       await createWeb3Wallet()
 
+      console.log("dispatching,..")
       dispatch(initAccounts(wallets.map(wallet => ({ ...wallet, isImported: false }))))
       dispatch(loginUser())
 
