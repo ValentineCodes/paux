@@ -251,7 +251,7 @@ export default function Header({ }: Props) {
 
     return (
         <HStack alignItems="center" justifyContent="space-between" py="4" borderBottomColor="#ccc">
-            <Image source={require("../../../assets/images/pocket.jpg")} alt="Pocket" style={styles.logo} />
+            <Image source={require("../../../assets/images/pocket.jpg")} alt="Paux" style={styles.logo} />
 
             <Select
                 selectedValue={connectedNetwork.chainId.toString()}

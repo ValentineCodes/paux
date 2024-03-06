@@ -14,7 +14,7 @@ export async function createWeb3Wallet() {
   web3wallet = await Web3Wallet.init({
     core,
     metadata: {
-      name: 'Pocket',
+      name: 'Paux',
       description: 'A crypto wallet for managing funds on evm-compatible chains and interacting with DApps',
       url: 'https://walletconnect.com/',
       icons: [],

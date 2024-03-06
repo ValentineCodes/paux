@@ -68,7 +68,7 @@ export default function SecureWallet({ }: Props) {
 
                         <Text fontSize="md">A seed phrase is a set of twelve words that contains all the information about your wallet, including your funds. It's like a secret code used to access your entire wallet.</Text>
                         <Text fontSize="md">You must keep your seed phrase secret and safe. If someone gets your seed phrase, they'll gain control over your accounts.</Text>
-                        <Text fontSize="md">Save it in a place where only you can access it. If you lose it, not even Pocket can help you recover it.</Text>
+                        <Text fontSize="md">Save it in a place where only you can access it. If you lose it, not even Paux can help you recover it.</Text>
 
                         <Divider bgColor="muted.100" my="2" />
 

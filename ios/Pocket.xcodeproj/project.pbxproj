@@ -527,7 +527,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pocket.scaffoldwallet";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.paux.wallet";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pocket.app/Pocket";
 			};
@@ -552,7 +552,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pocket.scaffoldwallet";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.paux.wallet";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pocket.app/Pocket";
 			};
@@ -581,7 +581,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pocket.scaffoldwallet";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.paux.wallet";
 				PRODUCT_NAME = "Pocket";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -611,7 +611,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.pocket.scaffoldwallet";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.paux.wallet";
 				PRODUCT_NAME = "Pocket";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";

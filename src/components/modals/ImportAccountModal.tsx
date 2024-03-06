@@ -72,7 +72,7 @@ export default function ImportAccountModal({ isVisible, onClose, onImport }: Pro
             <VStack bgColor="white" borderRadius="30" px="7" py="5" alignItems="center" space="4">
                 <Icon as={<Ionicons name="cloud-download" />} color={COLORS.primary} size={4 * FONT_SIZE['xl']} />
                 <Text color={COLORS.primary} bold fontSize={1.2 * FONT_SIZE['xl']}>Import Account</Text>
-                <Text fontSize={FONT_SIZE['lg']} textAlign="center">Imported accounts won’t be associated with your Pocket Secret Recovery Phrase.</Text>
+                <Text fontSize={FONT_SIZE['lg']} textAlign="center">Imported accounts won’t be associated with your Paux Secret Recovery Phrase.</Text>
 
                 <VStack space={2} w="full">
                     <Input

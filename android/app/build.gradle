@@ -96,9 +96,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.pocket.scaffoldwallet"
+    namespace "com.paux.wallet"
     defaultConfig {
-        applicationId "com.pocket.scaffoldwallet"
+        applicationId "com.paux.wallet"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4

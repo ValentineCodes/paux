@@ -39,9 +39,9 @@ export default function Onboarding({ }: Props) {
             justifyContent: "center",
             alignItems: "center"
         }} style={styles.container}>
-            <Image source={require("../../assets/images/pocket.jpg")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
+            <Image source={require("../../assets/images/pocket.jpg")} alt='Paux' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
             <VStack w="full" mt="10">
-                <Text textAlign="center" color={COLORS.primary} fontSize={2 * FONT_SIZE["xl"]} bold>Welcome to Pocket</Text>
+                <Text textAlign="center" color={COLORS.primary} fontSize={2 * FONT_SIZE["xl"]} bold>Welcome to Paux</Text>
                 <Text textAlign="center" fontSize={FONT_SIZE["lg"]} my="4">A safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more</Text>
 
                 <Button text="Get Started" onPress={handleNav} style={{ marginTop: 40, marginBottom: 50 }} />

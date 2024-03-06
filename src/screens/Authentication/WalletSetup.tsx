@@ -21,7 +21,7 @@ export default function WalletSetup({ }: Props) {
             <Pressable onPress={() => navigation.goBack()} _pressed={{ opacity: 0.4 }} style={styles.navBtn}>
                 <Icon as={<Ionicons name="arrow-back-outline" />} size={1.3 * FONT_SIZE['xl']} color="black" />
             </Pressable>
-            <Image source={require("../../assets/icons/wallet_icon.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
+            <Image source={require("../../assets/icons/wallet_icon.png")} alt='Paux' style={{ width: Dimensions.get("window").height * 0.3, height: Dimensions.get("window").height * 0.3 }} />
 
             <VStack w="full" mt="10">
                 <Text textAlign="center" color={COLORS.primary} fontSize={2 * FONT_SIZE["xl"]} bold mt="10">Wallet Setup</Text>

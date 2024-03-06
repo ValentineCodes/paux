@@ -1,10 +1,10 @@
-# Pocket
+# Paux Wallet
 
 <p align="center">
-<img src="pocket.jpg" alt="Pocket" width="500">
+<img src="paux.jpg" alt="Paux" width="500">
 </p>
 
-[Pocket](https://play.google.com/store/apps/details?id=com.pocket.scaffoldwallet&pli=1) is a safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more on multiple chains such as Ethereum, Optimism, Arbitrum, Sepolia, e.t.c
+[Paux](https://play.google.com/store/apps/details?id=com.paux.wallet&pli=1) is a safe and secure crypto wallet to manage funds, interact with Dapps, sign transactions and more on multiple chains such as Ethereum, Optimism, Arbitrum, Sepolia, e.t.c
 
 [Video guide](https://youtu.be/AoY_Um2t_wg?si=Nn-q-tu2oYKnS-RH)
 
