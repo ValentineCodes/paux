@@ -251,7 +251,7 @@ export default function Header({ }: Props) {
 
     return (
         <HStack alignItems="center" justifyContent="space-between" py="4" borderBottomColor="#ccc">
-            <Image source={require("../../../assets/images/pocket.png")} alt="Pocket" style={styles.logo} />
+            <Image source={require("../../../assets/images/pocket.jpg")} alt="Pocket" style={styles.logo} />
 
             <Select
                 selectedValue={connectedNetwork.chainId.toString()}
@@ -356,8 +356,8 @@ export default function Header({ }: Props) {
 
 const styles = StyleSheet.create({
     logo: {
-        width: 1.7 * FONT_SIZE["xl"],
-        height: 1.7 * FONT_SIZE["xl"],
+        width: 3 * FONT_SIZE["xl"],
+        height: 3 * FONT_SIZE["xl"],
     },
     menuOption: {
         flexDirection: 'row',

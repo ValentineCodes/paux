@@ -167,7 +167,7 @@ export default function Login({ }: Props) {
     }, [])
     return (
         <ScrollView contentContainerStyle={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} style={styles.container}>
-            <Image source={require("../../assets/images/pocket.png")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.2, height: Dimensions.get("window").height * 0.2 }} />
+            <Image source={require("../../assets/images/pocket.jpg")} alt='Pocket' style={{ width: Dimensions.get("window").height * 0.2, height: Dimensions.get("window").height * 0.2 }} />
             <Text fontSize={2 * FONT_SIZE['xl']} color={COLORS.primary} bold>Welcome Back!</Text>
 
             <VStack mt="5" space={2} w="full">
